@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 5000
 var app = express();
 var pool;
 pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+    connectionString: process.env.DATABASE_URL
 });
 
 
@@ -16,5 +16,10 @@ app.use(express.urlencoded({ extended: false }));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.get('/login', (req, res) => {
+    console.log('Landed on loging page');
+    res.render('pages/login');
+});
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
