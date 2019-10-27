@@ -30,6 +30,12 @@ app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
+app.get('/register', (req, res) => {
+    console.log('Landed on register page');
+
+    res.render('pages/register');
+});
+
 app.get('/main-menu', (req, res) => {
     console.log('Landed on main menu page');
 
