@@ -20,11 +20,13 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
     console.log('Landed on home page')
     console.log('Redirecting to login page')
+
     res.redirect('/login');
 });
 
 app.get('/login', (req, res) => {
-    console.log('Landed on loging page');
+    console.log('Landed on login page');
+
     res.render('pages/login');
 });
 
