@@ -30,4 +30,10 @@ app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
+app.get('/main-menu', (req, res) => {
+    console.log('Landed on main menu page');
+
+    res.render('pages/main-menu');
+});
+
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
