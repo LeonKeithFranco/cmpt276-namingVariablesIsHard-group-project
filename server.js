@@ -17,6 +17,12 @@ app.use(express.urlencoded({ extended: false }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.get('/', (req, res) => {
+    console.log('Landed on home page')
+    console.log('Redirecting to login page')
+    res.redirect('/login');
+});
+
 app.get('/login', (req, res) => {
     console.log('Landed on loging page');
     res.render('pages/login');
