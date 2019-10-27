@@ -1,0 +1,22 @@
+body
+{
+	background-color: #fcffcf;
+}
+
+.text
+{
+	font-family: "Comic Sans MS", cursive, sans-serif
+}
+
+#header1
+{
+	font-size: 26px;
+}
+.button
+{
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	background-color: #4ebaa1;
+	color: black;
+	text-align: center;
+	font-size: 18px;
+}
