@@ -18,8 +18,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-    console.log('Landed on home page')
-    console.log('Redirecting to login page')
+    console.log('Landed on home page');
+    console.log('Redirecting to login page');
 
     res.redirect('/login');
 });
@@ -34,7 +34,7 @@ app.post('/login', (req, res) => {
   var loginQuery = `SELECT * FROM users WHERE username=\'${req.body.username}\'`;
   pool.query(loginQuery, (error, result) => {
     if (error) {
-      res.end(error);
+      res.send(error);
     }
     if (result.rows.length == 0) {
       console.log('Invalid username');
