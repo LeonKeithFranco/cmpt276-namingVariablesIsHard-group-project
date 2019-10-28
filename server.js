@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 var app = express();
 var pool;
 pool = new Pool({
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.get('/db', async (req, res) => {
   try {
-    const client = await pool.connect()
+    const client = await pool.connect();
     const result = await client.query('SELECT * FROM users');
     const results = { 'results': (result) ? result.rows : null };
 
@@ -37,7 +37,7 @@ app.get('/db', async (req, res) => {
 
     res.send("Error " + err);
   }
-})
+});
 
 app.get('/login', (req, res) => {
   console.log('Landed on login page');
@@ -68,7 +68,7 @@ app.post('/login', (req, res) => {
         res.redirect('/login');
       }
     }
-  })
+  });
 });
 
 app.get('/register', (req, res) => {
