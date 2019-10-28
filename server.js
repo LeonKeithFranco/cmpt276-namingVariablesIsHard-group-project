@@ -34,6 +34,7 @@ app.post('/login', (req, res) => {
   var loginQuery = `SELECT * FROM users WHERE username=\'${req.body.username}\'`;
   pool.query(loginQuery, (error, result) => {
     if (error) {
+      console.log(error);
       res.send(error);
     }
     if (result.rows.length == 0) {
