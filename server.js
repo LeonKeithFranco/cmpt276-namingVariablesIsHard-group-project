@@ -6,8 +6,7 @@ const PORT = process.env.PORT || 5000
 var app = express();
 var pool;
 pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
+    connectionString: process.env.DATABASE_URL
 });
 
 
