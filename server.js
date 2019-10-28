@@ -45,8 +45,9 @@ app.get('/login', (req, res) => {
   res.render('pages/login');
 });
 app.post('/login', (req, res) => {
-  var loginQuery = `SELECT * FROM users WHERE username=\'${req.body.username}\'`;
+  console.log('Login requested');
 
+  var loginQuery = `SELECT * FROM Users WHERE username=\'${req.body.username}\'`;
   pool.query(loginQuery, (error, result) => {
     if (error) {
       console.log(error);
