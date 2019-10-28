@@ -24,19 +24,6 @@ app.get('/', (req, res) => {
     res.redirect('/login');
 });
 
-app.get('/db', async (req, res) => {
-  try {
-    const client = await pool.connect()
-    const result = await client.query('SELECT * FROM users');
-    const results = { 'results': (result) ? result.rows : null};
-    res.render('/');
-    client.release();
-  } catch (err) {
-    console.error(err);
-    res.send("Error " + err);
-  }
-});
-
 app.get('/login', (req, res) => {
     console.log('Landed on login page');
 
@@ -44,14 +31,24 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  console.log(typeof req.body.username);
   var loginQuery = `SELECT * FROM users WHERE username=\'${req.body.username}\'`;
-  console.log(loginQuery);
   pool.query(loginQuery, (error, result) => {
     if (error) {
-      res.redirect('/login');
+      console.error(err);
+      res.send("Error " + err);
     }
-    res.render('pages/main-menu');
+    if (result.rows.length == 0) {
+      console.log('Invalid username');
+      res.redirect('/login');
+    } else {
+      if (req.body.password == result.rows[0].password) {
+        console.log('Login successful');
+        res.redirect('/main-menu');
+      } else {
+        console.log('Invalid password');
+        res.redirect('/login');
+      }
+    }
   })
 });
 
