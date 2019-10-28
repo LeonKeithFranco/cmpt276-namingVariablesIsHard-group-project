@@ -1,7 +1,8 @@
 # Scribbltaire.io
 
-Project Name: Scribbltaire.io
-GitHub Link: https://github.com/LeonFranco/cmpt276-namingVariablesIsHard-group-project.git
+Project Name: Scribbltaire.io   
+GitHub Link: https://github.com/LeonFranco/cmpt276-namingVariablesIsHard-group-project.git   
+Webapp Link: https://scribbltaire-io.herokuapp.com
 
 Proposal:
 Scribbltaire.io is a game where a player guesses what is being drawn on the screen. A player can enter a game with a set of random doodles pulled from Google’s Quick Draw dataset where the objective is to correctly guess the subject of each doodle, simulating Skribbl.io without the need for friends or strangers. Skribbl.io provides a platform to play a drawing and guessing game, but requires friends and other people to play. This solitaire version, Scribbltaire.io,  will provide the drawings for guessing while absolving the social requirements of Skribbl.io. Scribbltaire.io provides entertainment through a similar venue to Skribbl.io, engaging players that seek expressive and social gameplay. 
