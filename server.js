@@ -6,7 +6,8 @@ const PORT = process.env.PORT || 5000
 var app = express();
 var pool;
 pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
 });
 
 
@@ -34,8 +35,7 @@ app.post('/login', (req, res) => {
   var loginQuery = `SELECT * FROM users WHERE username=\'${req.body.username}\'`;
   pool.query(loginQuery, (error, result) => {
     if (error) {
-      console.error(err);
-      res.send("Error " + err);
+      res.end(error);
     }
     if (result.rows.length == 0) {
       console.log('Invalid username');
