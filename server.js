@@ -76,6 +76,9 @@ app.get('/register', (req, res) => {
 
   res.render('pages/register');
 });
+app.post('/register', (req, res) => {
+  console.log('Regsiter test')
+});
 
 app.get('/main-menu', (req, res) => {
   console.log('Landed on main menu page');
