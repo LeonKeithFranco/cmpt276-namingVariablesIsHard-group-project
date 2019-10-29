@@ -8,7 +8,7 @@ $(selector).submit((event) => {
     url: '/register',
     data: $(selector).serialize(),
     success: (response) => {
-      alert(response);
+      window.location.href = window.location.href = `${window.location.origin}/login`
     },
     error: (jqXHR, textStatus, errorThrown) => {
       console.log(`Error: ${textStatus} - ${errorThrown}`)
