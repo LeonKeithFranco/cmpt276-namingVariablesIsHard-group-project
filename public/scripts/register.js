@@ -5,7 +5,7 @@ $(selector).submit((event) => {
 
   $.ajax({
     type: 'POST',
-    url: `${window.location.origin}/register`,
+    url: '/register',
     data: $(selector).serialize(),
     success: (response) => {
       alert(response);
