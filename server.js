@@ -103,7 +103,7 @@ app.post('/register', (req, res) => {
 
         }
         else {
-          registerResponse(406, 'Passwords do not match')
+          registerResponse(406, 'Passwords do not match');
         }
         break;
       case 1: // existing user in db
