@@ -78,7 +78,34 @@ app.get('/register', (req, res) => {
   res.render('pages/register');
 });
 app.post('/register', (req, res) => {
-  console.log('Regsiter test')
+  console.log('User register requested');
+
+  const { username, password, passwordReconfirm } = req.body;
+  const registerQuery = `SELECT * FROM Users WHERE username=\'${username}\'`
+
+  pool.query(registerQuery, (error, result) => {
+    if (error) {
+      console.error(error);
+
+      res.send(error);
+    }
+
+    switch(result.rows.length) {
+      case 0: // no existing user in db
+        
+        break;
+      case 1: // existing user in db
+        const msg = 'User already exists';
+
+        console.log(msg);
+
+        res.statusMessage = msg;
+        res.status(406).end();
+        break;
+      default:
+        throw new Error('Non-unique user in database');
+    } 
+  });
 });
 
 app.get('/main-menu', (req, res) => {
