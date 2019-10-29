@@ -90,11 +90,11 @@ app.post('/register', (req, res) => {
       res.send(error);
     }
 
-    const failResponse = (msg) => {
+    const registerResponse = (httpResponseCode, msg) => {
       console.log(msg);
 
       res.statusMessage = msg;
-      res.status(406).end();
+      res.status(httpResponseCode).end();
     }
 
     switch (result.rows.length) {
@@ -103,11 +103,11 @@ app.post('/register', (req, res) => {
 
         }
         else {
-          
+          registerResponse(406, 'Passwords do not match')
         }
         break;
       case 1: // existing user in db
-        failResponse('User already exists');
+        registerResponse(406, 'User already exists');
         break;
       default:
         throw new Error('Non-unique user in database');
