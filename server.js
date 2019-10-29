@@ -90,21 +90,28 @@ app.post('/register', (req, res) => {
       res.send(error);
     }
 
-    switch(result.rows.length) {
+    const failResponse = (msg) => {
+      console.log(msg);
+
+      res.statusMessage = msg;
+      res.status(406).end();
+    }
+
+    switch (result.rows.length) {
       case 0: // no existing user in db
-        
+        if (password === passwordReconfirm) {
+
+        }
+        else {
+          
+        }
         break;
       case 1: // existing user in db
-        const msg = 'User already exists';
-
-        console.log(msg);
-
-        res.statusMessage = msg;
-        res.status(406).end();
+        failResponse('User already exists');
         break;
       default:
         throw new Error('Non-unique user in database');
-    } 
+    }
   });
 });
 
