@@ -81,7 +81,7 @@ app.post('/register', (req, res) => {
   console.log('User register requested');
 
   const { username, password, passwordReconfirm } = req.body;
-  const registerQuery = `SELECT * FROM Users WHERE username=\'${username}\'`
+  let registerQuery = `SELECT * FROM Users WHERE username=\'${username}\'`
 
   pool.query(registerQuery, (error, result) => {
     if (error) {
@@ -100,7 +100,17 @@ app.post('/register', (req, res) => {
     switch (result.rows.length) {
       case 0: // no existing user in db
         if (password === passwordReconfirm) {
+          registerQuery = `INSERT INTO Users(username,password) VALUES (\'${username}\',\'${password}\')`;
 
+          pool.query(registerQuery, (error, result) => {
+            if (error) {
+              console.error(error);
+
+              res.send(error);
+            }
+
+            registerResponse(201, 'New user added to database');
+          });
         }
         else {
           registerResponse(406, 'Passwords do not match');
