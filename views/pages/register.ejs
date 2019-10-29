@@ -3,6 +3,7 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <script type="text/javascript" src="/scripts/register.js" defer></script>
 </head>
 
 <body>
@@ -10,13 +11,14 @@
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h4 class="text" id="header1">Welcome to scribbltaire.io!</h4>
         <h4 class="text">Enter your user information to join us</h4>
-        <form type="submit" name="register" action="/register" method="post">
+        <form id="registerForm">
             <input type="text" name="username" placeholder="User Name">
             <br>
             <input type="password" name="password" placeholder="Password">
             <br>
             <input type="password" name="passwordReconfirm" placeholder="Reconfirm Password">
             <br>
-            <button class="button">Sign Up</button>
+            <button type="submit" class="button">Sign Up</button>
+        </form>
     </center>
 </body>
