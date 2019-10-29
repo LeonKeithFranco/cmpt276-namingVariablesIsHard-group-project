@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
+const HttpStatus = require('http-status-codes');
 
 const PORT = process.env.PORT || 5000;
 var app = express();
@@ -109,15 +110,15 @@ app.post('/register', (req, res) => {
               res.send(error);
             }
 
-            registerResponse(201, 'New user added to database');
+            registerResponse(HttpStatus.CREATED, 'New user added to database');
           });
         }
         else {
-          registerResponse(406, 'Passwords do not match');
+          registerResponse(HttpStatus.CONFLICT, 'Passwords do not match');
         }
         break;
       case 1: // existing user in db
-        registerResponse(406, 'User already exists');
+        registerResponse(HttpStatus.CONFLICT, 'User already exists');
         break;
       default:
         throw new Error('Non-unique user in database');
