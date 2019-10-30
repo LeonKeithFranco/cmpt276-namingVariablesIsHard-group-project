@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
   cookieName: 'session',
-  secret: 'random_string_goes_here',
+  secret: 'namingVariablesIsHard',
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000
 }));
