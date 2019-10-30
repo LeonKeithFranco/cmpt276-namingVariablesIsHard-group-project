@@ -7,7 +7,9 @@ $(selector).submit((event) => {
     type: 'POST',
     url: '/login',
     data: $(selector).serialize(),
-    success: (response) => {},
+    success: (response) => {
+        window.location.href = window.location.href = `${window.location.origin}/main-menu`
+    },
     error: (jqXHR, textStatus, errorThrown) => {
       console.log(`Error: ${textStatus} - ${errorThrown}`)
       alert(`${errorThrown}`);

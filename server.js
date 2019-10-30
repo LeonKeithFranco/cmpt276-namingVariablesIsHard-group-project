@@ -67,9 +67,7 @@ app.post('/login', (req, res) => {
       loginResponse(HttpStatus.CONFLICT, 'Invalid Username');
     } else {
       if (req.body.password == result.rows[0].password) {
-        console.log('Login successful');
-
-        res.redirect('/main-menu');
+        loginResponse(HttpStatus.OK, 'Login succesful');
       } else {
         loginResponse(HttpStatus.CONFLICT, 'Invalid password');
       }
