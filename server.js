@@ -75,7 +75,7 @@ app.post('/login', (req, res) => {
     } else {
       if (req.body.password == result.rows[0].password) {
         req.session.user = result.rows[0].username;
-        
+
         loginResponse(HttpStatus.OK, 'Login succesful');
       } else {
         loginResponse(HttpStatus.CONFLICT, 'Invalid password');
@@ -140,7 +140,14 @@ app.post('/register', (req, res) => {
 app.get('/main-menu', (req, res) => {
   console.log('Landed on main menu page');
 
-  res.render('pages/main-menu');
+  const sesh = req.session;
+
+  if (sesh && sesh.user) {
+    res.render('pages/main-menu', { user: sesh.user });
+  }
+  else {
+    res.redirect('/login');
+  }
 });
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
