@@ -80,6 +80,7 @@ app.post('/login', (req, res) => {
         sesh.user = user.username;
         sesh.highscore = user.highscore || 0;
 
+        console.log(`${sesh.user} logged in`);
         loginResponse(HttpStatus.OK, 'Login succesful');
       } else {
         loginResponse(HttpStatus.CONFLICT, 'Invalid password');
@@ -142,20 +143,26 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/main-menu', (req, res) => {
-  console.log('Landed on main menu page');
-
   const sesh = req.session;
-
+  
   if (sesh && sesh.user) {
+    console.log(`${sesh.user} landed on main menu page`);
+
     res.render('pages/main-menu', { user: sesh.user });
   }
   else {
+    console.log('Client redirected from main page to login');
+
     res.redirect('/login');
   }
 });
 
 app.get('/logout', (req, res) => {
-  req.session.reset();
+  const sesh = req.session;
+
+  console.log(`${sesh.user} logged out`)
+
+  sesh.reset();
   res.redirect('/');
 });
 
