@@ -154,4 +154,9 @@ app.get('/main-menu', (req, res) => {
   }
 });
 
+app.get('/logout', (req, res) => {
+  req.session.reset();
+  res.redirect('/');
+});
+
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
