@@ -55,19 +55,23 @@ app.post('/login', (req, res) => {
 
       res.send(error);
     }
-    if (result.rows.length == 0) {
-      console.log('Invalid username');
 
-      res.redirect('/login');
+    const loginResponse = (httpResponseCode, msg) => {
+      console.log(msg);
+
+      res.statusMessage = msg;
+      res.status(httpResponseCode).end();
+    }
+
+    if (result.rows.length == 0) {
+      loginResponse(HttpStatus.CONFLICT, 'Invalid Username');
     } else {
       if (req.body.password == result.rows[0].password) {
         console.log('Login successful');
 
         res.redirect('/main-menu');
       } else {
-        console.log('Invalid password');
-
-        res.redirect('/login');
+        loginResponse(HttpStatus.CONFLICT, 'Invalid password');
       }
     }
   });
