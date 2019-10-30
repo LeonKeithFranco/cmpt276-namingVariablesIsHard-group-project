@@ -74,7 +74,11 @@ app.post('/login', (req, res) => {
       loginResponse(HttpStatus.CONFLICT, 'Invalid Username');
     } else {
       if (req.body.password == result.rows[0].password) {
-        req.session.user = result.rows[0].username;
+        const sesh = req.session;
+        const user = result.rows[0];
+
+        sesh.user = user.username;
+        sesh.highscore = user.highscore || 0;
 
         loginResponse(HttpStatus.OK, 'Login succesful');
       } else {
