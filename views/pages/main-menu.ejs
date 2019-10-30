@@ -3,6 +3,7 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main-menu.css">
 </head>
 
 <body>
@@ -10,16 +11,12 @@
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h4 class="text" id="header1">Welcome. [insertUserName]</h4>
         <h4 class="text">Choose your gamemode</h4>
-        <form type="submit">
-            <button class="button">Standard</button>
-        </form>
-        <p></p>
-        <form type="submit">
-            <button class="button">Odd One Out</button>
-        </form>
-        <p></p>
-        <form type="submit">
-            <button class="button">Timed</button>
-        </form>
+        <button class="button">Standard</button>
+        <br>
+        <button class="button">Odd One Out</button>
+        <br>
+        <button class="button">Timed</button>
+        <br>
+        <button class="button">Logout</button>
     </center>
 </body>
