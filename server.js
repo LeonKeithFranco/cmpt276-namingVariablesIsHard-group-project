@@ -3,7 +3,7 @@ const path = require('path');
 const { Pool } = require('pg');
 const HttpStatus = require('http-status-codes');
 var session = require('client-sessions');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const PORT = process.env.PORT || 5000;
 var app = express();
