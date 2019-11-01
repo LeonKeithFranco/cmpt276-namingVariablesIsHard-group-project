@@ -118,16 +118,24 @@ app.post('/register', (req, res) => {
     switch (result.rows.length) {
       case 0: // no existing user in db
         if (password === passwordReconfirm) { // password match
-          registerQuery = `INSERT INTO Users(username,password) VALUES (\'${username}\',\'${password}\')`;
-
-          pool.query(registerQuery, (error, result) => {
+          bcrypt.hash(password, saltRounds, (error, hash) => {
             if (error) {
               console.error(error);
 
               res.send(error);
             }
 
-            registerResponse(HttpStatus.CREATED, 'New user added to database');
+            registerQuery = `INSERT INTO Users(username,password) VALUES (\'${username}\',\'${hash}\')`;
+
+            pool.query(registerQuery, (error, result) => {
+              if (error) {
+                console.error(error);
+
+                res.send(error);
+              }
+
+              registerResponse(HttpStatus.CREATED, 'New user added to database');
+            });
           });
         }
         else { // password mismatch
@@ -145,7 +153,7 @@ app.post('/register', (req, res) => {
 
 app.get('/main-menu', (req, res) => {
   const sesh = req.session;
-  
+
   if (sesh && sesh.user) {
     console.log(`${sesh.user} landed on main menu page`);
 
