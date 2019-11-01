@@ -117,7 +117,7 @@ app.post('/register', (req, res) => {
 
     switch (result.rows.length) {
       case 0: // no existing user in db
-        if (password === passwordReconfirm) {
+        if (password === passwordReconfirm) { // password match
           registerQuery = `INSERT INTO Users(username,password) VALUES (\'${username}\',\'${password}\')`;
 
           pool.query(registerQuery, (error, result) => {
@@ -130,7 +130,7 @@ app.post('/register', (req, res) => {
             registerResponse(HttpStatus.CREATED, 'New user added to database');
           });
         }
-        else {
+        else { // password mismatch
           registerResponse(HttpStatus.CONFLICT, 'Passwords do not match');
         }
         break;
