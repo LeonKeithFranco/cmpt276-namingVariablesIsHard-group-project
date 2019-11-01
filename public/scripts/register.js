@@ -8,11 +8,11 @@ $(selector).submit((event) => {
     url: '/register',
     data: $(selector).serialize(),
     success: (response) => {
-      alert('Registration successful\nWelcome to Scribbltaire.io!')
-      window.location.href = window.location.href = `${window.location.origin}/login`
+      alert('Registration successful\nWelcome to Scribbltaire.io!');
+      window.location.href = window.location.href = `${window.location.origin}/login`;
     },
     error: (jqXHR, textStatus, errorThrown) => {
-      console.log(`Error: ${textStatus} - ${errorThrown}`)
+      console.log(`Error: ${textStatus} - ${errorThrown}`);
       alert(`${errorThrown}`);
     }
   });
