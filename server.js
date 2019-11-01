@@ -118,14 +118,14 @@ app.post('/register', (req, res) => {
     switch (result.rows.length) {
       case 0: // no existing user in db
         if (password === passwordReconfirm) { // password match
-          bcrypt.hash(password, saltRounds, (error, hash) => {
+          bcrypt.hash(password, saltRounds, (error, hashedPassword) => {
             if (error) {
               console.error(error);
 
               res.send(error);
             }
 
-            registerQuery = `INSERT INTO Users(username,password) VALUES (\'${username}\',\'${hash}\')`;
+            registerQuery = `INSERT INTO Users(username,password) VALUES (\'${username}\',\'${hashedPassword}\')`;
 
             pool.query(registerQuery, (error, result) => {
               if (error) {
