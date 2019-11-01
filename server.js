@@ -71,10 +71,10 @@ app.post('/login', (req, res) => {
       res.status(httpResponseCode).end();
     }
 
-    if (result.rows.length == 0) {
+    if (result.rows.length == 0) { // invalid username
       loginResponse(HttpStatus.CONFLICT, 'Invalid Username');
-    } else {
-      if (req.body.password == result.rows[0].password) {
+    } else { // valid username
+      if (req.body.password == result.rows[0].password) { // valid password
         const sesh = req.session;
         const user = result.rows[0];
 
@@ -83,7 +83,7 @@ app.post('/login', (req, res) => {
 
         console.log(`${sesh.user} logged in`);
         loginResponse(HttpStatus.OK, 'Login succesful');
-      } else {
+      } else { // invalid password
         loginResponse(HttpStatus.CONFLICT, 'Invalid password');
       }
     }
