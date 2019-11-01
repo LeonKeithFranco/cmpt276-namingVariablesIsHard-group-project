@@ -3,6 +3,7 @@ const path = require('path');
 const { Pool } = require('pg');
 const HttpStatus = require('http-status-codes');
 var session = require('client-sessions');
+const bcrypt = require('bcrypt');
 
 const PORT = process.env.PORT || 5000;
 var app = express();
@@ -10,7 +11,7 @@ var pool;
 pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
-
+const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
