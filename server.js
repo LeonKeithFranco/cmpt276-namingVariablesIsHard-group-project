@@ -59,7 +59,7 @@ app.post('/login', (req, res) => {
   var loginQuery = `SELECT * FROM Users WHERE username=\'${req.body.username}\'`;
   pool.query(loginQuery, (error, result) => {
     if (error) {
-      console.log(error);
+      console.error(error);
 
       res.send(error);
     }
@@ -74,18 +74,26 @@ app.post('/login', (req, res) => {
     if (result.rows.length == 0) { // invalid username
       loginResponse(HttpStatus.CONFLICT, 'Invalid Username');
     } else { // valid username
-      if (req.body.password == result.rows[0].password) { // valid password
-        const sesh = req.session;
-        const user = result.rows[0];
+      bcrypt.compare(req.body.password, result.rows[0].password, function (error, validPassword) {
+        if (error) {
+          console.error(error);
 
-        sesh.user = user.username;
-        sesh.highscore = user.highscore || 0;
+          res.send(error);
+        }
 
-        console.log(`${sesh.user} logged in`);
-        loginResponse(HttpStatus.OK, 'Login succesful');
-      } else { // invalid password
-        loginResponse(HttpStatus.CONFLICT, 'Invalid password');
-      }
+        if (validPassword) { // valid password
+          const sesh = req.session;
+          const user = result.rows[0];
+
+          sesh.user = user.username;
+          sesh.highscore = user.highscore || 0;
+
+          console.log(`${sesh.user} logged in`);
+          loginResponse(HttpStatus.OK, 'Login succesful');
+        } else { // invalid password
+          loginResponse(HttpStatus.CONFLICT, 'Invalid password');
+        }
+      });
     }
   });
 });
