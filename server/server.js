@@ -29,21 +29,6 @@ app.set('view engine', 'ejs');
 
 app.use('/', indexRoute);
 
-app.get('/db', async (req, res) => {
-  try {
-    const client = await pool.connect();
-    const result = await client.query('SELECT * FROM users');
-    const results = { 'results': (result) ? result.rows : null };
-
-    res.render('/', results);
-    client.release();
-  } catch (err) {
-    console.error(err);
-
-    res.send("Error " + err);
-  }
-});
-
 app.get('/login', (req, res) => {
   console.log('Landed on login page');
 
