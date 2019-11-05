@@ -1,5 +1,4 @@
 const loginRoute = require('express').Router();
-const HttpStatus = require('http-status-codes');
 const bcrypt = require('bcryptjs');
 
 loginRoute.get('/', (req, res) => {
@@ -26,7 +25,7 @@ loginRoute.post('/', (req, res) => {
     }
 
     if (result.rows.length == 0) { // invalid username
-      loginResponse(HttpStatus.CONFLICT, 'Invalid Username');
+      loginResponse(req.httpStatus.CONFLICT, 'Invalid Username');
     } else { // valid username
       bcrypt.compare(req.body.password, result.rows[0].password, function (error, validPassword) {
         if (error) {
@@ -43,9 +42,9 @@ loginRoute.post('/', (req, res) => {
           sesh.highscore = user.highscore || 0;
 
           console.log(`${sesh.user} logged in`);
-          loginResponse(HttpStatus.OK, 'Login succesful');
+          loginResponse(req.httpStatus.OK, 'Login succesful');
         } else { // invalid password
-          loginResponse(HttpStatus.CONFLICT, 'Invalid password');
+          loginResponse(req.httpStatus.CONFLICT, 'Invalid password');
         }
       });
     }
