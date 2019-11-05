@@ -5,6 +5,8 @@ const HttpStatus = require('http-status-codes');
 var session = require('client-sessions');
 const bcrypt = require('bcryptjs');
 
+const indexRoute = require('./routes/index-route');
+
 const PORT = process.env.PORT || 5000;
 var app = express();
 var pool;
@@ -26,12 +28,7 @@ app.use(session({
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-  console.log('Landed on home page');
-  console.log('Redirecting to login page');
-
-  res.redirect('/login');
-});
+app.use('/', indexRoute);
 
 app.get('/db', async (req, res) => {
   try {
