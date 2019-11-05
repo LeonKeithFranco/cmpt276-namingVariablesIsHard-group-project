@@ -10,14 +10,19 @@ const loginRoute = require('./routes/login-route')
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
+const pool = (req, res, next) => {
+  req.pool = new Pool({
+    connectionString: process.env.DATABASE_URL
+  });
+
+  next();
+}
 const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(pool);
 app.use(session({
   cookieName: 'session',
   secret: 'namingVariablesIsHard',
@@ -42,7 +47,7 @@ app.post('/register', (req, res) => {
   const { username, password, passwordReconfirm } = req.body;
   let registerQuery = `SELECT * FROM Users WHERE username=\'${username}\'`
 
-  pool.query(registerQuery, (error, result) => {
+  req.pool.query(registerQuery, (error, result) => {
     if (error) {
       console.error(error);
 
@@ -68,7 +73,7 @@ app.post('/register', (req, res) => {
 
             registerQuery = `INSERT INTO Users(username,password) VALUES (\'${username}\',\'${hashedPassword}\')`;
 
-            pool.query(registerQuery, (error, result) => {
+            req.pool.query(registerQuery, (error, result) => {
               if (error) {
                 console.error(error);
 
