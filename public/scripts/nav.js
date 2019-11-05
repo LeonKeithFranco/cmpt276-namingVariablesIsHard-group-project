@@ -1,3 +1,7 @@
+function goTo(page) {
+    return () => window.location.href = `${window.location.origin}/${page}`
+}
+
 // for register page
 $("#registerButton").click(() => window.location.href = `${window.location.origin}/register`);
 
