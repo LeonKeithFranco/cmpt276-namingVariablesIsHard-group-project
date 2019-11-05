@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const HttpStatus = require('http-status-codes');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   pool: function (req, res, next) {
@@ -11,6 +12,11 @@ module.exports = {
   },
   httpStatusCodes: function(req, res, next) {
     req.httpStatus = HttpStatus; // adds HttpStatus object to request object
+
+    next();
+  },
+  hash: function(req, res, next) {
+    req.bcrypt = bcrypt; // adds bcrypt object to request object
 
     next();
   }
