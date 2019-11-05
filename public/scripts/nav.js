@@ -6,4 +6,4 @@ function goTo(page) {
 $("#registerButton").click(goTo('register'));
 
 //for main menu page
-$("#logoutButton").click(() => window.location.href = `${window.location.origin}/logout`);
+$("#logoutButton").click(goTo('logout'));
