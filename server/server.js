@@ -13,7 +13,7 @@ pool = new Pool({
 });
 const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
@@ -23,7 +23,7 @@ app.use(session({
   activeDuration: 5 * 60 * 1000
 }));
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
