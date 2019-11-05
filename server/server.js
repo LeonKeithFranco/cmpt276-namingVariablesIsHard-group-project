@@ -6,29 +6,33 @@ const session = require('client-sessions');
 const bcrypt = require('bcryptjs');
 
 const indexRoute = require('./routes/index-route');
-const loginRoute = require('./routes/login-route')
+const loginRoute = require('./routes/login-route');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-const pool = (req, res, next) => {
-  req.pool = new Pool({ // adds Pool obect onto request object
-    connectionString: process.env.DATABASE_URL
-  });
-
-  next();
-}
 const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(pool); // makes req.pool usable in any route call back
 app.use(session({
   cookieName: 'session',
   secret: 'namingVariablesIsHard',
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000
 }));
+app.use((req, res, next) => {
+  req.pool = new Pool({ // adds Pool obect onto request object
+    connectionString: process.env.DATABASE_URL
+  });
+
+  next();
+});
+app.use((req, res, next) => {
+  req.httpStatus = HttpStatus; // adds HttpStatus object to request object
+
+  next();
+});
 
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
@@ -80,16 +84,16 @@ app.post('/register', (req, res) => {
                 res.send(error);
               }
 
-              registerResponse(HttpStatus.CREATED, 'New user added to database');
+              registerResponse(req.httpStatus.CREATED, 'New user added to database');
             });
           });
         }
         else { // password mismatch
-          registerResponse(HttpStatus.CONFLICT, 'Passwords do not match');
+          registerResponse(req.httpStatus.CONFLICT, 'Passwords do not match');
         }
         break;
       case 1: // existing user in db
-        registerResponse(HttpStatus.CONFLICT, 'User already exists');
+        registerResponse(req.httpStatus.CONFLICT, 'User already exists');
         break;
       default:
         throw new Error('Non-unique user in database');
