@@ -2,15 +2,14 @@ const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
 const HttpStatus = require('http-status-codes');
-var session = require('client-sessions');
+const session = require('client-sessions');
 const bcrypt = require('bcryptjs');
 
 const indexRoute = require('./routes/index-route');
 
 const PORT = process.env.PORT || 5000;
-var app = express();
-var pool;
-pool = new Pool({
+const app = express();
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
 const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
@@ -53,7 +52,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   console.log('Login requested');
 
-  var loginQuery = `SELECT * FROM Users WHERE username=\'${req.body.username}\'`;
+  let loginQuery = `SELECT * FROM Users WHERE username=\'${req.body.username}\'`;
   pool.query(loginQuery, (error, result) => {
     if (error) {
       console.error(error);
