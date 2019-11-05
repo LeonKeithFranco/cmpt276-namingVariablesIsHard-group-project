@@ -25,11 +25,8 @@ app.use((req, res, next) => {
   req.pool = new Pool({ // adds Pool obect onto request object
     connectionString: process.env.DATABASE_URL
   });
-
-  next();
-});
-app.use((req, res, next) => {
   req.httpStatus = HttpStatus; // adds HttpStatus object to request object
+  req.bcrypt = bcrypt; // adds bcrypt object to request object
 
   next();
 });
