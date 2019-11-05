@@ -3,7 +3,7 @@ function goTo(page) {
 }
 
 // for register page
-$("#registerButton").click(() => window.location.href = `${window.location.origin}/register`);
+$("#registerButton").click(goTo('register'));
 
 //for main menu page
 $("#logoutButton").click(() => window.location.href = `${window.location.origin}/logout`);
