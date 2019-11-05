@@ -11,7 +11,7 @@ const loginRoute = require('./routes/login-route')
 const PORT = process.env.PORT || 5000;
 const app = express();
 const pool = (req, res, next) => {
-  req.pool = new Pool({
+  req.pool = new Pool({ // adds Pool obect onto request object
     connectionString: process.env.DATABASE_URL
   });
 
@@ -22,7 +22,7 @@ const saltRounds = 8; // for hashing; the higher the number, the more secure the
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(pool);
+app.use(pool); // makes req.pool usable in any route call back
 app.use(session({
   cookieName: 'session',
   secret: 'namingVariablesIsHard',
