@@ -1,5 +1,4 @@
 const registerRoute = require('express').Router();
-const bcrypt = require('bcryptjs');
 
 const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
 
@@ -31,7 +30,7 @@ registerRoute.post('/', (req, res) => {
     switch (result.rows.length) {
       case 0: // no existing user in db
         if (password === passwordReconfirm) { // password match
-          bcrypt.hash(password, saltRounds, (error, hashedPassword) => {
+          req.bcrypt.hash(password, saltRounds, (error, hashedPassword) => {
             if (error) {
               console.error(error);
 

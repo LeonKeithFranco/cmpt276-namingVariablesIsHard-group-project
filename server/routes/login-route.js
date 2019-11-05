@@ -1,5 +1,4 @@
 const loginRoute = require('express').Router();
-const bcrypt = require('bcryptjs');
 
 loginRoute.get('/', (req, res) => {
   console.log('Landed on login page');
@@ -27,7 +26,7 @@ loginRoute.post('/', (req, res) => {
     if (result.rows.length == 0) { // invalid username
       loginResponse(req.httpStatus.CONFLICT, 'Invalid Username');
     } else { // valid username
-      bcrypt.compare(req.body.password, result.rows[0].password, function (error, validPassword) {
+      req.bcrypt.compare(req.body.password, result.rows[0].password, function (error, validPassword) {
         if (error) {
           console.error(error);
 
