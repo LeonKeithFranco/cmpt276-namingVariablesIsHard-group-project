@@ -1,19 +1,6 @@
 const loginRoute = require('express').Router();
-const { Pool } = require('pg');
 const HttpStatus = require('http-status-codes');
-const session = require('client-sessions');
 const bcrypt = require('bcryptjs');
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
-
-loginRoute.use(session({
-  cookieName: 'session',
-  secret: 'namingVariablesIsHard',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000
-}));
 
 loginRoute.get('/', (req, res) => {
   console.log('Landed on login page');
@@ -24,7 +11,7 @@ loginRoute.post('/', (req, res) => {
   console.log('Login requested');
 
   let loginQuery = `SELECT * FROM Users WHERE username=\'${req.body.username}\'`;
-  pool.query(loginQuery, (error, result) => {
+  req.pool.query(loginQuery, (error, result) => {
     if (error) {
       console.error(error);
 
