@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const session = require('client-sessions');
-const { pool, httpStatusCodes, hash } = require('./modules/custom-middleware');
+const { pool, httpStatusCodes, hash, respond } = require('./modules/custom-middleware');
 
 const indexRoute = require('./routes/index-route');
 const loginRoute = require('./routes/login-route');
@@ -26,8 +26,8 @@ app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
 app.use('/', indexRoute);
-app.use('/login', pool, httpStatusCodes, hash, loginRoute);
-app.use('/register', pool, httpStatusCodes, hash, registerRoute);
+app.use('/login', pool, httpStatusCodes, hash, respond, loginRoute);
+app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
 

@@ -16,15 +16,8 @@ loginRoute.post('/', (req, res) => {
       res.send(error);
     }
 
-    const loginResponse = (httpResponseCode, msg) => {
-      console.log(msg);
-
-      res.statusMessage = msg;
-      res.status(httpResponseCode).end();
-    }
-
     if (result.rows.length == 0) { // invalid username
-      loginResponse(req.httpStatus.CONFLICT, 'Invalid Username');
+      res.respond(req.httpStatus.CONFLICT, 'Invalid Username');
     } else { // valid username
       req.bcrypt.compare(req.body.password, result.rows[0].password, function (error, validPassword) {
         if (error) {
@@ -41,9 +34,9 @@ loginRoute.post('/', (req, res) => {
           sesh.highscore = user.highscore || 0;
 
           console.log(`${sesh.user} logged in`);
-          loginResponse(req.httpStatus.OK, 'Login succesful');
+          res.respond(req.httpStatus.OK, 'Login succesful');
         } else { // invalid password
-          loginResponse(req.httpStatus.CONFLICT, 'Invalid password');
+          res.respond(req.httpStatus.CONFLICT, 'Invalid password');
         }
       });
     }
