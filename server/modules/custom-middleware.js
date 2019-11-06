@@ -19,5 +19,15 @@ module.exports = {
     req.bcrypt = bcrypt; // adds bcrypt object to request object
 
     next();
+  },
+  respond: function(req, res, next) {
+    res.respond = (httpResponseCode, msg) => {
+      console.log(msg);
+
+      res.statusMessage = msg;
+      res.status(httpResponseCode).end();
+    }
+
+    next();
   }
 };
