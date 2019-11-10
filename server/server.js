@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const session = require('client-sessions');
-const { pool, httpStatusCodes, hash, respond } = require('./modules/custom-middleware');
+const { pool, httpStatusCodes, hash, respond } = require('./lib/custom-middleware');
 
 const indexRoute = require('./routes/index-route');
 const loginRoute = require('./routes/login-route');
