@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const session = require('client-sessions');
 const { pool, httpStatusCodes, hash, respond } = require('./lib/custom-middleware');
+const quickdraw = require('./lib/quickdraw/quickdraw-api');
+const qdsr = require('quickdraw-svg-render')
 
 const indexRoute = require('./routes/index-route');
 const loginRoute = require('./routes/login-route');
@@ -30,5 +32,13 @@ app.use('/login', pool, httpStatusCodes, hash, respond, loginRoute);
 app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
+
+app.get('/test-draw', (req, res) => {
+  quickdraw.getDrawing((drawing) => {
+    // res.send(qdsr(drawing.drawing, true));
+    console.log(qdsr(drawing.drawing, true));
+    res.render('pages/test-draw', { draw: qdsr(drawing.drawing, true), word: drawing.word });
+  });
+});
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

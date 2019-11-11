@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/header.ejs %>
+</head>
+
+<body>
+    <h1><%= word %></h1> 
+    <%  draw.forEach((item) => { %>
+    <%-     item                 %>
+    <%  })                       %>
+</body>
+
+</html>
