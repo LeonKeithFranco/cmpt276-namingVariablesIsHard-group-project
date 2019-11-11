@@ -6,9 +6,9 @@ const API_KEY = 'AIzaSyBasoPrgP5G0T08HZ41H4hc4_FiCVf61qA';
 
 module.exports = {
   /*
-    Pre-condition: None
+    Pre-condition: Requires a callback as input
     Post-condition: Will get a random Quick, Draw! drawing from Google's web API, convert the returned drawing into a
-                    JSON object, then apply the call back to the drawing JSON object 
+                    JSON object, then apply the callback to the drawing JSON object 
   */
   getDrawing: function (callback) {
     const categoryIndex = _.random(categories.length - 1);
@@ -20,7 +20,7 @@ module.exports = {
         throw error;
       }
 
-      setTimeout(callback, 1, JSON.parse(body));
+      setTimeout(callback, 0, JSON.parse(body));
     });
   }
 };
