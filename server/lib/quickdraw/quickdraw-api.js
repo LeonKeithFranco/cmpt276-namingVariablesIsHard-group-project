@@ -20,7 +20,7 @@ module.exports = {
         throw error;
       }
 
-      callback(JSON.parse(body));
+      setTimeout(callback, 1, JSON.parse(body));
     });
   }
 };
