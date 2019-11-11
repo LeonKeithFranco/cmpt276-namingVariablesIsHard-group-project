@@ -33,12 +33,23 @@ app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
 
-app.get('/test-draw', (req, res) => {
+app.get('/send-drawing', (req, res) => {
   quickdraw.getDrawing((drawing) => {
     // res.send(qdsr(drawing.drawing, true));
-    console.log(qdsr(drawing.drawing, true));
-    res.render('pages/test-draw', { draw: qdsr(drawing.drawing, true), word: drawing.word });
+    const svgArray = qdsr(drawing.drawing, true);
+    let svgHTMLElem = '';
+
+    svgArray.forEach((val) => {
+      svgHTMLElem += val;
+    });
+
+    // res.render('pages/test-draw', { draw: svgHTMLElem, word: drawing.word });
+
+    res.status(200).send({ word: drawing.word, svg: svgHTMLElem });
   });
+});
+app.get('/test-draw', (req, res) => {
+  res.render('pages/test-draw');
 });
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
