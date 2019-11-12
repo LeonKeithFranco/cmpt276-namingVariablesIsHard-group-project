@@ -33,8 +33,4 @@ app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
 app.use('/send-drawing', httpStatusCodes, sendDrawingRoute);
 
-app.get('/test-draw', (req, res) => {
-  res.render('pages/test-draw');
-});
-
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
