@@ -2,14 +2,13 @@ const express = require('express');
 const path = require('path');
 const session = require('client-sessions');
 const { pool, httpStatusCodes, hash, respond } = require('./lib/custom-middleware');
-const quickdraw = require('./lib/quickdraw/quickdraw-api');
-const qdsr = require('quickdraw-svg-render')
 
 const indexRoute = require('./routes/index-route');
 const loginRoute = require('./routes/login-route');
 const registerRoute = require('./routes/register-route');
 const mainMenuRoute = require('./routes/main-menu-route');
 const logoutRoute = require('./routes/logout-route');
+const sendDrawingRoute = require('./routes/send-drawing-route');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -32,22 +31,8 @@ app.use('/login', pool, httpStatusCodes, hash, respond, loginRoute);
 app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
+app.use('/send-drawing', httpStatusCodes, sendDrawingRoute);
 
-app.get('/send-drawing', (req, res) => {
-  quickdraw.getDrawing((drawing) => {
-    // res.send(qdsr(drawing.drawing, true));
-    const svgArray = qdsr(drawing.drawing, true);
-    let svgHTMLElem = '';
-
-    svgArray.forEach((val) => {
-      svgHTMLElem += val;
-    });
-
-    // res.render('pages/test-draw', { draw: svgHTMLElem, word: drawing.word });
-
-    res.status(200).send({ word: drawing.word, svg: svgHTMLElem });
-  });
-});
 app.get('/test-draw', (req, res) => {
   res.render('pages/test-draw');
 });
