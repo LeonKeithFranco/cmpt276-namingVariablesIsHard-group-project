@@ -10,7 +10,7 @@ module.exports = {
     Post-condition: Will get a random Quick, Draw! drawing from Google's web API, convert the returned drawing into a
                     JSON object, then apply the callback to the drawing JSON object 
   */
-  getDrawing: function (callback) {
+  getRandomDrawing: function (callback) {
     const categoryIndex = _.random(categories.length - 1);
     const category = categories[categoryIndex];
     const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?&key=${API_KEY}&isAnimated=false&format=json`;
