@@ -5,10 +5,8 @@ const qdsr = require('quickdraw-svg-render')
 sendDrawingRoute.get('/random', (req, res) => {
     quickdraw.getRandomDrawing((drawing) => {
         const svgArray = qdsr(drawing.drawing, true);
-        let svgHTMLElem = '';
-    
-        svgArray.forEach((val) => {
-          svgHTMLElem += val;
+        const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
+            return currentVal + nextVal;
         });
     
         res.status(200).send({ word: drawing.word, svg: svgHTMLElem });
