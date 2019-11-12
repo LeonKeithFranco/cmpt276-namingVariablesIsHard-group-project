@@ -3,6 +3,8 @@ const quickdraw = require('../lib/quickdraw/quickdraw-api');
 const qdsr = require('quickdraw-svg-render')
 
 sendDrawingRoute.get('/random', (req, res) => {
+    console.log('Random drawing requested');
+
     quickdraw.getRandomDrawing((drawing) => {
         const svgArray = qdsr(drawing.drawing, true);
         const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
