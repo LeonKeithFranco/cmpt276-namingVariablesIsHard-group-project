@@ -65,7 +65,7 @@ module.exports = {
     });
   },
 
-  convertDrawingToSvgHtmlElem: function (drawing, callback) {
+  convertDrawing: function (drawing, callback) {
     const svgArray = qdsr(drawing.drawing, true);
     const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
       return currentVal + nextVal;
