@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const session = require('client-sessions');
+const socket = require('socket.io');
 const { pool, httpStatusCodes, hash, respond } = require('./lib/custom-middleware');
 
 const indexRoute = require('./routes/index-route');
@@ -33,4 +34,9 @@ app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
 app.use('/send-drawing', httpStatusCodes, sendDrawingRoute);
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+const io = socket(server);
+
+io.on('connection', (socket) => {
+  
+});
