@@ -46,12 +46,9 @@ app.get('/socket-test', (req, res) => { // for testing
 io.on('connection', (socket) => {
   socket.on('clientRequestRandomDrawing', () => {
     quickdraw.getRandomDrawing((drawing) => {
-      const svgArray = qdsr(drawing.drawing, true);
-      const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
-        return currentVal + nextVal;
+      quickdraw.convertDrawing(drawing, (convertedDrawing) => {
+        socket.emit('serverSendRandomDrawing', convertedDrawing);
       });
-  
-      socket.emit('serverSendRandomDrawing', { word: drawing.word, svg: svgHTMLElem });
     });
   });
 
