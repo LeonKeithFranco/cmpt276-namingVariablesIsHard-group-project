@@ -44,11 +44,7 @@ app.get('/socket-test', (req, res) => { // for testing
 });
 
 io.on('connection', (socket) => {
-  console.log('Made socket connection', socket.id);
-  
   socket.on('clientRequestRandomDrawing', () => {
-    console.log('Client requested random drawing', socket.id);
-
     quickdraw.getRandomDrawing((drawing) => {
       const svgArray = qdsr(drawing.drawing, true);
       const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
@@ -56,6 +52,19 @@ io.on('connection', (socket) => {
       });
   
       socket.emit('serverSendRandomDrawing', { word: drawing.word, svg: svgHTMLElem });
+    });
+  });
+
+  socket.on('clientRequestDrawing', (data) => {
+    const { category, id } = data;
+
+    quickdraw.getDrawing(category, id, (drawing) => {
+      const svgArray = qdsr(drawing.drawing, true);
+      const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
+        return currentVal + nextVal;
+      });
+  
+      socket.emit('serverSendDrawing', { word: drawing.word, svg: svgHTMLElem });
     });
   });
 });
