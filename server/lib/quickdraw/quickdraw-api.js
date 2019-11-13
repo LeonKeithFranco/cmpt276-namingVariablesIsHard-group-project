@@ -15,13 +15,6 @@ module.exports = {
     const category = categories[categoryIndex];
     const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?&key=${API_KEY}&isAnimated=false&format=json`;
 
-    //debugging info
-    console.log(`Category: ${category}`);
-    console.log(`Category length: ${categories.length}`);
-    console.log(`Category index: ${categoryIndex}`);
-    console.log(`Category: ${module.exports.getCategory(categoryIndex)}`);
-    module.exports.getCategorySize(category, (size) => {console.log(`Category size: ${size}`);});
-
     request(URL, (error, response, body) => {
       if (error) {
         throw error;
@@ -32,7 +25,7 @@ module.exports = {
   },
 
   /*
-    Pre-condition: Requires a callback as input
+    Pre-condition: Requires a category name (string), a drawing id (number) and a callback as input
     Post-condition: Will get a specific Quick, Draw! drawing from Google's web API, convert the returned drawing into a
                     JSON object, then apply the callback to the drawing JSON object 
   */
