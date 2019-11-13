@@ -1,6 +1,7 @@
 const request = require('request');
 const _ = require('lodash');
 const categories = require('./categories');
+const qdsr = require('quickdraw-svg-render');
 
 const API_KEY = 'AIzaSyBasoPrgP5G0T08HZ41H4hc4_FiCVf61qA';
 
