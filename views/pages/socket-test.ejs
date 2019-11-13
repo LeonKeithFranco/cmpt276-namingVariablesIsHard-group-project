@@ -3,10 +3,13 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <script type="text/javascript" src="/scripts/socket-test.js" defer></script>
 </head>
 
 <body>
-    
+    <button id="getRandomDrawing" type="button">Get Random Drawing</button>
+    <h1 id="word"></h1>
+    <div id="drawing" style="width: 250px; height: 250px;"></div>
 </body>
 
 </html>

@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const session = require('client-sessions');
 const socket = require('socket.io');
+const quickdraw = require('./lib/quickdraw/quickdraw-api');
+const qdsr = require('quickdraw-svg-render');
 const { pool, httpStatusCodes, hash, respond } = require('./lib/custom-middleware');
 
 const indexRoute = require('./routes/index-route');
@@ -37,6 +39,23 @@ app.use('/send-drawing', httpStatusCodes, sendDrawingRoute);
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
 
+app.get('/socket-test', (req, res) => { // for testing
+  res.render('pages/socket-test');
+});
+
 io.on('connection', (socket) => {
+  console.log('Made socket connection', socket.id);
   
+  socket.on('clientRequestRandomDrawing', () => {
+    console.log('Client requested random drawing', socket.id);
+
+    quickdraw.getRandomDrawing((drawing) => {
+      const svgArray = qdsr(drawing.drawing, true);
+      const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
+        return currentVal + nextVal;
+      });
+  
+      socket.emit('serverSendRandomDrawing', { word: drawing.word, svg: svgHTMLElem });
+    });
+  });
 });
