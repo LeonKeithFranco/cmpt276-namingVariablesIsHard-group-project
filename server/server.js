@@ -56,12 +56,9 @@ io.on('connection', (socket) => {
     const { category, id } = data;
 
     quickdraw.getDrawing(category, id, (drawing) => {
-      const svgArray = qdsr(drawing.drawing, true);
-      const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
-        return currentVal + nextVal;
+      quickdraw.convertDrawing(drawing, (convertedDrawing) => {
+        socket.emit('serverSendDrawing', convertedDrawing);
       });
-  
-      socket.emit('serverSendDrawing', { word: drawing.word, svg: svgHTMLElem });
     });
   });
 });
