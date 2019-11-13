@@ -63,5 +63,14 @@ module.exports = {
       }
       setTimeout(callback, 0, JSON.parse(body));
     });
+  },
+
+  convertDrawingToSvgHtmlElem: function (drawing, callback) {
+    const svgArray = qdsr(drawing.drawing, true);
+    const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
+      return currentVal + nextVal;
+    });
+
+    setTimeout(callback, 0, { word: drawing.word, svg: svgHTMLElem });
   }
 };
