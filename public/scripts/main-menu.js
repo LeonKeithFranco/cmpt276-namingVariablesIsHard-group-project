@@ -1,3 +1,7 @@
+const gameModeMenu = $('#gameModeMenu');
+const difficultyMenu = $('#difficultyMenu');
+const confirmationMenu = $('#confirmationMenu');
+
 $(document).ready(() => {
     defaultDisplayHtml = display.html();
 });
