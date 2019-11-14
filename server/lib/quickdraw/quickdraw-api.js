@@ -66,6 +66,10 @@ module.exports = {
     });
   },
 
+  /*
+    Pre-Condition: Requires a Quick, Draw! object and a callback
+    Post-Condition: Applies the callback to an object which contains the related word and an HTML svg element as a string
+  */
   convertDrawing: function (drawing, callback) {
     const svgArray = qdsr(drawing.drawing, true);
     const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
