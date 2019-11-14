@@ -34,7 +34,7 @@ app.use('/login', pool, httpStatusCodes, hash, respond, loginRoute);
 app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', checkForValidSession, mainMenuRoute);
 app.use('/logout', logoutRoute);
-app.use('/game-mode', gameModeRoute);
+app.use('/game-mode', checkForValidSession, gameModeRoute);
 
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
