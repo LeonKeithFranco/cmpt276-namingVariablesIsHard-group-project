@@ -54,6 +54,10 @@ hardBtn.click(() => {
 backBtn.click(reset);
 
 
+const yesBtn = $('#yesButton');
+const noBtn = $('#noButton');
+
+
 function gameModePicked() {
     gameModeMenu.hide();
     difficultyMenu.show();
