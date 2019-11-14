@@ -7,32 +7,34 @@ $(document).ready(() => {
     confirmationMenu.hide();
 });
 
+let gameMode;
+let difficulty;
+
+
 const standardBtn = $('#standardButton');
 const oddOneOutBtn = $('#oddOneOutButton');
 const timedBtn = $('#timedButton');
-
-let gameMode;
-let difficulty;
 
 function gameModePicked() {
     gameModeMenu.hide();
     difficultyMenu.show();
 }
 
-standardBtn.click(function() {
+standardBtn.click(() => {
     gameMode = standardBtn.text();
     gameModePicked()
 });
 
-oddOneOutBtn.click(function() {
+oddOneOutBtn.click(() => {
     gameMode = oddOneOutBtn.text();
     gameModePicked()
 });
 
-timedBtn.click(function() {
+timedBtn.click(() => {
     gameMode = timedBtn.text();
     gameModePicked()
 });
+
 
 const easyBtn = $('#easyButton');
 const normalBtn = $('#normalButton');
