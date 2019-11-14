@@ -31,12 +31,3 @@ oddOneOutBtn.click(() => {
 timedBtn.click(() => {
     display.html(difficultyHtml);
 });
-
-const easyBtn = $("#easyButton");
-const normalBtn = $("#normalButton");
-const hardBtn = $("#hardButton");
-const backBtn = $("#backButton");
-
-backBtn.click(() => {
-    display.html(defaultDisplayHtml);
-});
