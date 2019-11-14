@@ -11,6 +11,7 @@ const loginRoute = require('./routes/login-route');
 const registerRoute = require('./routes/register-route');
 const mainMenuRoute = require('./routes/main-menu-route');
 const logoutRoute = require('./routes/logout-route');
+const gameModeRoute = require('./routes/game-mode-route');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -33,6 +34,7 @@ app.use('/login', pool, httpStatusCodes, hash, respond, loginRoute);
 app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
+app.use('/game-mode', gameModeRoute);
 
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
