@@ -11,7 +11,6 @@ const loginRoute = require('./routes/login-route');
 const registerRoute = require('./routes/register-route');
 const mainMenuRoute = require('./routes/main-menu-route');
 const logoutRoute = require('./routes/logout-route');
-const sendDrawingRoute = require('./routes/send-drawing-route');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -34,14 +33,9 @@ app.use('/login', pool, httpStatusCodes, hash, respond, loginRoute);
 app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', mainMenuRoute);
 app.use('/logout', logoutRoute);
-app.use('/send-drawing', httpStatusCodes, sendDrawingRoute);
 
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
-
-app.get('/socket-test', (req, res) => { // for testing
-  res.render('pages/socket-test');
-});
 
 io.on('connection', (socket) => {
   socket.on('clientRequestRandomDrawing', () => {
