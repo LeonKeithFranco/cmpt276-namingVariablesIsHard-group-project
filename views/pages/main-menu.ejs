@@ -3,6 +3,7 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <script type="text/javascript" src="/scripts/main-menu.js" defer></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/main-menu.css">
 </head>
 
@@ -10,13 +11,30 @@
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h4 class="text" id="header1">Welcome <%= user %></h4>
-        <h4 class="text">Choose your gamemode</h4>
-        <button class="button">Standard</button>
-        <br>
-        <button class="button">Odd One Out</button>
-        <br>
-        <button class="button">Timed</button>
-        <br>
-        <button id="logoutButton" class="button">Logout</button>
+        <div id="gameModeMenu">
+            <h4 class="text">Choose your gamemode</h4>
+            <button id="standardButton" class="button">Standard</button>
+            <br>
+            <button id="oddOneOutButton" class="button">Odd One Out</button>
+            <br>
+            <button id="timedButton" class="button">Timed</button>
+            <br>
+            <button id="logoutButton" class="button">Logout</button>
+        </div>
+        <div id="difficultyMenu">
+            <h4 class="text">Choose your difficulty</h4>
+            <button id="easyButton" class="button">Easy</button>
+            <br>
+            <button id="normalButton" class="button">Normal</button>
+            <br>
+            <button id="hardButton" class="button">Hard</button>
+            <br>
+            <button id="backButton" class="button">Back</button>
+        </div>
+        <div id="confirmationMenu">
+            <h4 id="confirmationMessage" class="text"></h4>
+            <button id="yesButton" class="button">Yes</button>
+            <button id="noButton" class="button">No</button>
+        </div>
     </center>
 </body>
