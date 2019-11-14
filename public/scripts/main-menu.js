@@ -1,7 +1,8 @@
+const display = $('#display');
 let defaultDisplayHtml;
 
 $(document).ready(() => {
-    defaultDisplayHtml = $("#display").html();
+    defaultDisplayHtml = display.html();
 });
 
 const standardBtn = $("#standardButton");
@@ -20,18 +21,22 @@ const difficultyHtml = `
 `
 
 standardBtn.click(() => {
-    $("#display").html(difficultyHtml);
+    display.html(difficultyHtml);
 });
 
 oddOneOutBtn.click(() => {
-    $("#display").html(difficultyHtml);
+    display.html(difficultyHtml);
 });
 
 timedBtn.click(() => {
-    $("#display").html(difficultyHtml);
+    display.html(difficultyHtml);
 });
 
 const easyBtn = $("#easyButton");
 const normalBtn = $("#normalButton");
 const hardBtn = $("#hardButton");
 const backBtn = $("#backButton");
+
+backBtn.click(() => {
+    display.html(defaultDisplayHtml);
+});
