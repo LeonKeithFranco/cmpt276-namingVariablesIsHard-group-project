@@ -33,3 +33,8 @@ timedBtn.click(function() {
     gameMode = timedBtn.text();
     gameModePicked()
 });
+
+const easyBtn = $('#easyButton');
+const normalBtn = $('#normalButton');
+const hardBtn = $('#hardButton');
+const backBtn = $('#backButton');
