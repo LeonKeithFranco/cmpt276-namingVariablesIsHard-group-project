@@ -15,11 +15,6 @@ const standardBtn = $('#standardButton');
 const oddOneOutBtn = $('#oddOneOutButton');
 const timedBtn = $('#timedButton');
 
-function gameModePicked() {
-    gameModeMenu.hide();
-    difficultyMenu.show();
-}
-
 standardBtn.click(() => {
     gameMode = standardBtn.text();
     gameModePicked()
@@ -41,11 +36,6 @@ const normalBtn = $('#normalButton');
 const hardBtn = $('#hardButton');
 const backBtn = $('#backButton');
 
-function difficultyPicked() {
-    difficultyMenu.hide();
-    confirmationMenu.show();
-}
-
 easyBtn.click(() => {
     difficulty = easyBtn.text();
     difficultyPicked();
@@ -61,13 +51,24 @@ hardBtn.click(() => {
     difficultyPicked();
 });
 
+backBtn.click(reset);
+
+
+function gameModePicked() {
+    gameModeMenu.hide();
+    difficultyMenu.show();
+}
+
+function difficultyPicked() {
+    difficultyMenu.hide();
+    confirmationMenu.show();
+}
+
 function reset() {
     gameMode = undefined;
     difficulty = undefined;
-
+    
     difficultyMenu.hide();
     confirmationMenu.hide();
     gameModeMenu.show();
 }
-
-backBtn.click(reset);
