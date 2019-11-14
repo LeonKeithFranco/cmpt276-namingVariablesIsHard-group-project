@@ -3,7 +3,8 @@ const difficultyMenu = $('#difficultyMenu');
 const confirmationMenu = $('#confirmationMenu');
 
 $(document).ready(() => {
-    defaultDisplayHtml = display.html();
+    difficultyMenu.hide();
+    confirmationMenu.hide();
 });
 
 const standardBtn = $('#standardButton');
