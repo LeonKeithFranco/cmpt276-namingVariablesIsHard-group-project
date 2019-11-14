@@ -57,6 +57,9 @@ backBtn.click(reset);
 const yesBtn = $('#yesButton');
 const noBtn = $('#noButton');
 
+noBtn.click(reset);
+yesBtn.click(() => window.location.href = `${window.location.origin}/game-mode/${gameMode}/${difficulty}`);
+
 
 function gameModePicked() {
     gameModeMenu.hide();
