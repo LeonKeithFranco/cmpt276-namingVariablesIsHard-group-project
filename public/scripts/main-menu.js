@@ -64,6 +64,8 @@ function gameModePicked() {
 }
 
 function difficultyPicked() {
+    $('#confirmationMessage').text(`Play ${gameMode} with ${difficulty} difficulty?`);
+
     difficultyMenu.hide();
     confirmationMenu.show();
 }
