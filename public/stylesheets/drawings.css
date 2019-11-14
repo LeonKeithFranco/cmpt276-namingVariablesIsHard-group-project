@@ -1,0 +1,21 @@
+.drawing {
+    width: 250px;
+    height: 250px;
+    background-color: white;
+}
+
+.drawingContainer {
+    display: grid;
+}
+
+.twoDrawings {
+    grid-template-columns: auto auto;
+}
+
+.threeDrawings {
+    grid-template-columns: auto auto auto;
+}
+
+.fourDrawings {
+    grid-template-columns: auto auto auto auto;
+}
