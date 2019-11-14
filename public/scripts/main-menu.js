@@ -9,6 +9,8 @@ const difficultyHtml = `
     <button id="normalButton" class="button">Normal</button>
     <br>
     <button id="hardButton" class="button">Hard</button>
+    <br>
+    <button id="backButton" class="button">Back</button>
 `
 
 standardBtn.click(() => {
