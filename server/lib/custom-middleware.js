@@ -29,5 +29,16 @@ module.exports = {
     }
 
     next();
+  },
+  checkForValidSession: function(req, res, next) {
+    const sesh = req.session;
+
+    if (!sesh || !sesh.user) {
+      console.log('Client redirected from main page to login');
+  
+      res.redirect('/login');
+    }
+
+    next();
   }
 };
