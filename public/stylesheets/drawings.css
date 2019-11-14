@@ -5,7 +5,7 @@
 }
 
 .drawingContainer {
-    display: grid;
+    display: inline-grid;
 }
 
 .twoDrawings {
