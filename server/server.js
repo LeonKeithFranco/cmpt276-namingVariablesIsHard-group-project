@@ -4,7 +4,7 @@ const session = require('client-sessions');
 const socket = require('socket.io');
 const quickdraw = require('./lib/quickdraw/quickdraw-api');
 const qdsr = require('quickdraw-svg-render');
-const { pool, httpStatusCodes, hash, respond } = require('./lib/custom-middleware');
+const { pool, httpStatusCodes, hash, respond, checkForValidSession } = require('./lib/custom-middleware');
 
 const indexRoute = require('./routes/index-route');
 const loginRoute = require('./routes/login-route');
@@ -32,7 +32,7 @@ app.set('view engine', 'ejs');
 app.use('/', indexRoute);
 app.use('/login', pool, httpStatusCodes, hash, respond, loginRoute);
 app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
-app.use('/main-menu', mainMenuRoute);
+app.use('/main-menu', checkForValidSession, mainMenuRoute);
 app.use('/logout', logoutRoute);
 app.use('/game-mode', gameModeRoute);
 

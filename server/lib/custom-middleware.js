@@ -10,17 +10,17 @@ module.exports = {
 
     next();
   },
-  httpStatusCodes: function(req, res, next) {
+  httpStatusCodes: function (req, res, next) {
     req.httpStatus = HttpStatus; // adds HttpStatus object to request object
 
     next();
   },
-  hash: function(req, res, next) {
+  hash: function (req, res, next) {
     req.bcrypt = bcrypt; // adds bcrypt object to request object
 
     next();
   },
-  respond: function(req, res, next) {
+  respond: function (req, res, next) {
     res.respond = (httpResponseCode, msg) => {
       console.log(msg);
 
@@ -29,5 +29,17 @@ module.exports = {
     }
 
     next();
+  },
+  checkForValidSession: function (req, res, next) {
+    const sesh = req.session;
+
+    if (!sesh || !sesh.user) {
+      console.log('Client redirected from main page to login');
+
+      res.redirect('/login');
+    }
+    else {
+      next();
+    }
   }
 };
