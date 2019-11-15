@@ -58,7 +58,11 @@ const yesBtn = $('#yesButton');
 const noBtn = $('#noButton');
 
 noBtn.click(reset);
-yesBtn.click(() => window.location.href = `${window.location.origin}/game-mode/${gameMode}/${difficulty}`);
+yesBtn.click(() => {
+    gameMode = gameMode.toLowerCase().replace(/ /g, "-");
+    difficulty = difficulty.toLowerCase();
+    window.location.href = `${window.location.origin}/game-mode/${gameMode}/${difficulty}`
+});
 
 
 function gameModePicked() {
