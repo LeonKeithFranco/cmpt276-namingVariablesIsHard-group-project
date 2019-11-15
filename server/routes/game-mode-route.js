@@ -1,6 +1,6 @@
 const gameModeRoute = require('express').Router();
 
-gameModeRoute.get('/Standard/:difficulty', (req, res) => {
+gameModeRoute.get('/standard/:difficulty', (req, res) => {
     const difficulty = req.params.difficulty;
 
     console.log(`${req.session.user} started a Standard game with ${difficulty} difficulty`);
