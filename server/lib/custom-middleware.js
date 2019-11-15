@@ -34,7 +34,7 @@ module.exports = {
     const sesh = req.session;
 
     if (!sesh || !sesh.user) {
-      console.log('Client redirected from main page to login');
+      console.log('Client redirected to login');
 
       res.redirect('/login');
     }
