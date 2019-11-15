@@ -9,6 +9,18 @@
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Standard Mode</h1>
+        <% if (difficulty === 'Easy') { %>
+            <% include ../partials/4-drawing.ejs %>
+        <% } else if (difficulty === 'Normal') { %>
+            <% include ../partials/2-drawing.ejs %>
+        <% } else if (difficulty === 'Hard') { %>
+            <% include ../partials/1-drawing.ejs %>
+        <% } else { %>
+            <h1>Something has gone horribly wrong</h1>
+        <% } %>
+        <div id="inputSection">
+            <input id="wordInput" type="text" placeholder="Word"><button id="standardButton" class="button">Guess</button>
+        </div>
     </center>
 </body>
 
