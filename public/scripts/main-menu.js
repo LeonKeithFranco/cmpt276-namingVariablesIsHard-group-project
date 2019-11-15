@@ -3,8 +3,8 @@ const difficultyMenu = $('#difficultyMenu');
 const confirmationMenu = $('#confirmationMenu');
 
 $(document).ready(() => {
-    difficultyMenu.hide();
-    confirmationMenu.hide();
+  difficultyMenu.hide();
+  confirmationMenu.hide();
 });
 
 
@@ -16,18 +16,18 @@ const oddOneOutBtn = $('#oddOneOutButton');
 const timedBtn = $('#timedButton');
 
 standardBtn.click(() => {
-    gameMode = standardBtn.text();
-    gameModePicked()
+  gameMode = standardBtn.text();
+  gameModePicked()
 });
 
 oddOneOutBtn.click(() => {
-    gameMode = oddOneOutBtn.text();
-    gameModePicked()
+  gameMode = oddOneOutBtn.text();
+  gameModePicked()
 });
 
 timedBtn.click(() => {
-    gameMode = timedBtn.text();
-    gameModePicked()
+  gameMode = timedBtn.text();
+  gameModePicked()
 });
 
 
@@ -37,18 +37,18 @@ const hardBtn = $('#hardButton');
 const backBtn = $('#backButton');
 
 easyBtn.click(() => {
-    difficulty = easyBtn.text();
-    difficultyPicked();
+  difficulty = easyBtn.text();
+  difficultyPicked();
 });
 
 normalBtn.click(() => {
-    difficulty = normalBtn.text();
-    difficultyPicked();
+  difficulty = normalBtn.text();
+  difficultyPicked();
 });
 
 hardBtn.click(() => {
-    difficulty = hardBtn.text();
-    difficultyPicked();
+  difficulty = hardBtn.text();
+  difficultyPicked();
 });
 
 backBtn.click(reset);
@@ -59,29 +59,29 @@ const noBtn = $('#noButton');
 
 noBtn.click(reset);
 yesBtn.click(() => {
-    gameMode = gameMode.toLowerCase().replace(/ /g, "-");
-    difficulty = difficulty.toLowerCase();
-    window.location.href = `${window.location.origin}/game-mode/${gameMode}/${difficulty}`
+  gameMode = gameMode.toLowerCase().replace(/ /g, "-");
+  difficulty = difficulty.toLowerCase();
+  window.location.href = `${window.location.origin}/game-mode/${gameMode}/${difficulty}`
 });
 
 
 function gameModePicked() {
-    gameModeMenu.hide();
-    difficultyMenu.show();
+  gameModeMenu.hide();
+  difficultyMenu.show();
 }
 
 function difficultyPicked() {
-    $('#confirmationMessage').text(`Play ${gameMode} with ${difficulty} difficulty?`);
+  $('#confirmationMessage').text(`Play ${gameMode} with ${difficulty} difficulty?`);
 
-    difficultyMenu.hide();
-    confirmationMenu.show();
+  difficultyMenu.hide();
+  confirmationMenu.show();
 }
 
 function reset() {
-    gameMode = undefined;
-    difficulty = undefined;
-    
-    difficultyMenu.hide();
-    confirmationMenu.hide();
-    gameModeMenu.show();
+  gameMode = undefined;
+  difficulty = undefined;
+
+  difficultyMenu.hide();
+  confirmationMenu.hide();
+  gameModeMenu.show();
 }

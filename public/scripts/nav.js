@@ -1,5 +1,5 @@
 function goTo(page) {
-    return () => window.location.href = `${window.location.origin}/${page}`
+  return () => window.location.href = `${window.location.origin}/${page}`
 }
 
 // for register page
