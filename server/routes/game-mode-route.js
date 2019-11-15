@@ -1,7 +1,7 @@
 const gameModeRoute = require('express').Router();
 
 gameModeRoute.get('/', (req, res) => {
-    console.log(`${req.session.user} redirected to login`);
+    console.log(`${req.session.user} redirected to main menu`);
 
     res.redirect('/main-menu');
 });
