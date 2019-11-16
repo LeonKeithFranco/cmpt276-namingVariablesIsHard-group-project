@@ -6,6 +6,7 @@
 
 .drawingContainer {
     display: inline-grid;
+    background-color: white;
 }
 
 .twoDrawings {
