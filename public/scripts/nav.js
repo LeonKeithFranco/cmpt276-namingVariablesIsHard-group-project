@@ -6,10 +6,8 @@ function goTo(page) {
 $('#registerButton').click(goTo('register'));
 
 // for main menu page
+$('#leaderboardButton').click(goTo('leaderboard'));
 $('#logoutButton').click(goTo('logout'));
 
-// for standard game mode page
+// for game modes and leaderboard
 $('#backToMainMenuButton').click(goTo('main-menu'));
-
-//for leaderboard
-$('#leaderboardButton').click(goTo('leaderboard'));
