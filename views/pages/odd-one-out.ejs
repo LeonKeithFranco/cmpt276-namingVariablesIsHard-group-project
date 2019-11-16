@@ -10,22 +10,19 @@
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Standard Mode</h1>
         <% if (difficulty === 'easy') { %>
-            <% include ../partials/4-drawing.ejs %>
+            <% include ../partials/6-drawing.ejs %>
         <% } else if (difficulty === 'normal') { %>
-            <% include ../partials/2-drawing.ejs %>
+            <% include ../partials/4-drawing.ejs %>
         <% } else if (difficulty === 'hard') { %>
-            <% include ../partials/1-drawing.ejs %>
+            <% include ../partials/3-drawing.ejs %>
         <% } else { %>
             <h1><strong>Something has gone horribly wrong</strong></h1>
         <% } %>
-        <div id="inputSection">
-            <input id="wordInput" type="text" placeholder="Word"><button id="submitGuessButton" class="button">Guess</button>
-        </div>
-        <p id="standardModeRules" class="text">
+        <p id="oddOneOutRules" class="text">
             Rules:<br>
-            These drawings share the same subject<br>
-            Guess the subject <br>
-            The game ends when you enter the wrong subject<br>
+            Most of these drawings share the same topic, except for one<br>
+            Find that picture <br>
+            The game ends when you choose the wrong drawing<br>
             The highest score shall be counted
         </p>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
