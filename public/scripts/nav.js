@@ -10,3 +10,6 @@ $('#logoutButton').click(goTo('logout'));
 
 // for standard game mode page
 $('#backToMainMenuButton').click(goTo('main-menu'));
+
+//for leaderboard
+$('#leaderboardButton').click(goTo('leaderboard'));
