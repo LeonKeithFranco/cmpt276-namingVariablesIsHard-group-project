@@ -6,6 +6,7 @@
 
 .drawingContainer {
     display: inline-grid;
+    background-color: black;
 }
 
 .twoDrawings {
@@ -18,4 +19,7 @@
 
 .fourDrawings {
     grid-template-columns: auto auto auto auto;
+}
+.sixDrawings {
+    grid-template-columns: auto auto auto auto auto auto;
 }

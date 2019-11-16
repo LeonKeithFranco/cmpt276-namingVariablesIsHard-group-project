@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/header.ejs %>
+</head>
+
+<body>
+    <center>
+        <img id="headerimage" src="/assets/scribbltaireio.png">
+        <h1 class="text">Standard Mode</h1>
+        <% if (difficulty === 'easy') { %>
+            <% include ../partials/6-drawing.ejs %>
+        <% } else if (difficulty === 'normal') { %>
+            <% include ../partials/4-drawing.ejs %>
+        <% } else if (difficulty === 'hard') { %>
+            <% include ../partials/2-drawing.ejs %>
+        <% } else { %>
+            <h1><strong>Something has gone horribly wrong</strong></h1>
+        <% } %>
+        <div id="inputSection">
+            <input id="wordInput" type="text" placeholder="Word"><button id="submitGuessButton" class="button">Guess</button>
+        </div>
+        <p id="standardModeRules" class="text">
+            Rules:
+            
+        </p>
+    </center>
+    <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
+</body>
+
+</html>
