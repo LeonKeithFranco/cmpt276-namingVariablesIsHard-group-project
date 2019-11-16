@@ -1,14 +1,14 @@
 .drawing {
-    width: 250px;
-    height: 250px;
+    width: 150px;
+    height: 150px;
     background-color: black;
 }
 
 .drawingContainer {
     display: inline-grid;
-    grid-gap: 10px;
-    padding: 10px;
-    background-color: white;
+    grid-gap: 15px;
+    padding: 15px;
+    background-color: red;
 }
 
 .twoDrawings {
@@ -20,7 +20,7 @@
 }
 
 .fourDrawings {
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto;
 }
 .sixDrawings {
     grid-template-columns: auto auto auto;

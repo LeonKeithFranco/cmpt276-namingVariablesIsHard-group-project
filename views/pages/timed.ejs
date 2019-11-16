@@ -9,6 +9,7 @@
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Standard Mode</h1>
+        <p class="text">Timer:</p>
         <% if (difficulty === 'easy') { %>
             <% include ../partials/4-drawing.ejs %>
         <% } else if (difficulty === 'normal') { %>
@@ -21,11 +22,15 @@
         <div id="inputSection">
             <input id="wordInput" type="text" placeholder="Word"><button id="submitGuessButton" class="button">Guess</button>
         </div>
+        <div id ="skipButton">
+            <input id="wordInput" type="text" placeholder="Word"><button id="submitGuessButton" class="button">Skip</button>
+        </div>
         <p id="standardModeRules" class="text">
             Rules:
             These drawings share the same subject
-            Guess the subject 
-            The game ends when you enter the wrong subject
+            Guess the subject
+            The game ends when the timer runs out
+            Press skip if you cannot find the right answer
             The highest score shall be counted
         </p>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
