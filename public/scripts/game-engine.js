@@ -29,6 +29,7 @@ submitGuessButton.addEventListener('click', function() {
 
 //whenever client receives a drawing from the server, it adds it to the svgList
 socket.on('serverSendDrawing', (convertedDrawing) => {
+	console.log('server sent drawing!');
 	console.log(`${convertedDrawing}`);
 	const {word, svg} = convertedDrawing;
 	svgList.push(svg);

@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
 
   socket.on('clientRequestDrawing', (data) => {
     const { category, id } = data;
-
+    console.log('requesting drawing');
     quickdraw.getDrawing(category, id, (drawing) => {
       quickdraw.convertDrawing(drawing, (convertedDrawing) => {
         socket.emit('serverSendDrawing', convertedDrawing);

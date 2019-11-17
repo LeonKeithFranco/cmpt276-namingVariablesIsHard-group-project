@@ -13,7 +13,8 @@
 <body>
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
-        <h1 class="text">Standard Mode</h1>
+        <h1 class="text">Odd-One-Out Mode</h1>
+        <p id="score"></p>
         <% if (difficulty === 'easy') { %>
             <% include ../partials/6-drawing.ejs %>
         <% } else if (difficulty === 'normal') { %>

@@ -11,23 +11,32 @@ window.onload = function() {
     } else if (difficulty === 'hard') {
         num = 3;
     }
-    console.log(num);
 
     let i;
     for (i = 1; i <= num; i++) {
+        // Line is needed because j is a block scoped variable
         let j = i;
-        let tempString = 'drawing' + j;
-        document.getElementById(tempString).addEventListener('click', function () {
+        document.getElementById('drawing' + j).addEventListener('click', function () {
             select(j - 1);
         });
     }
 
-    console.log(randomRange(6));
+    document.getElementById('score').innerHTML = "Score: "  + score;
+    drawPictures();
 };
+
+function drawPictures() {
+    socket.emit('clientRequestDrawing', {
+        category: "cat",
+        id: 4023
+    });
+    document.getElementById('drawing1').innerHTML = svgList[0];
+}
 
 function select (guess) {
     if (guess == odd) {
         score++;
+        document.getElementById('score').innerHTML = "Score: "  + score;
         console.log('nice!');
     } else {
         gameOver();
