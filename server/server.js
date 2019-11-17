@@ -61,12 +61,25 @@ io.on('connection', (socket) => {
 
   socket.on('clientRequestCategoryName', (data) => {
     console.log(`${data}`);
-    socket.emit('serverSendCategoryName', (quickdraw.getCategory(data)));
+    socket.emit('serverSendCategoryName', quickdraw.getCategory(data));
   });
 
-  socket.on('clientRequestCategorySize', (data) => {
+  socket.on('clientRequestRandomCategoryName', () => {
+    console.log('Random category requested');
 
-    quickdraw.getCategorySize(data, (size) => {
+    let category = quickdraw.getRandomCategory();
+    console.log(category)
+
+    socket.emit('serverSendRandomCategoryName', category);
+  });
+
+  socket.on('clientRequestCategorySize', (category) => {
+    console.log('Category size requested');
+    console.log(`Category: ${category}`);
+
+    quickdraw.getCategorySize(category, (size) => {
+      console.log(`size of ${category} category: ${size}`);
+      console.log('Size of ' + category + ' category: ' + size);
       socket.emit('serverSendCategorySize', size);  
     });
   });

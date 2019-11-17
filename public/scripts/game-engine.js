@@ -25,9 +25,9 @@ socket.on('serverSendDrawing', (convertedDrawing) => {
 });
 
 //whenever client recieves a category size, it saves the number in maxSize
-socket.on('serverSendCategorySize', (size) => {
-	maxSize = size;
-});
+// socket.on('serverSendCategorySize', (size) => {
+// 	maxSize = size;
+// });
 
 //whenever client receives a category name, it saves the name in category
 socket.on('serverSendCategoryName', (name) => {
@@ -69,3 +69,40 @@ function shuffle (array) {
 	}
 	return array;
 };
+
+function getRandomCategory() {
+	socket.emit('clientRequestRandomCategoryName');
+	socket.on('serverSendRandomCategoryName', (randomCategory) => {
+		category = randomCategory
+	});
+}
+
+function getCategorySize(category) {
+	console.log
+	socket.emit('clientRequestCategorySize', category);
+	socket.on('serverSendCategorySize', (size) => {
+		maxSize = size;
+	});
+}
+
+function getDrawing(category, id) {
+	socket.emit('clientRequestDrawing', { category, id })
+	socket.on('serverSendDrawing', (convertedDrawing) => {
+		return convertedDrawing;
+	})
+}
+
+function fillDrawingDivsWithRandomDrawings() {
+	getRandomCategory();
+	console.log(category);
+
+	getCategorySize(category);
+	console.log(maxSize);
+
+	const drawingIds = randomArray(maxSize, drawings.length);
+	console.log(drawingIds);
+
+	// $(drawings).each(function(index) {
+	// 	$(this).html(getDrawing(category, drawingIds[index]));
+	// });
+}
