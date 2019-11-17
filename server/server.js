@@ -58,4 +58,16 @@ io.on('connection', (socket) => {
       });
     });
   });
+
+  socket.on('clientRequestCategoryName', (data) => {
+    console.log(`${data}`);
+    socket.emit('serverSendCategoryName', (quickdraw.getCategory(data)));
+  });
+
+  socket.on('clientRequestCategorySize', (data) => {
+
+    quickdraw.getCategorySize(data, (size) => {
+      socket.emit('serverSendCategorySize', size);  
+    });
+  });
 });
