@@ -2,8 +2,18 @@
 const PORT = 5000;
 
 //get elements from the HTML page
-var drawing1 = document.getElementById('drawing1');
-	guessButton = document.getElementById('submitGuessButton');
+var numDrawings = 6;
+
+var drawings = [];
+var svgList = [];
+
+for (var i = 0; i < numDrawings; i++) {
+	if (document.getElementById(`drawing${i+1}`) !== null) {
+		drawings.push(document.getElementById(`drawing${i+1}`));
+	}
+}
+
+var	guessButton = document.getElementById('submitGuessButton');
 
 //connect to server socket
 const socket = io.connect(`http://localhost:${PORT}`);
@@ -19,7 +29,7 @@ submitGuessButton.addEventListener('click', function() {
 socket.on('serverSendDrawing', (convertedDrawing) => {
 	console.log(`${convertedDrawing}`);
 	const {word, svg} = convertedDrawing;
-	drawing1.innerHTML = svg;
+	drawings[0].innerHTML = svg;
 });
 
 
