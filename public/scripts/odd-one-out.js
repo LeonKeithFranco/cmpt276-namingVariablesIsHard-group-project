@@ -1,3 +1,6 @@
+let odd = randomRange(6);
+let score = 0;
+
 window.onload = function() {
     console.log(difficulty);
     let num;
@@ -13,10 +16,26 @@ window.onload = function() {
     let i;
     for (i = 1; i <= num; i++) {
         let j = i;
-        console.log(j);
         let tempString = 'drawing' + j;
         document.getElementById(tempString).addEventListener('click', function () {
-            console.log(j);
+            select(j - 1);
         });
     }
+
+    console.log(randomRange(6));
 };
+
+function select (guess) {
+    if (guess == odd) {
+        score++;
+        console.log('nice!');
+    } else {
+        gameOver();
+        console.log('u suck');
+    }
+}
+
+function gameOver() {
+
+}
+
