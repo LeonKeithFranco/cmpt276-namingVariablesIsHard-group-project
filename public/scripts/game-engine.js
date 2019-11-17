@@ -1,6 +1,3 @@
-//server port
-const PORT = 5000;
-
 //get elements from the HTML page
 var numDrawings = 6; //maximum drawings per set
 
@@ -19,8 +16,7 @@ for (var i = 0; i < numDrawings; i++) {
 var	guessButton = document.getElementById('submitGuessButton');
 
 //connect to server socket
-const socket = io.connect(`http://localhost:${PORT}`);
-
+const socket = io.connect(window.location.origin);
 
 //add event to the Guess button
 submitGuessButton.addEventListener('click', function() {
