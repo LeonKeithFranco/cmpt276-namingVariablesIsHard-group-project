@@ -40,6 +40,7 @@ const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
 
 io.on('connection', (socket) => {
+  console.log("connection made with socket id:", socket.id);
   socket.on('clientRequestRandomDrawing', () => {
     quickdraw.getRandomDrawing((drawing) => {
       quickdraw.convertDrawing(drawing, (convertedDrawing) => {
@@ -55,6 +56,18 @@ io.on('connection', (socket) => {
       quickdraw.convertDrawing(drawing, (convertedDrawing) => {
         socket.emit('serverSendDrawing', convertedDrawing);
       });
+    });
+  });
+
+  socket.on('clientRequestCategoryName', (data) => {
+    console.log(`${data}`);
+    socket.emit('serverSendCategoryName', (quickdraw.getCategory(data)));
+  });
+
+  socket.on('clientRequestCategorySize', (data) => {
+
+    quickdraw.getCategorySize(data, (size) => {
+      socket.emit('serverSendCategorySize', size);  
     });
   });
 });
