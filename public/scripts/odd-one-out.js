@@ -1,9 +1,9 @@
 let odd = randomRange(6);
 let score = 0;
+let num;
 
 window.onload = function() {
     console.log(difficulty);
-    let num;
     if (difficulty === 'easy') {
         num = 6;
     } else if (difficulty === 'normal') {
@@ -12,12 +12,9 @@ window.onload = function() {
         num = 3;
     }
 
-    let i;
-    for (i = 1; i <= num; i++) {
-        // Line is needed because j is a block scoped variable
-        let j = i;
-        document.getElementById('drawing' + j).addEventListener('click', function () {
-            select(j - 1);
+    for (let i = 1; i <= num; i++) {
+        document.getElementById('drawing' + i).addEventListener('click', function () {
+            select(i - 1);
         });
     }
 
@@ -26,11 +23,24 @@ window.onload = function() {
 };
 
 function drawPictures() {
+    for (let i = 1; i <= num; i++) {
+        requestDrawing(function () {
+            drawPicture(i);
+        });
+    }
+}
+
+function requestDrawing(callback) {
     socket.emit('clientRequestDrawing', {
         category: "cat",
-        id: 4023
+        id: 40323
     });
-    document.getElementById('drawing1').innerHTML = svgList[0];
+
+    setTimeout(callback,500);
+}
+
+function drawPicture(num) {
+    document.getElementById('drawing' + num).innerHTML = svgList[num - 1];
 }
 
 function select (guess) {
@@ -40,11 +50,10 @@ function select (guess) {
         console.log('nice!');
     } else {
         gameOver();
-        console.log('u suck');
     }
 }
 
 function gameOver() {
-
+    console.log('u suck');
 }
 
