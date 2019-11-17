@@ -41,7 +41,7 @@ const io = socket(server);
 
 io.on('connection', (socket) => {
   console.log("connection made with socket id:", socket.id);
-  
+
   socket.on('clientRequestRandomDrawing', () => {
     quickdraw.getRandomDrawing((drawing) => {
       quickdraw.convertDrawing(drawing, (convertedDrawing) => {
@@ -63,6 +63,10 @@ io.on('connection', (socket) => {
   socket.on('clientRequestCategoryName', (data) => {
     console.log(`${data}`);
     socket.emit('serverSendCategoryName', (quickdraw.getCategory(data)));
+  });
+
+  socket.on('clientRequestRandomCategoryName', () => {
+    socket.emit('serverSendRandomCategoryName', (quickdraw.getCategory()));
   });
 
   socket.on('clientRequestCategorySize', (data) => {
