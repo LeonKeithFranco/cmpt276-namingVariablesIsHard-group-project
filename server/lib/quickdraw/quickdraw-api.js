@@ -88,11 +88,17 @@ module.exports = {
     Post-Condition: Applies the callback to an object which contains the related word and an HTML svg element as a string
   */
   convertDrawing: function (drawing, callback) {
-    const svgArray = qdsr(drawing.drawing, true);
-    const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
-      return currentVal + nextVal;
-    });
+    let svgArray = 0;
+    try {
+      svgArray = qdsr(drawing.drawing, true);
+      const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
+        return currentVal + nextVal;
+      });
 
-    setTimeout(callback, 0, { word: drawing.word, svg: svgHTMLElem });
+      setTimeout(callback, 0, { word: drawing.word, svg: svgHTMLElem });
+
+    } catch(error) {
+      console.error(error);
+    }
   }
 };
