@@ -69,7 +69,7 @@ $('#submitGuessButton').click(() => {
     } else {
       continueGame = false;
 
-      alert(`Game over! The word was \"${category}\"`);
+      alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
     }
   }
 });
