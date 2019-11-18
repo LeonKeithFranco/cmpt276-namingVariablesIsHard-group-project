@@ -19,7 +19,7 @@ module.exports = {
 
     request(URL, (error, response, body) => {
       if (error) {
-        throw error;
+        console.error(error);
       }
 
       setTimeout(callback, 0, JSON.parse(body));
@@ -36,7 +36,7 @@ module.exports = {
 
     request(URL, (error, response, body) => {
       if (error) {
-        throw error;
+        console.error(error);
       }
 
       const parsedBody = JSON.parse(body);
@@ -86,7 +86,7 @@ module.exports = {
 
     request(URL, (error, response, body) => {
       if (error) {
-        throw error;
+        console.error(error);
       }
       setTimeout(callback, 0, JSON.parse(body));
     });
@@ -106,7 +106,7 @@ module.exports = {
 
       setTimeout(callback, 0, { word: drawing.word, svg: svgHTMLElem });
 
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
   }

@@ -51,7 +51,7 @@ registerRoute.post('/', (req, res) => {
         res.respond(req.httpStatus.CONFLICT, 'User already exists');
         break;
       default:
-        throw new Error('Non-unique user in database');
+        console.error(new Error('Non-unique user in database'));
     }
   });
 });
