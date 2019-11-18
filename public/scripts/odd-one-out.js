@@ -6,7 +6,7 @@ let sizeTimer;
 let drawTimer;
 let checkTime = 1;
 let oneIteration = false;
-let click = false;
+let loaded = false;
 
 window.onload = function() {
     console.log(difficulty);
@@ -89,33 +89,36 @@ function getOdd() {
 }
 
 function drawPictures() {
-    odd = randomRange(6);
+    odd = randomRange(num);
 
     for (let i = 1; i <= num; i++) {
         document.getElementById("drawing" + i).innerHTML = svgList[i-1];
     }
     document.getElementById("drawing" + (odd+1)).innerHTML = svgList[num];
+    loaded = true;
 }
 
 function select (guess) {
-    if (guess == odd) {
-        score++;
-        document.getElementById('score').innerHTML = "Score: " + score;
-        console.log('nice!');
-    } else {
-        gameOver();
-    }
-    while (svgList.length != 0) {
-        svgList.pop();
-    }
-    maxSize = 0;
-    category = "";
-    oneIteration = false;
-    clearInterval(sizeTimer);
-    clearInterval(categoryTimer);
-    clearInterval(drawTimer);
-    if (svgList.length === 0) {
-        gameLoop();
+    if (loaded) {
+        if (guess == odd) {
+            score++;
+            document.getElementById('score').innerHTML = "Score: " + score;
+            console.log('nice!');
+        } else {
+            gameOver();
+        }
+        while (svgList.length != 0) {
+            svgList.pop();
+        }
+        maxSize = 0;
+        category = "";
+        oneIteration = false;
+        clearInterval(sizeTimer);
+        clearInterval(categoryTimer);
+        clearInterval(drawTimer);
+        if (svgList.length === 0) {
+            gameLoop();
+        }
     }
 }
 
