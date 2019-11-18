@@ -3,7 +3,8 @@ const _ = require('lodash');
 const categories = require('./categories');
 const qdsr = require('quickdraw-svg-render');
 
-const API_KEY = 'AIzaSyBasoPrgP5G0T08HZ41H4hc4_FiCVf61qA';
+const API_KEYS = ['AIzaSyC0U3yLy_m6u7aOMi9YJL2w1vWG4oI5mj0', 'AIzaSyC5osDYfGz4jZvEw_6WdGFuQ1ZYDE-P7VM'];
+let apiKey = API_KEYS[0];
 
 module.exports = {
   /*
@@ -14,7 +15,7 @@ module.exports = {
   getRandomDrawing: function (callback) {
     const categoryIndex = _.random(categories.length - 1);
     const category = categories[categoryIndex];
-    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?&key=${API_KEY}&isAnimated=false&format=json`;
+    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?&key=${apiKey}&isAnimated=false&format=json`;
 
     request(URL, (error, response, body) => {
       if (error) {
@@ -31,14 +32,24 @@ module.exports = {
                     JSON object, then apply the callback to the drawing JSON object 
   */
   getDrawing: function (category, id, callback) {
-    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?id=${id}&key=${API_KEY}&isAnimated=false&format=json`;
+    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?id=${id}&key=${apiKey}&isAnimated=false&format=json`;
 
     request(URL, (error, response, body) => {
       if (error) {
         throw error;
       }
 
-      setTimeout(callback, 0, JSON.parse(body));
+      const parsedBody = JSON.parse(body);
+
+      if (parsedBody.code !== 8) {
+        console.log("if");
+        setTimeout(callback, 0, parsedBody);
+        apiKey = API_KEYS[0];
+      } else {
+        console.log("else");
+        apiKey = API_KEYS[1];
+        this.getDrawing(category, id, callback);
+      }
     });
   },
 
@@ -73,7 +84,7 @@ module.exports = {
     Additional notes: used to obtain an upper bound for generating random drawing indexes
   */
   getCategorySize: function (category, callback) {
-    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}/count?key=${API_KEY}`;
+    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}/count?key=${apiKey}`;
 
     request(URL, (error, response, body) => {
       if (error) {
