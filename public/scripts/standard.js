@@ -12,6 +12,7 @@ let category = "";
 let drawingCount = 0;
 let playerScore = 0;
 let continueGame = true;
+let allDrawingsLoaded = false;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
   category = cat;
@@ -32,12 +33,14 @@ socket.on('serverSendDrawing', (drawingData) => {
   svgArr.push(svg);
   $(drawingDivs[drawingCount]).html(svgArr[drawingCount]);
   drawingCount++;
+  allDrawingsLoaded = drawingCount === drawingDivs.length;
 });
 
 function fillDrawingDivs() {
   svgArr = [];
   category = "";
   drawingCount = 0;
+  allDrawingsLoaded = false;
 
   socket.emit('clientRequestRandomCategoryName');
 }
@@ -87,13 +90,15 @@ input.keypress(function (e) {
 });
 
 playAgainBtn.click(() => {
-  console.log('play again clicked')
-  continueGame = true;
+  if (allDrawingsLoaded) {
+    console.log('play again clicked')
+    continueGame = true;
 
-  playerScore = 0;
+    playerScore = 0;
 
-  scoreDisplay.text(`Score: ${playerScore}`);
-  input.val('');
+    scoreDisplay.text(`Score: ${playerScore}`);
+    input.val('');
 
-  fillDrawingDivs();
+    fillDrawingDivs();
+  }
 });
