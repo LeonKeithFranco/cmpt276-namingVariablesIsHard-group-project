@@ -20,7 +20,7 @@ socket.on('serverSendRandomCategoryName', (cat) => {
 socket.on('serverSendCategorySize', (categorySize) => {
   const drawingIds = randomArray(categorySize, drawingDivs.length);
 
-  $('.drawing').each(function (index) {
+  drawingDivs.each(function (index) {
     socket.emit('clientRequestDrawing', { category: category, id: drawingIds[index] });
   });
 });
