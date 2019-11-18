@@ -3,7 +3,7 @@ const path = require('path');
 const session = require('client-sessions');
 const socket = require('socket.io');
 const quickdraw = require('./lib/quickdraw/quickdraw-api');
-const qdsr = require('quickdraw-svg-render');
+const random = require('./lib/random');
 const { pool, httpStatusCodes, hash, respond, checkForValidSession } = require('./lib/custom-middleware');
 
 const indexRoute = require('./routes/index-route');
@@ -52,6 +52,7 @@ io.on('connection', (socket) => {
 
   socket.on('clientRequestDrawing', (data) => {
     const { category, id } = data;
+    console.log(`drawing requested for: ${category}`);
 
     quickdraw.getDrawing(category, id, (drawing) => {
       quickdraw.convertDrawing(drawing, (convertedDrawing) => {
@@ -80,7 +81,6 @@ io.on('connection', (socket) => {
 
     quickdraw.getCategorySize(category, (size) => {
       console.log(`size of ${category} category: ${size}`);
-      console.log('Size of ' + category + ' category: ' + size);
       socket.emit('serverSendCategorySize', size);  
     });
   });

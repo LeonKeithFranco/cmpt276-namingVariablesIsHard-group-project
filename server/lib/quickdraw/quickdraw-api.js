@@ -55,6 +55,14 @@ module.exports = {
     Post-condition: Will return a random category name
   */
   getRandomCategory: function () {
+    return categories[_.random(categories.length - 1)];
+  },
+
+  /*
+    Pre-condition: None
+    Post-condition: Will return a random category name
+  */
+  getRandomCategory: function () {
     // if (index >= 0 && index < categories.length) return categories[index];
     return categories[_.random(categories.length - 1)];
   },

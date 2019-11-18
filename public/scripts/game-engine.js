@@ -2,10 +2,10 @@
 let numDrawings = 6; //maximum drawings per set
 
 const drawings = $(".drawing"); //holds html div elements to place drawings
-let svgList = []; //holds svgs of drawings from server, can place each element directly in a div's innerHTML
+var svgList = []; //holds svgs of drawings from server, can place each element directly in a div's innerHTML
 
-let maxSize = 0;
-let category = "";
+var maxSize = 0;
+var category = "";
 
 let	guessButton = document.getElementById('submitGuessButton');
 
@@ -20,19 +20,27 @@ submitGuessButton.addEventListener('click', function() {
 //whenever client receives a drawing from the server, it adds it to the svgList
 socket.on('serverSendDrawing', (convertedDrawing) => {
 	console.log(`${convertedDrawing}`);
+
+	const numberOfDrawings = svgList.length
 	const {word, svg} = convertedDrawing;
 	svgList.push(svg);
+
+	drawings[numDrawings] = svgList[numDrawings];
 });
 
 //whenever client recieves a category size, it saves the number in maxSize
-// socket.on('serverSendCategorySize', (size) => {
-// 	maxSize = size;
-// });
+socket.on('serverSendCategorySize', (size) => {
+	maxSize = size;
+});
 
 //whenever client receives a category name, it saves the name in category
 socket.on('serverSendCategoryName', (name) => {
 	category = name;
-})
+});
+
+socket.on('serverSendRandomCategoryName', (name) => {
+	category = name;
+});
 
 //random functions
 /*
@@ -69,40 +77,3 @@ function shuffle (array) {
 	}
 	return array;
 };
-
-function getRandomCategory() {
-	socket.emit('clientRequestRandomCategoryName');
-	socket.on('serverSendRandomCategoryName', (randomCategory) => {
-		category = randomCategory
-	});
-}
-
-function getCategorySize(category) {
-	console.log
-	socket.emit('clientRequestCategorySize', category);
-	socket.on('serverSendCategorySize', (size) => {
-		maxSize = size;
-	});
-}
-
-function getDrawing(category, id) {
-	socket.emit('clientRequestDrawing', { category, id })
-	socket.on('serverSendDrawing', (convertedDrawing) => {
-		return convertedDrawing;
-	})
-}
-
-function fillDrawingDivsWithRandomDrawings() {
-	getRandomCategory();
-	console.log(category);
-
-	getCategorySize(category);
-	console.log(maxSize);
-
-	const drawingIds = randomArray(maxSize, drawings.length);
-	console.log(drawingIds);
-
-	// $(drawings).each(function(index) {
-	// 	$(this).html(getDrawing(category, drawingIds[index]));
-	// });
-}
