@@ -1,6 +1,11 @@
 const socket = io.connect(window.location.origin);
 
 const drawingDivs = $(".drawing");
+const input = $('#wordInput');
+const scoreDisplay = $('#score');
+const submitGuessBtn = $('#submitGuessButton');
+const playAgainBtn = $('#playAgainButton');
+
 let svgArr = [];
 let category = "";
 let drawingCount = 0;
@@ -15,7 +20,7 @@ socket.on('serverSendRandomCategoryName', (cat) => {
 socket.on('serverSendCategorySize', (categorySize) => {
   const drawingIds = randomArray(categorySize, drawingDivs.length);
 
-  $('.drawing').each(function (index) {
+  drawingDivs.each(function (index) {
     socket.emit('clientRequestDrawing', { category: category, id: drawingIds[index] });
   });
 });
@@ -28,6 +33,10 @@ socket.on('serverSendDrawing', (drawingData) => {
 });
 
 function fillDrawingDivs() {
+  svgArr = [];
+  category = "";
+  drawingCount = 0;
+
   socket.emit('clientRequestRandomCategoryName');
 }
 
@@ -45,53 +54,44 @@ function randomRange(upperbound) {
 };
 
 $(document).ready(() => {
-  $('#score').text(`Score: ${playerScore}`);
+  scoreDisplay.text(`Score: ${playerScore}`);
   fillDrawingDivs();
 });
 
-$('#submitGuessButton').click(() => {
+submitGuessBtn.click(() => {
   if (continueGame) {
-    const input = $('#wordInput')
-
     const playerGuess = input.val().trim().toLowerCase();
     const answer = category.toLowerCase();
 
     if (playerGuess === answer) {
-      svgArr = [];
-      category = "";
-      drawingCount = 0;
-
-      $('#score').text(`Score: ${++playerScore}`);
+      scoreDisplay.text(`Score: ${++playerScore}`);
       input.val('');
 
       fillDrawingDivs();
     } else {
       continueGame = false;
 
-      alert(`Game over! The word was \"${category}\"`);
+      alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
     }
   }
 });
 
-$('#wordInput').keypress(function (e) {
+input.keypress(function (e) {
   let key = e.which;
 
   if (key == 13) { // hitting enter key
-    $('#submitGuessButton').click();
+    submitGuessBtn.click();
   }
 });
 
-$('#playAgainButton').click(() => {
+playAgainBtn.click(() => {
   console.log('play again clicked')
   continueGame = true;
 
-  svgArr = [];
-  category = "";
-  drawingCount = 0;
   playerScore = 0;
 
-  $('#score').text(`Score: ${playerScore}`);
-  $('#wordInput').val('');
+  scoreDisplay.text(`Score: ${playerScore}`);
+  input.val('');
 
   fillDrawingDivs();
 });
