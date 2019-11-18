@@ -12,10 +12,10 @@ let	guessButton = document.getElementById('submitGuessButton');
 //connect to server socket
 const socket = io.connect(window.location.origin);
 
-//add event to the Guess button
-submitGuessButton.addEventListener('click', function() {
-	//you can use this to test and debug some of the functions I've written if you want, note console.log here will output to the browser console.
-});
+// //add event to the Guess button
+// submitGuessButton.addEventListener('click', function() {
+// 	//you can use this to test and debug some of the functions I've written if you want, note console.log here will output to the browser console.
+// });
 
 //whenever client receives a drawing from the server, it adds it to the svgList
 socket.on('serverSendDrawing', (convertedDrawing) => {
