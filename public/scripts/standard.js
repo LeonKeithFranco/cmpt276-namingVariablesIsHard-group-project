@@ -6,7 +6,6 @@ let category = "";
 let drawingCount = 0;
 let playerScore = 0;
 
-
 socket.on('serverSendRandomCategoryName', (cat) => {
   category = cat;
   socket.emit('clientRequestCategorySize', category);
@@ -45,6 +44,7 @@ function randomRange(upperbound) {
 };
 
 $(document).ready(() => {
+  $('#score').text(`Score: ${playerScore}`);
   fillDrawingDivs();
 });
 
@@ -58,7 +58,7 @@ $('#submitGuessButton').click(() => {
     category = "";
     drawingCount = 0;
 
-    playerScore++;
+    $('#score').text(`Score: ${++playerScore}`);
     input.val('');
 
     fillDrawingDivs();
