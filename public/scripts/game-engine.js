@@ -1,26 +1,16 @@
-//server port
-const PORT = 5000;
-
 //get elements from the HTML page
-var numDrawings = 6; //maximum drawings per set
+let numDrawings = 6; //maximum drawings per set
 
-var drawings = []; //holds html div elements to place drawings
+const drawings = $(".drawing"); //holds html div elements to place drawings
 var svgList = []; //holds svgs of drawings from server, can place each element directly in a div's innerHTML
 
 var maxSize = 0;
 var category = "";
 
-for (var i = 0; i < numDrawings; i++) {
-	if (document.getElementById(`drawing${i+1}`) !== null) {
-		drawings.push(document.getElementById(`drawing${i+1}`));
-	}
-}
-
-var	guessButton = document.getElementById('submitGuessButton');
+let	guessButton = document.getElementById('submitGuessButton');
 
 //connect to server socket
-const socket = io.connect(`http://localhost:${PORT}`);
-
+const socket = io.connect(window.location.origin);
 
 // //add event to the Guess button
 // submitGuessButton.addEventListener('click', function() {
@@ -30,8 +20,12 @@ const socket = io.connect(`http://localhost:${PORT}`);
 //whenever client receives a drawing from the server, it adds it to the svgList
 socket.on('serverSendDrawing', (convertedDrawing) => {
 	console.log(`${convertedDrawing}`);
+
+	const numberOfDrawings = svgList.length
 	const {word, svg} = convertedDrawing;
 	svgList.push(svg);
+
+	drawings[numDrawings] = svgList[numDrawings];
 });
 
 //whenever client recieves a category size, it saves the number in maxSize
@@ -42,7 +36,11 @@ socket.on('serverSendCategorySize', (size) => {
 //whenever client receives a category name, it saves the name in category
 socket.on('serverSendCategoryName', (name) => {
 	category = name;
-})
+});
+
+socket.on('serverSendRandomCategoryName', (name) => {
+	category = name;
+});
 
 //random functions
 /*
@@ -59,9 +57,9 @@ function randomRange (upperbound) {
 	Additional notes: code credit to https://stackoverflow.com/questions/2380019/generate-unique-random-numbers-between-1-and-100
 */
 function randomArray (upperbound, size) {
-	var arr = [];
+	let arr = [];
 	while(arr.length < size){
-	    var r = randomRange(upperbound);
+	    let r = randomRange(upperbound);
 	    if(arr.indexOf(r) === -1) arr.push(r);
 	}
 	return arr;
