@@ -66,8 +66,8 @@ $('#submitGuessButton').click(() => {
       fillDrawingDivs();
     } else {
       continueGame = false;
-      // ask player if they want to play again
-      console.log("play again")
+      
+      alert(`Game over! The word was \"${category}\"`);
     }
   }
 });
