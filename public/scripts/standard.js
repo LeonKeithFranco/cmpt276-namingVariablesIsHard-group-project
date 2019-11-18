@@ -28,6 +28,10 @@ socket.on('serverSendDrawing', (drawingData) => {
 });
 
 function fillDrawingDivs() {
+  svgArr = [];
+  category = "";
+  drawingCount = 0;
+
   socket.emit('clientRequestRandomCategoryName');
 }
 
@@ -57,10 +61,6 @@ $('#submitGuessButton').click(() => {
     const answer = category.toLowerCase();
 
     if (playerGuess === answer) {
-      svgArr = [];
-      category = "";
-      drawingCount = 0;
-
       $('#score').text(`Score: ${++playerScore}`);
       input.val('');
 
@@ -85,9 +85,6 @@ $('#playAgainButton').click(() => {
   console.log('play again clicked')
   continueGame = true;
 
-  svgArr = [];
-  category = "";
-  drawingCount = 0;
   playerScore = 0;
 
   $('#score').text(`Score: ${playerScore}`);
