@@ -42,11 +42,9 @@ module.exports = {
       const parsedBody = JSON.parse(body);
 
       if (parsedBody.code !== 8) {
-        console.log("if");
         setTimeout(callback, 0, parsedBody);
         apiKey = API_KEYS[0];
       } else {
-        console.log("else");
         apiKey = API_KEYS[1];
         this.getDrawing(category, id, callback);
       }
