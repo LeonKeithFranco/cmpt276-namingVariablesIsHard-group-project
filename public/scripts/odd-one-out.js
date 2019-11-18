@@ -4,6 +4,8 @@ let num;
 let categoryTimer;
 let sizeTimer;
 let drawTimer;
+let checkTime = 1000;
+let oneIteration = false;
 let sameCategory = 0;
 let oddCategory = 0;
 
@@ -32,17 +34,18 @@ function getRandomCategory(numPics) {
 
     categoryTimer = setInterval(function() {
         getCategorySize(numPics);
-    }, 10);
+    }, checkTime);
 }
 
 function getCategorySize(numPics) {
     if (category === "") {
     } else {
         clearInterval(categoryTimer);
+        console.log('nice');
         socket.emit('clientRequestCategorySize', category);
         sizeTimer = setInterval(function() {
             drawPictures(numPics);
-        }, 10);
+        }, checkTime);
         console.log("nice");
     }
 
@@ -53,29 +56,41 @@ function drawPictures(numPics) {
         console.log('and');
     } else {
         clearInterval(sizeTimer);
+        console.log(numPics);
         for (let i = 1; i <= numPics; i++) {
-            requestDrawing(i);
+            requestDrawing();
         }
-
+        drawTimer = setInterval(function() {
+            drawPicture();
+        }, checkTime);
     }
 }
 
-function requestDrawing(num) {
+function requestDrawing() {
+    console.log('requesting');
+    console.log(maxSize);
     socket.emit('clientRequestDrawing', {
         category: category,
         id: randomRange(maxSize)
     });
-
-    drawTimer = setInterval(function() {
-        drawPicture();
-    }, 10);
 }
 
 function drawPicture() {
     if (svgList[num-2] === undefined) {
-    } else {
+
+    } else if (svgList[num-1] === undefined && !oneIteration) {
         clearInterval(drawTimer);
-        for (let i = 1; i < num; i++) {
+        maxSize = 0;
+        category = "";
+        oneIteration = true;
+
+        console.log('one iteration');
+        getRandomCategory(1);
+    }
+    else {
+        console.log('made it');
+        clearInterval(drawTimer);
+        for (let i = 1; i <= num; i++) {
             document.getElementById('drawing' + i).innerHTML = svgList[i - 1];
         }
     }
