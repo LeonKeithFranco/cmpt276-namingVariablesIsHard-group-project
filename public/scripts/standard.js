@@ -5,15 +5,18 @@ const input = $('#wordInput');
 const scoreDisplay = $('#score');
 const submitGuessBtn = $('#submitGuessButton');
 const playAgainBtn = $('#playAgainButton');
+const hintDisplay = $('#hint');
 
 let svgArr = [];
 let category = "";
 let drawingCount = 0;
 let playerScore = 0;
 let continueGame = true;
+let allDrawingsLoaded = false;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
   category = cat;
+  hintDisplay.text(`Hint: ${category.replace(/\S/g, "-")}`);
   socket.emit('clientRequestCategorySize', category);
 });
 
@@ -30,12 +33,14 @@ socket.on('serverSendDrawing', (drawingData) => {
   svgArr.push(svg);
   $(drawingDivs[drawingCount]).html(svgArr[drawingCount]);
   drawingCount++;
+  allDrawingsLoaded = drawingCount === drawingDivs.length;
 });
 
 function fillDrawingDivs() {
   svgArr = [];
   category = "";
   drawingCount = 0;
+  allDrawingsLoaded = false;
 
   socket.emit('clientRequestRandomCategoryName');
 }
@@ -59,8 +64,9 @@ $(document).ready(() => {
 });
 
 submitGuessBtn.click(() => {
-  if (continueGame) {
-    const playerGuess = input.val().trim().toLowerCase();
+  const playerGuess = input.val().trim().toLowerCase();
+
+  if (continueGame && playerGuess) {
     const answer = category.toLowerCase();
 
     if (playerGuess === answer) {
@@ -85,13 +91,15 @@ input.keypress(function (e) {
 });
 
 playAgainBtn.click(() => {
-  console.log('play again clicked')
-  continueGame = true;
+  if (allDrawingsLoaded) {
+    console.log('play again clicked')
+    continueGame = true;
 
-  playerScore = 0;
+    playerScore = 0;
 
-  scoreDisplay.text(`Score: ${playerScore}`);
-  input.val('');
+    scoreDisplay.text(`Score: ${playerScore}`);
+    input.val('');
 
-  fillDrawingDivs();
+    fillDrawingDivs();
+  }
 });
