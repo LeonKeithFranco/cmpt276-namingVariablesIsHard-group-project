@@ -54,8 +54,9 @@ $('#submitGuessButton').click(() => {
     const input = $('#wordInput')
 
     const playerGuess = input.val().trim().toLowerCase();
+    const answer = category.toLowerCase();
 
-    if (playerGuess === category) {
+    if (playerGuess === answer) {
       svgArr = [];
       category = "";
       drawingCount = 0;
@@ -66,7 +67,7 @@ $('#submitGuessButton').click(() => {
       fillDrawingDivs();
     } else {
       continueGame = false;
-      
+
       alert(`Game over! The word was \"${category}\"`);
     }
   }
