@@ -2,6 +2,7 @@ const socket = io.connect(window.location.origin);
 
 const drawingDivs = $(".drawing");
 const input = $('#wordInput');
+const scoreDisplay = $('#score');
 
 let svgArr = [];
 let category = "";
@@ -51,7 +52,7 @@ function randomRange(upperbound) {
 };
 
 $(document).ready(() => {
-  $('#score').text(`Score: ${playerScore}`);
+  scoreDisplay.text(`Score: ${playerScore}`);
   fillDrawingDivs();
 });
 
@@ -61,7 +62,7 @@ $('#submitGuessButton').click(() => {
     const answer = category.toLowerCase();
 
     if (playerGuess === answer) {
-      $('#score').text(`Score: ${++playerScore}`);
+      scoreDisplay.text(`Score: ${++playerScore}`);
       input.val('');
 
       fillDrawingDivs();
@@ -87,7 +88,7 @@ $('#playAgainButton').click(() => {
 
   playerScore = 0;
 
-  $('#score').text(`Score: ${playerScore}`);
+  scoreDisplay.text(`Score: ${playerScore}`);
   input.val('');
 
   fillDrawingDivs();
