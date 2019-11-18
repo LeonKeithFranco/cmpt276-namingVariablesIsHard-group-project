@@ -7,6 +7,9 @@ let drawTimer;
 let checkTime = 10;
 let oneIteration = false;
 let loaded = false;
+maxSize = 0;
+category = "";
+svgList = [];
 
 window.onload = function() {
     console.log(difficulty);
