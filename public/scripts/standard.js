@@ -4,6 +4,7 @@ const drawingDivs = $(".drawing");
 let svgArr = [];
 let category = "";
 let drawingCount = 0;
+let playerScore = 0;
 
 
 socket.on('serverSendRandomCategoryName', (cat) => {
@@ -46,3 +47,31 @@ function randomRange(upperbound) {
 $(document).ready(() => {
   fillDrawingDivs();
 });
+
+$('#submitGuessButton').click(() => {
+  const input = $('#wordInput')
+
+  const playerGuess = input.val().trim().toLowerCase();
+
+  if (playerGuess === category) {
+    svgArr = [];
+    category = "";
+    drawingCount = 0;
+
+    playerScore++;
+    input.val('');
+
+    fillDrawingDivs();
+  } else {
+    // ask player if they want to play again
+    console.log("play again")
+  }
+});
+
+$('#wordInput').keypress(function (e) {
+  let key = e.which;
+
+  if (key == 13) { // hitting enter key
+    $('#submitGuessButton').click();
+  }
+});   
