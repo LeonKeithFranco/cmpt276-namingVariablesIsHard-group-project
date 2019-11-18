@@ -5,6 +5,7 @@ let svgArr = [];
 let category = "";
 let drawingCount = 0;
 let playerScore = 0;
+let continueGame = true;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
   category = cat;
@@ -49,22 +50,25 @@ $(document).ready(() => {
 });
 
 $('#submitGuessButton').click(() => {
-  const input = $('#wordInput')
+  if (continueGame) {
+    const input = $('#wordInput')
 
-  const playerGuess = input.val().trim().toLowerCase();
+    const playerGuess = input.val().trim().toLowerCase();
 
-  if (playerGuess === category) {
-    svgArr = [];
-    category = "";
-    drawingCount = 0;
+    if (playerGuess === category) {
+      svgArr = [];
+      category = "";
+      drawingCount = 0;
 
-    $('#score').text(`Score: ${++playerScore}`);
-    input.val('');
+      $('#score').text(`Score: ${++playerScore}`);
+      input.val('');
 
-    fillDrawingDivs();
-  } else {
-    // ask player if they want to play again
-    console.log("play again")
+      fillDrawingDivs();
+    } else {
+      continueGame = false;
+      // ask player if they want to play again
+      console.log("play again")
+    }
   }
 });
 
@@ -74,4 +78,19 @@ $('#wordInput').keypress(function (e) {
   if (key == 13) { // hitting enter key
     $('#submitGuessButton').click();
   }
-});   
+});
+
+$('#playAgainButton').click(() => {
+  console.log('play again clicked')
+  continueGame = true;
+
+  svgArr = [];
+  category = "";
+  drawingCount = 0;
+  playerScore = 0;
+
+  $('#score').text(`Score: ${playerScore}`);
+  $('#wordInput').val('');
+
+  fillDrawingDivs();
+});
