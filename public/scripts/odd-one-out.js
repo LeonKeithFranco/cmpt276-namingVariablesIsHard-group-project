@@ -1,13 +1,12 @@
-let odd = randomRange(6);
+let odd;
 let score = 0;
 let num;
 let categoryTimer;
 let sizeTimer;
 let drawTimer;
-let checkTime = 1000;
+let checkTime = 1;
 let oneIteration = false;
-let sameCategory = 0;
-let oddCategory = 0;
+let click = false;
 
 window.onload = function() {
     console.log(difficulty);
@@ -26,9 +25,12 @@ window.onload = function() {
     }
 
     document.getElementById('score').innerHTML = "Score: "  + score;
-    getRandomCategory(num-1);
+    gameLoop();
 };
 
+function gameLoop() {
+    getRandomCategory(num);
+}
 function getRandomCategory(numPics) {
     socket.emit('clientRequestRandomCategoryName');
 
@@ -41,73 +43,86 @@ function getCategorySize(numPics) {
     if (category === "") {
     } else {
         clearInterval(categoryTimer);
-        console.log('nice');
         socket.emit('clientRequestCategorySize', category);
         sizeTimer = setInterval(function() {
-            drawPictures(numPics);
+            getPics(numPics);
         }, checkTime);
-        console.log("nice");
     }
 
 }
 
-function drawPictures(numPics) {
+function getPics(numPics) {
     if (maxSize === 0) {
-        console.log('and');
+
     } else {
         clearInterval(sizeTimer);
-        console.log(numPics);
         for (let i = 1; i <= numPics; i++) {
             requestDrawing();
         }
         drawTimer = setInterval(function() {
-            drawPicture();
+            getOdd();
         }, checkTime);
     }
 }
 
 function requestDrawing() {
-    console.log('requesting');
-    console.log(maxSize);
     socket.emit('clientRequestDrawing', {
         category: category,
         id: randomRange(maxSize)
     });
 }
 
-function drawPicture() {
-    if (svgList[num-2] === undefined) {
+function getOdd() {
+    if (svgList[num-1] === undefined) {
 
-    } else if (svgList[num-1] === undefined && !oneIteration) {
+    } else if (svgList[num] === undefined && !oneIteration) {
         clearInterval(drawTimer);
         maxSize = 0;
         category = "";
         oneIteration = true;
 
-        console.log('one iteration');
         getRandomCategory(1);
-    }
-    else {
-        console.log('made it');
+    }  else if (svgList[num] != undefined) {
         clearInterval(drawTimer);
-        for (let i = 1; i <= num; i++) {
-            document.getElementById('drawing' + i).innerHTML = svgList[i - 1];
-        }
+        drawPictures();
     }
+}
+
+function drawPictures() {
+    odd = randomRange(6);
+
+    for (let i = 1; i <= num; i++) {
+        document.getElementById("drawing" + i).innerHTML = svgList[i-1];
+    }
+    document.getElementById("drawing" + (odd+1)).innerHTML = svgList[num];
 }
 
 function select (guess) {
     if (guess == odd) {
         score++;
-        document.getElementById('score').innerHTML = "Score: "  + score;
+        document.getElementById('score').innerHTML = "Score: " + score;
         console.log('nice!');
     } else {
         gameOver();
     }
+    while (svgList.length != 0) {
+        svgList.pop();
+    }
+    maxSize = 0;
+    category = "";
+    oneIteration = false;
+    clearInterval(sizeTimer);
+    clearInterval(categoryTimer);
+    clearInterval(drawTimer);
+    if (svgList.length === 0) {
+        gameLoop();
+    }
 }
 
 function gameOver() {
-    console.log('u suck');
+    alert('Game over: it was picture ' + (odd + 1));
+    score = 0;
+    document.getElementById('score').innerHTML = "Score: " + score;
 }
 
 
