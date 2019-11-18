@@ -101,6 +101,7 @@ function drawPictures() {
 function select (guess) {
     if (loaded) {
         if (guess == odd) {
+            loaded = false;
             score++;
             document.getElementById('score').innerHTML = "Score: " + score;
             console.log('nice!');
