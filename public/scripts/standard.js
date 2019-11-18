@@ -1,6 +1,8 @@
 const socket = io.connect(window.location.origin);
 
 const drawingDivs = $(".drawing");
+const input = $('#wordInput');
+
 let svgArr = [];
 let category = "";
 let drawingCount = 0;
@@ -55,8 +57,6 @@ $(document).ready(() => {
 
 $('#submitGuessButton').click(() => {
   if (continueGame) {
-    const input = $('#wordInput')
-
     const playerGuess = input.val().trim().toLowerCase();
     const answer = category.toLowerCase();
 
@@ -73,7 +73,7 @@ $('#submitGuessButton').click(() => {
   }
 });
 
-$('#wordInput').keypress(function (e) {
+input.keypress(function (e) {
   let key = e.which;
 
   if (key == 13) { // hitting enter key
@@ -88,7 +88,7 @@ $('#playAgainButton').click(() => {
   playerScore = 0;
 
   $('#score').text(`Score: ${playerScore}`);
-  $('#wordInput').val('');
+  input.val('');
 
   fillDrawingDivs();
 });
