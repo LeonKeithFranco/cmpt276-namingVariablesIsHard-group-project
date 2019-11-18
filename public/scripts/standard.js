@@ -4,7 +4,8 @@ const drawingDivs = $(".drawing");
 let svgArr = [];
 let category = "";
 let drawingCount = 0;
-
+let playerScore = 0;
+let continueGame = true;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
   category = cat;
@@ -44,5 +45,53 @@ function randomRange(upperbound) {
 };
 
 $(document).ready(() => {
+  $('#score').text(`Score: ${playerScore}`);
+  fillDrawingDivs();
+});
+
+$('#submitGuessButton').click(() => {
+  if (continueGame) {
+    const input = $('#wordInput')
+
+    const playerGuess = input.val().trim().toLowerCase();
+    const answer = category.toLowerCase();
+
+    if (playerGuess === answer) {
+      svgArr = [];
+      category = "";
+      drawingCount = 0;
+
+      $('#score').text(`Score: ${++playerScore}`);
+      input.val('');
+
+      fillDrawingDivs();
+    } else {
+      continueGame = false;
+
+      alert(`Game over! The word was \"${category}\"`);
+    }
+  }
+});
+
+$('#wordInput').keypress(function (e) {
+  let key = e.which;
+
+  if (key == 13) { // hitting enter key
+    $('#submitGuessButton').click();
+  }
+});
+
+$('#playAgainButton').click(() => {
+  console.log('play again clicked')
+  continueGame = true;
+
+  svgArr = [];
+  category = "";
+  drawingCount = 0;
+  playerScore = 0;
+
+  $('#score').text(`Score: ${playerScore}`);
+  $('#wordInput').val('');
+
   fillDrawingDivs();
 });
