@@ -41,6 +41,7 @@ const io = socket(server);
 
 io.on('connection', (socket) => {
   console.log("connection made with socket id:", socket.id);
+
   socket.on('clientRequestRandomDrawing', () => {
     quickdraw.getRandomDrawing((drawing) => {
       quickdraw.convertDrawing(drawing, (convertedDrawing) => {
