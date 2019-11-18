@@ -4,6 +4,7 @@ const drawingDivs = $(".drawing");
 const input = $('#wordInput');
 const scoreDisplay = $('#score');
 const submitGuessBtn = $('#submitGuessButton');
+const playAgainBtn = $('#playAgainButton');
 
 let svgArr = [];
 let category = "";
@@ -83,7 +84,7 @@ input.keypress(function (e) {
   }
 });
 
-$('#playAgainButton').click(() => {
+playAgainBtn.click(() => {
   console.log('play again clicked')
   continueGame = true;
 
