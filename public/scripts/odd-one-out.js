@@ -1,7 +1,11 @@
 let odd = randomRange(6);
 let score = 0;
 let num;
-let timer;
+let categoryTimer;
+let sizeTimer;
+let drawTimer;
+let sameCategory = 0;
+let oddCategory = 0;
 
 window.onload = function() {
     console.log(difficulty);
@@ -20,37 +24,59 @@ window.onload = function() {
     }
 
     document.getElementById('score').innerHTML = "Score: "  + score;
-    drawPictures();
+    getRandomCategory(num-1);
 };
 
-function drawPictures() {
-    for (let i = 1; i <= num; i++) {
-        requestDrawing(i);
+function getRandomCategory(numPics) {
+    socket.emit('clientRequestRandomCategoryName');
+
+    categoryTimer = setInterval(function() {
+        getCategorySize(numPics);
+    }, 10);
+}
+
+function getCategorySize(numPics) {
+    if (category === "") {
+    } else {
+        clearInterval(categoryTimer);
+        socket.emit('clientRequestCategorySize', category);
+        sizeTimer = setInterval(function() {
+            drawPictures(numPics);
+        }, 10);
+        console.log("nice");
+    }
+
+}
+
+function drawPictures(numPics) {
+    if (maxSize === 0) {
+        console.log('and');
+    } else {
+        clearInterval(sizeTimer);
+        for (let i = 1; i <= numPics; i++) {
+            requestDrawing(i);
+        }
+
     }
 }
 
-// function getCategorySize() {
-//     socket.emit('clientRequestCategorySize', "cat");
-// }
-
 function requestDrawing(num) {
     socket.emit('clientRequestDrawing', {
-        category: "cat",
-        id: 4230
+        category: category,
+        id: randomRange(maxSize)
     });
 
-    timer = setInterval(function() {
-        drawPicture(num);
-    }, 100);
+    drawTimer = setInterval(function() {
+        drawPicture();
+    }, 10);
 }
 
-function drawPicture(num) {
-    if (svgList[num-1] === undefined) {
-        console.log(num);
+function drawPicture() {
+    if (svgList[num-2] === undefined) {
     } else {
-        document.getElementById('drawing' + num).innerHTML = svgList[num - 1];
-        if (num === 6) {
-            clearInterval(timer);
+        clearInterval(drawTimer);
+        for (let i = 1; i < num; i++) {
+            document.getElementById('drawing' + i).innerHTML = svgList[i - 1];
         }
     }
 }
@@ -68,4 +94,5 @@ function select (guess) {
 function gameOver() {
     console.log('u suck');
 }
+
 
