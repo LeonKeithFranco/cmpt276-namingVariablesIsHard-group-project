@@ -64,8 +64,9 @@ $(document).ready(() => {
 });
 
 submitGuessBtn.click(() => {
-  if (continueGame) {
-    const playerGuess = input.val().trim().toLowerCase();
+  const playerGuess = input.val().trim().toLowerCase();
+
+  if (continueGame && playerGuess) {
     const answer = category.toLowerCase();
 
     if (playerGuess === answer) {
