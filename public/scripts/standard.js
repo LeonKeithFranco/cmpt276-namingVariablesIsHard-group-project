@@ -5,6 +5,7 @@ const input = $('#wordInput');
 const scoreDisplay = $('#score');
 const submitGuessBtn = $('#submitGuessButton');
 const playAgainBtn = $('#playAgainButton');
+const hintDisplay = $('#hint');
 
 let svgArr = [];
 let category = "";
@@ -14,6 +15,7 @@ let continueGame = true;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
   category = cat;
+  hintDisplay.text(`Hint: ${category.replace(/\S/g, "-")}`);
   socket.emit('clientRequestCategorySize', category);
 });
 
