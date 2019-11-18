@@ -4,7 +4,7 @@ let num;
 let categoryTimer;
 let sizeTimer;
 let drawTimer;
-let checkTime = 1;
+let checkTime = 10;
 let oneIteration = false;
 let loaded = false;
 
@@ -101,7 +101,6 @@ function drawPictures() {
 function select (guess) {
     if (loaded) {
         if (guess == odd) {
-            loaded = false;
             score++;
             document.getElementById('score').innerHTML = "Score: " + score;
             console.log('nice!');
@@ -120,6 +119,7 @@ function select (guess) {
         if (svgList.length === 0) {
             gameLoop();
         }
+        loaded = false;
     }
 }
 
