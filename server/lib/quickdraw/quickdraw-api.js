@@ -5,6 +5,7 @@ const qdsr = require('quickdraw-svg-render');
 
 const API_KEYS = ['AIzaSyC0U3yLy_m6u7aOMi9YJL2w1vWG4oI5mj0', 'AIzaSyC5osDYfGz4jZvEw_6WdGFuQ1ZYDE-P7VM'];
 let apiKey = API_KEYS[0];
+let counter = 0;
 
 module.exports = {
   /*
@@ -43,9 +44,9 @@ module.exports = {
 
       if (parsedBody.code !== 8) {
         setTimeout(callback, 0, parsedBody);
-        apiKey = API_KEYS[0];
       } else {
-        apiKey = API_KEYS[1];
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
         this.getDrawing(category, id, callback);
       }
     });
