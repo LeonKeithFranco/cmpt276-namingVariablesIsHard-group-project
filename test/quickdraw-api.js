@@ -45,5 +45,26 @@ describe('quickdraw-api', () => {
     });
   });
 
+  describe('getCategory()', () => {
+    let index = 0;
+    let expected = 'aircraft carrier';
+
+    it(`Index of ${index} should return category of "${expected}"`, () => {
+      const result = quickdraw.getCategory(index);
+
+      assert.isString(result);
+      assert.strictEqual(result, expected);
+    });
+
+    index = 344;
+    expected = 'zigzag';
+
+    it(`Index of ${index} should return category of "${expected}"`, () => {
+      const result = quickdraw.getCategory(index);
+
+      assert.isString(result);
+      assert.strictEqual(result, expected);
+    });
+  });
 
 });
