@@ -3,6 +3,7 @@ const socket = io.connect(window.location.origin);
 const drawingDivs = $(".drawing");
 const input = $('#wordInput');
 const scoreDisplay = $('#score');
+const timeDisplay = $('#time');
 const submitGuessBtn = $('#submitGuessButton');
 const playAgainBtn = $('#playAgainButton');
 const hintDisplay = $('#hint');
@@ -13,6 +14,12 @@ let drawingCount = 0;
 let playerScore = 0;
 let continueGame = true;
 let allDrawingsLoaded = false;
+
+let start = Date.now();
+let checkTimer;
+let checkTime = 1000;
+let time;
+let maxTime = 60;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
     category = cat;
@@ -61,7 +68,18 @@ function randomRange(upperbound) {
 $(document).ready(() => {
     scoreDisplay.text(`Score: ${playerScore}`);
     fillDrawingDivs();
+   checkTimer = setInterval(function () {
+        updateTime();
+    }, checkTime);
 });
+
+function updateTime() {
+    time = maxTime - Math.floor((Date.now() - start)/1000);
+    console.log((Date.now() - start)/1000);
+    timeDisplay.text(`Time: ${time}`);
+
+    
+}
 
 submitGuessBtn.click(() => {
     const playerGuess = input.val().trim().toLowerCase();
