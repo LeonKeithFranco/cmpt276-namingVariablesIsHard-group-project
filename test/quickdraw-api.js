@@ -75,4 +75,14 @@ describe('quickdraw-api', () => {
     });
   });
 
+  describe('getCategorySize()', () => {
+    it('Should return a positive number for some category', (asyncTestDone) => {
+      quickdraw.getCategorySize('cat', (categorySize) => {
+        assert.operator(categorySize, '>', 0);
+
+        asyncTestDone();
+      });
+    })
+  });
+
 });
