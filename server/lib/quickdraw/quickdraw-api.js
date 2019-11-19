@@ -23,7 +23,17 @@ module.exports = {
         console.error(error);
       }
 
-      setTimeout(callback, 0, JSON.parse(body));
+      // setTimeout(callback, 0, JSON.parse(body));
+
+      const parsedBody = JSON.parse(body);
+
+      if (parsedBody.code !== 8) {
+        setTimeout(callback, 0, parsedBody);
+      } else {
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
+        this.getRandomDrawing(callback);
+      }
     });
   },
 
