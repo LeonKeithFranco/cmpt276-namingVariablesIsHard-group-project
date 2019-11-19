@@ -3,6 +3,9 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <script>
+        let difficulty = "<%= difficulty %>";
+    </script>
     <script type="text/javascript" src="/scripts/timed.js" defer></script>
 </head>
 
@@ -27,9 +30,6 @@
             <input id="wordInput" type="text" placeholder="Word">
             <button id="submitGuessButton" class="button">Guess</button><br>
             <button id="playAgainButton" class="button">Play Again</button>
-        </div>
-        <div id ="skipButton">
-            <button id="submitGuessButton" class="button">Skip</button>
         </div>
         <p id="timedModeRules" class="text">
             Rules:<br>
