@@ -23,7 +23,17 @@ module.exports = {
         console.error(error);
       }
 
-      setTimeout(callback, 0, JSON.parse(body));
+      // setTimeout(callback, 0, JSON.parse(body));
+
+      const parsedBody = JSON.parse(body);
+
+      if (parsedBody.code !== 8) {
+        setTimeout(callback, 0, parsedBody);
+      } else {
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
+        this.getRandomDrawing(callback);
+      }
     });
   },
 
@@ -65,15 +75,6 @@ module.exports = {
     Post-condition: Will return a random category name
   */
   getRandomCategory: function () {
-    return categories[_.random(categories.length - 1)];
-  },
-
-  /*
-    Pre-condition: None
-    Post-condition: Will return a random category name
-  */
-  getRandomCategory: function () {
-    // if (index >= 0 && index < categories.length) return categories[index];
     return categories[_.random(categories.length - 1)];
   },
 

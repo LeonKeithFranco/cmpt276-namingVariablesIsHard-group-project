@@ -1,0 +1,1 @@
+For list of all chai assertions: https://www.chaijs.com/api/assert/
