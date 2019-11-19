@@ -3,13 +3,16 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <script>
+        let difficulty = "<%= difficulty %>";
+    </script>
+    <script type="text/javascript" src="/scripts/timed.js" defer></script>
 </head>
 
 <body>
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
-        <h1 class="text">Standard Mode</h1>
-        <p class="text">Timer:</p>
+        <h1 class="text">Timed Mode</h1>
         <% if (difficulty === 'easy') { %>
             <% include ../partials/4-drawing.ejs %>
         <% } else if (difficulty === 'normal') { %>
@@ -20,10 +23,12 @@
             <h1><strong>Something has gone horribly wrong</strong></h1>
         <% } %>
         <div id="inputSection">
-            <input id="wordInput" type="text" placeholder="Word"><button id="submitGuessButton" class="button">Guess</button>
-        </div>
-        <div id ="skipButton">
-            <button id="submitGuessButton" class="button">Skip</button>
+            <p id="score" class="text"></p>
+            <p id="time" class="text"></p>
+            <p id="hint" class="text"></p>
+            <input id="wordInput" type="text" placeholder="Word">
+            <button id="submitGuessButton" class="button">Guess</button><br>
+            <button id="playAgainButton" class="button">Play Again</button>
         </div>
         <p id="timedModeRules" class="text">
             Rules:<br>
