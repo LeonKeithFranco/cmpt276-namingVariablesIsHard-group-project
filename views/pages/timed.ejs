@@ -3,12 +3,13 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <script type="text/javascript" src="/scripts/standard.js" defer></script>
 </head>
 
 <body>
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
-        <h1 class="text">Standard Mode</h1>
+        <h1 class="text">Timed Mode</h1>
         <p class="text">Timer:</p>
         <% if (difficulty === 'easy') { %>
             <% include ../partials/4-drawing.ejs %>
