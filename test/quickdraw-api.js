@@ -85,4 +85,35 @@ describe('quickdraw-api', () => {
     })
   });
 
+  describe('convertDrawing()', () => {
+    const category = 'sock';
+    const drawingId = 0;
+
+    it(`Should return a word that matches category "${category}"`, (asyncTestDone) => {
+      quickdraw.getDrawing(category, drawingId, (drawing) => {
+        quickdraw.convertDrawing(drawing, (convertedDrawing) => {
+          const { word, svg } = convertedDrawing;
+
+          assert.isString(word);
+          assert.strictEqual(word, category);
+
+          asyncTestDone();
+        });
+      });
+    });
+
+    it('Should return a svg HTML element as a string', (asyncTestDone) => {
+      quickdraw.getRandomDrawing((drawing) => {
+        quickdraw.convertDrawing(drawing, (convertedDrawing) => {
+          const { word, svg } = convertedDrawing;
+
+          assert.isString(svg);
+          assert.match(svg, /svg/);
+
+          asyncTestDone();
+        });
+      });
+    });
+  });
+
 });
