@@ -69,15 +69,6 @@ module.exports = {
   },
 
   /*
-    Pre-condition: None
-    Post-condition: Will return a random category name
-  */
-  getRandomCategory: function () {
-    // if (index >= 0 && index < categories.length) return categories[index];
-    return categories[_.random(categories.length - 1)];
-  },
-
-  /*
     Pre-condition: Requires a category name as a string and a callback as input
     Post-condition: Will get the number of random Quick, Draw! drawings of the given category from Google's web API, convert the returned number into a JSON object, then apply the callback to the number
     Additional notes: used to obtain an upper bound for generating random drawing indexes
