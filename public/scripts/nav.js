@@ -6,7 +6,10 @@ function goTo(page) {
 $('#registerButton').click(goTo('register'));
 
 // for main menu page
-$('#leaderboardButton').click(goTo('leaderboard'));
+// $('#leaderboardButton').click(goTo('leaderboard'));
+$('#leaderboardButton').click(() => {
+  alert("Feature is still in development");
+});
 $('#logoutButton').click(goTo('logout'));
 
 // for game modes and leaderboard
