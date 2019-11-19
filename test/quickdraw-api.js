@@ -67,4 +67,12 @@ describe('quickdraw-api', () => {
     });
   });
 
+  describe('getRandomCategory()', () => {
+    it('Should return a random category', () => {
+      const result = quickdraw.getRandomCategory();
+
+      assert.isString(result);
+    });
+  });
+
 });
