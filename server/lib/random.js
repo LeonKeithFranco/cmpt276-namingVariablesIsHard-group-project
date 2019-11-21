@@ -21,10 +21,12 @@ module.exports = {
         Additional notes: specific function implementation credit to https://javascript.info/task/shuffle
     */
     shuffle: function (array) {
-        for (let i = array.length - 1; i > 0; i--) {
+        const copyArr = JSON.parse(JSON.stringify(array));
+
+        for (let i = copyArr.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
         }
-        return array;
+        return copyArr;
     }
 }
