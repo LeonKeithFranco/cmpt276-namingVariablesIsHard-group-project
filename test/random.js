@@ -2,12 +2,12 @@ const assert = require('chai').assert;
 const random = require('../server/lib/random');
 
 describe('random', () => {
-  describe('randomArray()', () => {
-    const size = 5;
-    const upperBound = 10;
-    const arr = random.randomArray(upperBound, size);
+  const size = 5;
+  const upperBound = 10;
+  const arr = random.randomArray(upperBound, size);
 
-    it(`Should return and array of size ${size}`, () => {
+  describe('randomArray()', () => {
+    it(`Should return an array of size ${size}`, () => {
       assert.strictEqual(arr.length, size);
     });
 
@@ -31,5 +31,25 @@ describe('random', () => {
       }
     });
   });
-  
+
+  describe('shuffle()', () => {
+    const shuffledArr = random.shuffle(arr);
+
+    it(`Should return an array of size ${size}`, () => {
+      assert.strictEqual(shuffledArr.length, size);
+    });
+
+    it('Should return an array of all numbers', () => {
+      shuffledArr.forEach(elem => assert.isNumber(elem));
+    });
+
+    it('Should return an array with the same members as the orginal array', () => {
+      assert.sameDeepMembers(arr, shuffledArr);
+    });
+
+    it('Should return a differently ordered array', () => {
+      assert.notSameOrderedMembers(arr, shuffledArr);
+    });
+  });
+
 });
