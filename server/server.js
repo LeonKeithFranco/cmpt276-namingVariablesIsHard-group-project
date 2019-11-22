@@ -12,6 +12,7 @@ const registerRoute = require('./routes/register-route');
 const mainMenuRoute = require('./routes/main-menu-route');
 const logoutRoute = require('./routes/logout-route');
 const gameModeRoute = require('./routes/game-mode-route');
+const leaderboardRoute = require('./routes/leaderboard-route');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -35,6 +36,7 @@ app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', checkForValidSession, mainMenuRoute);
 app.use('/logout', logoutRoute);
 app.use('/game-mode', checkForValidSession, gameModeRoute);
+app.use('/leaderboard', leaderboardRoute);
 
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
