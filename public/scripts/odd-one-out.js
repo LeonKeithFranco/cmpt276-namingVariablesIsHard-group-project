@@ -7,6 +7,7 @@ const scoreDisplay = $('#score');
 const playAgainBtn = $('#playAgainButton');
 
 let svgArr = [];
+let svgOdd;
 let category = "";
 let oddCategory = "";
 let drawingCount = 0;
@@ -142,11 +143,11 @@ socket.on('serverSendCategorySize', (categorySize) => {
     if (!sameDrawingsLoaded) {
         sameDrawingsLoaded = true;
 
-        const drawingIds = randomArray(categorySize, drawingDivs.length-1);
+        const drawingIds = randomArray(categorySize, drawingDivs.length);
 
-        for (let i = 0; i < num - 1; i++) {
-            socket.emit('clientRequestDrawing', { category: category, id: drawingIds[i] });
-        }
+        drawingDivs.each(function (index) {
+            socket.emit('clientRequestDrawing', { category: category, id: drawingIds[index] });
+        });
     } else {
         socket.emit('clientRequestDrawing', { category: oddCategory, id: randomRange(categorySize)});
     }
@@ -154,12 +155,22 @@ socket.on('serverSendCategorySize', (categorySize) => {
 
 socket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
-    svgArr.push(svg);
-    $(drawingDivs[drawingCount]).html(svgArr[drawingCount]);
+    if (word === category) {
+        svgArr.push(svg);
+    } else {
+        odd = randomRange(num);
+        svgOdd = svg;
+    }
     drawingCount++;
-    allDrawingsLoaded = drawingCount === drawingDivs.length;
+    allDrawingsLoaded = drawingCount === drawingDivs.length+1;
     if (allDrawingsLoaded) {
-
+        for (let i = 0; i < svgArr.length; i++) {
+            if (i != odd) {
+                $(drawingDivs[i]).html(svgArr[i]);
+            } else {
+                $(drawingDivs[i]).html(svgOdd);
+            }
+        }
     }
 });
 
