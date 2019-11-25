@@ -132,9 +132,11 @@ socket.on('serverSendRandomCategoryName', (cat) => {
     if (category === "") {
         category = cat;
         socket.emit('clientRequestCategorySize', category);
-    } else {
+    } else if (sameDrawingsLoaded) {
         oddCategory = cat;
         socket.emit('clientRequestCategorySize', oddCategory);
+    } else {
+        socket.emit('clientRequestRandomCategoryName');
     }
 
 });
@@ -170,6 +172,9 @@ socket.on('serverSendDrawing', (drawingData) => {
             } else {
                 $(drawingDivs[i]).html(svgOdd);
             }
+            // document.getElementById('drawing' + i).addEventListener('click', function () {
+            //     select(i - 1);
+            // });
         }
     }
 });
@@ -195,14 +200,6 @@ function randomArray(upperbound, size) {
 
 function randomRange(upperbound) {
     return Math.floor(Math.random() * upperbound);
-};
-
-function shuffle (array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
 };
 
 $(document).ready(() => {
