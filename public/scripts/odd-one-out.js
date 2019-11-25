@@ -1,4 +1,3 @@
-let odd;
 let num;
 
 const socket = io.connect(window.location.origin);
@@ -9,9 +8,12 @@ const playAgainBtn = $('#playAgainButton');
 
 let svgArr = [];
 let category = "";
+let oddCategory = "";
 let drawingCount = 0;
+let odd = 0;
 let playerScore = 0;
 let continueGame = true;
+let sameDrawingsLoaded = false;
 let allDrawingsLoaded = false;
 
 // window.onload = function() {
@@ -126,16 +128,28 @@ let allDrawingsLoaded = false;
 
 
 socket.on('serverSendRandomCategoryName', (cat) => {
-    category = cat;
-    socket.emit('clientRequestCategorySize', category);
+    if (category === "") {
+        category = cat;
+        socket.emit('clientRequestCategorySize', category);
+    } else {
+        oddCategory = cat;
+        socket.emit('clientRequestCategorySize', oddCategory);
+    }
+
 });
 
 socket.on('serverSendCategorySize', (categorySize) => {
-    const drawingIds = randomArray(categorySize, drawingDivs.length);
+    if (!sameDrawingsLoaded) {
+        sameDrawingsLoaded = true;
 
-    drawingDivs.each(function (index) {
-        socket.emit('clientRequestDrawing', { category: category, id: drawingIds[index] });
-    });
+        const drawingIds = randomArray(categorySize, drawingDivs.length-1);
+
+        for (let i = 0; i < num - 1; i++) {
+            socket.emit('clientRequestDrawing', { category: category, id: drawingIds[i] });
+        }
+    } else {
+        socket.emit('clientRequestDrawing', { category: oddCategory, id: randomRange(categorySize)});
+    }
 });
 
 socket.on('serverSendDrawing', (drawingData) => {
@@ -144,6 +158,9 @@ socket.on('serverSendDrawing', (drawingData) => {
     $(drawingDivs[drawingCount]).html(svgArr[drawingCount]);
     drawingCount++;
     allDrawingsLoaded = drawingCount === drawingDivs.length;
+    if (allDrawingsLoaded) {
+
+    }
 });
 
 function fillDrawingDivs() {
@@ -152,6 +169,7 @@ function fillDrawingDivs() {
     drawingCount = 0;
     allDrawingsLoaded = false;
 
+    socket.emit('clientRequestRandomCategoryName');
     socket.emit('clientRequestRandomCategoryName');
 }
 
@@ -168,6 +186,14 @@ function randomRange(upperbound) {
     return Math.floor(Math.random() * upperbound);
 };
 
+function shuffle (array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
+
 $(document).ready(() => {
     console.log(difficulty);
     if (difficulty === 'easy') {
@@ -178,27 +204,30 @@ $(document).ready(() => {
         num = 3;
     }
     scoreDisplay.text(`Score: ${playerScore}`);
+
+    for (let i = 1; i <= num; i++) {
+        document.getElementById('drawing' + i).addEventListener('click', function () {
+            select(i - 1);
+        });
+    }
+
     fillDrawingDivs();
 });
 
-// submitGuessBtn.click(() => {
-//     const playerGuess = input.val().trim().toLowerCase();
-//
-//     if (continueGame && playerGuess) {
-//         const answer = category.toLowerCase();
-//
-//         if (playerGuess === answer) {
-//             scoreDisplay.text(`Score: ${++playerScore}`);
-//             input.val('');
-//
-//             fillDrawingDivs();
-//         } else {
-//             continueGame = false;
-//
-//             alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
-//         }
-//     }
-// });
+function select(index) {
+    if (continueGame && allDrawingsLoaded) {
+
+        if (index === odd) {
+            scoreDisplay.text(`Score: ${++playerScore}`);
+
+            fillDrawingDivs();
+        } else {
+            continueGame = false;
+
+            alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
+        }
+    }
+};
 
 playAgainBtn.click(() => {
     if (allDrawingsLoaded) {
