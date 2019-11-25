@@ -6,7 +6,7 @@
     <script>
         let difficulty = "<%= difficulty %>";
     </script>
-    <script type="text/javascript" src="/scripts/game-engine.js" defer></script>
+    <!-- <script type="text/javascript" src="/scripts/game-engine.js" defer></script> -->
     <script type="text/javascript" src="/scripts/odd-one-out.js" defer></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/odd-one-out.css">
 </head>
@@ -15,7 +15,6 @@
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Odd-One-Out Mode</h1>
-        <p id="score"></p>
         <% if (difficulty === 'easy') { %>
             <% include ../partials/6-drawing.ejs %>
         <% } else if (difficulty === 'normal') { %>
@@ -25,6 +24,10 @@
         <% } else { %>
             <h1><strong>Something has gone horribly wrong</strong></h1>
         <% } %>
+        <div id="inputSection">
+            <p id="score" class="text"></p>
+            <button id="playAgainButton" class="button">Play Again</button>
+        </div>
         <p id="oddOneOutRules" class="text">
             Rules:<br>
             All of these drawings come from the same category... except one!<br>
