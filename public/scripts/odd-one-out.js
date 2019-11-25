@@ -172,18 +172,22 @@ socket.on('serverSendDrawing', (drawingData) => {
             } else {
                 $(drawingDivs[i]).html(svgOdd);
             }
-            // document.getElementById('drawing' + i).addEventListener('click', function () {
-            //     select(i - 1);
-            // });
+            $(drawingDivs[i]).on('click', function () {
+                select(i);
+            });
         }
     }
 });
 
 function fillDrawingDivs() {
     svgArr = [];
+
     category = "";
+    oddCategory = "";
+
     drawingCount = 0;
     allDrawingsLoaded = false;
+    sameDrawingsLoaded = false;
 
     socket.emit('clientRequestRandomCategoryName');
     socket.emit('clientRequestRandomCategoryName');
