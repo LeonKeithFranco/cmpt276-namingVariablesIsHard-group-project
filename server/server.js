@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
   }
 
   function sendRandomFromCategory(category, size) {
-    let id = randomRange(size);
+    let id = _.random(size - 1);
 
     quickdraw.getDrawing(category, id, (drawing) => {
       if(drawing.recognized) {
@@ -126,7 +126,3 @@ io.on('connection', (socket) => {
     });
   });
 });
-
-function randomRange(upperbound) {
-  return Math.floor(Math.random() * upperbound);
-}
