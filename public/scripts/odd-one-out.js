@@ -25,10 +25,7 @@ socket.on('serverSendRandomCategoryName', (cat) => {
         });
     } else {
         oddCategory = cat;
-        socket.emit('clientRequestCountFromCategory', {
-            category: oddCategory,
-            count: 1
-        });
+        socket.emit('clientRequestFromCategory', oddCategory);
     }
 
 });
