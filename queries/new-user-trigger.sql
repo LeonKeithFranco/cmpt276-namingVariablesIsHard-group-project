@@ -2,11 +2,9 @@ CREATE OR REPLACE FUNCTION new_user()
     RETURNS trigger AS
 $$
 BEGIN
-    UPDATE Users
-    SET standard=0,
-        odd_one_out=0,
-        timed=0
-    WHERE id=NEW.id;
+    NEW.standard=0;
+    NEW.odd_one_out=0;
+    NEW.timed=0;
 
     RETURN NEW;
 END;
@@ -14,6 +12,6 @@ $$
 LANGUAGE 'plpgsql';
 
 CREATE TRIGGER new_user
-AFTER INSERT ON Users
+BEFORE INSERT ON Users
 FOR EACH ROW
 EXECUTE PROCEDURE new_user();
