@@ -14,34 +14,23 @@ let drawingCount = 0;
 let odd = 0;
 let playerScore = 0;
 let continueGame = true;
-let sameDrawingsLoaded = false;
 let allDrawingsLoaded = false;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
     if (category === "") {
         category = cat;
-        socket.emit('clientRequestCategorySize', category);
-    } else if (sameDrawingsLoaded) {
-        oddCategory = cat;
-        socket.emit('clientRequestCategorySize', oddCategory);
-    } else {
-        socket.emit('clientRequestRandomCategoryName');
-    }
-
-});
-
-socket.on('serverSendCategorySize', (categorySize) => {
-    if (!sameDrawingsLoaded) {
-        sameDrawingsLoaded = true;
-
-        const drawingIds = randomArray(categorySize, drawingDivs.length);
-
-        drawingDivs.each(function (index) {
-            socket.emit('clientRequestDrawing', { category: category, id: drawingIds[index] });
+        socket.emit('clientRequestCountFromCategory', {
+            category: category,
+            count: drawingDivs.length
         });
     } else {
-        socket.emit('clientRequestDrawing', { category: oddCategory, id: randomRange(categorySize)});
+        oddCategory = cat;
+        socket.emit('clientRequestCountFromCategory', {
+            category: oddCategory,
+            count: 1
+        });
     }
+
 });
 
 socket.on('serverSendDrawing', (drawingData) => {
@@ -56,7 +45,7 @@ socket.on('serverSendDrawing', (drawingData) => {
     allDrawingsLoaded = drawingCount === drawingDivs.length+1;
     if (allDrawingsLoaded) {
         for (let i = 0; i < svgArr.length; i++) {
-            if (i != odd) {
+            if (i !== odd) {
                 $(drawingDivs[i]).html(svgArr[i]);
             } else {
                 $(drawingDivs[i]).html(svgOdd);
@@ -68,6 +57,10 @@ socket.on('serverSendDrawing', (drawingData) => {
     }
 });
 
+function randomRange(upperbound) {
+    return Math.floor(Math.random() * upperbound);
+}
+
 function fillDrawingDivs() {
     svgArr = [];
 
@@ -76,24 +69,10 @@ function fillDrawingDivs() {
 
     drawingCount = 0;
     allDrawingsLoaded = false;
-    sameDrawingsLoaded = false;
 
     socket.emit('clientRequestRandomCategoryName');
     socket.emit('clientRequestRandomCategoryName');
 }
-
-function randomArray(upperbound, size) {
-    let arr = [];
-    while (arr.length < size) {
-        let r = randomRange(upperbound);
-        if (arr.indexOf(r) === -1) arr.push(r);
-    }
-    return arr;
-};
-
-function randomRange(upperbound) {
-    return Math.floor(Math.random() * upperbound);
-};
 
 $(document).ready(() => {
     console.log(difficulty);
