@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const session = require('client-sessions');
 const socket = require('socket.io');
+const _ = require('lodash');
 const quickdraw = require('./lib/quickdraw/quickdraw-api');
 const random = require('./lib/random');
 const { pool, httpStatusCodes, hash, respond, checkForValidSession } = require('./lib/custom-middleware');
