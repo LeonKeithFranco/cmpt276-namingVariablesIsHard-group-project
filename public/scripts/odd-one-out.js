@@ -106,7 +106,15 @@ function select(index) {
         } else {
             continueGame = false;
 
-            alert(`Game over!\nIt was picture ${oddIndex + 1}.\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
+            let alertString = "";
+            alertString += `Game over!\n`;
+            alertString += `It was picture ${oddIndex + 1}.\n\n`;
+            alertString += `The common category was ${category}.\n`;
+            alertString += `The odd one out was from ${oddCategory}.\n\n`;
+            alertString += `Score: ${playerScore}\n\n`;
+            alertString += `Click "Play Again" to start a new game!`;
+
+            alert(alertString);
         }
     }
 };
