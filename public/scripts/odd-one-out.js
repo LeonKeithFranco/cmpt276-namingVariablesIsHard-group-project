@@ -7,66 +7,61 @@ const scoreDisplay = $('#score');
 const playAgainBtn = $('#playAgainButton');
 
 let svgArr = [];
+let svgNormal = [];
 let svgOdd;
 let category = "";
 let oddCategory = "";
 let drawingCount = 0;
-let odd = 0;
+let oddIndex = 0;
 let playerScore = 0;
 let continueGame = true;
-let sameDrawingsLoaded = false;
 let allDrawingsLoaded = false;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
     if (category === "") {
         category = cat;
-        socket.emit('clientRequestCategorySize', category);
-    } else if (sameDrawingsLoaded) {
-        oddCategory = cat;
-        socket.emit('clientRequestCategorySize', oddCategory);
-    } else {
-        socket.emit('clientRequestRandomCategoryName');
-    }
-
-});
-
-socket.on('serverSendCategorySize', (categorySize) => {
-    if (!sameDrawingsLoaded) {
-        sameDrawingsLoaded = true;
-
-        const drawingIds = randomArray(categorySize, drawingDivs.length);
-
-        drawingDivs.each(function (index) {
-            socket.emit('clientRequestDrawing', { category: category, id: drawingIds[index] });
+        socket.emit('clientRequestCountFromCategory', {
+            category: category,
+            count: drawingDivs.length - 1
         });
     } else {
-        socket.emit('clientRequestDrawing', { category: oddCategory, id: randomRange(categorySize)});
+        oddCategory = cat;
+        socket.emit('clientRequestFromCategory', oddCategory);
     }
+
 });
 
 socket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
     if (word === category) {
-        svgArr.push(svg);
+        svgNormal.push(svg);
     } else {
-        odd = randomRange(num);
         svgOdd = svg;
     }
     drawingCount++;
-    allDrawingsLoaded = drawingCount === drawingDivs.length+1;
+    allDrawingsLoaded = drawingCount === drawingDivs.length;
     if (allDrawingsLoaded) {
-        for (let i = 0; i < svgArr.length; i++) {
-            if (i != odd) {
-                $(drawingDivs[i]).html(svgArr[i]);
+        oddIndex = randomRange(num);
+        for(let i = 0; i < drawingDivs.length; i++) {
+            if(i === oddIndex) {
+                svgArr.push(svgOdd);
             } else {
-                $(drawingDivs[i]).html(svgOdd);
+                svgArr.push(svgNormal.pop());
             }
+        }
+
+        for (let i = 0; i < svgArr.length; i++) {
+            $(drawingDivs[i]).html(svgArr[i]);
             $(drawingDivs[i]).on('click', function () {
                 select(i);
             });
         }
     }
 });
+
+function randomRange(upperbound) {
+    return Math.floor(Math.random() * upperbound);
+}
 
 function fillDrawingDivs() {
     svgArr = [];
@@ -76,24 +71,10 @@ function fillDrawingDivs() {
 
     drawingCount = 0;
     allDrawingsLoaded = false;
-    sameDrawingsLoaded = false;
 
     socket.emit('clientRequestRandomCategoryName');
     socket.emit('clientRequestRandomCategoryName');
 }
-
-function randomArray(upperbound, size) {
-    let arr = [];
-    while (arr.length < size) {
-        let r = randomRange(upperbound);
-        if (arr.indexOf(r) === -1) arr.push(r);
-    }
-    return arr;
-};
-
-function randomRange(upperbound) {
-    return Math.floor(Math.random() * upperbound);
-};
 
 $(document).ready(() => {
     console.log(difficulty);
@@ -118,14 +99,14 @@ $(document).ready(() => {
 function select(index) {
     if (continueGame && allDrawingsLoaded) {
 
-        if (index === odd) {
+        if (index === oddIndex) {
             scoreDisplay.text(`Score: ${++playerScore}`);
 
             fillDrawingDivs();
         } else {
             continueGame = false;
 
-            alert(`Game over!\nIt was picture ${odd + 1}.\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
+            alert(`Game over!\nIt was picture ${oddIndex + 1}.\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
         }
     }
 };
