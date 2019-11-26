@@ -62,6 +62,36 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('clientRequestCountFromCategory', (data) =>{
+    const { category, count } = data;
+    console.log(`${count} drawings requested for: ${category}`);
+    quickdraw.getCategorySize(category, (size) => {
+      console.log(`size of ${category} category: ${size}`);
+      return sendCountFromCategory(category, count, size);
+    });
+  });
+
+  function sendCountFromCategory(category, count, size) {
+    for(let i = 0; i < count; i++) {
+      sendRandomFromCategory(category, size);
+    }
+  }
+
+  function sendRandomFromCategory(category, size) {
+    let id = randomRange(size);
+
+    quickdraw.getDrawing(category, id, (drawing) => {
+      if(drawing.recognized) {
+        quickdraw.convertDrawing(drawing, (convertedDrawing) => {
+          socket.emit('serverSendDrawing', convertedDrawing);
+        });
+      } else {
+        console.log(`drawing with id ${id} not recognized, requesting another`);
+        sendRandomFromCategory(category, size);
+      }
+    });
+  }
+
   socket.on('clientRequestCategoryName', (data) => {
     console.log(`${data}`);
     socket.emit('serverSendCategoryName', quickdraw.getCategory(data));
@@ -82,7 +112,11 @@ io.on('connection', (socket) => {
 
     quickdraw.getCategorySize(category, (size) => {
       console.log(`size of ${category} category: ${size}`);
-      socket.emit('serverSendCategorySize', size);  
+      socket.emit('serverSendCategorySize', size);
     });
   });
 });
+
+function randomRange(upperbound) {
+  return Math.floor(Math.random() * upperbound);
+}
