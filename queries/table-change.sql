@@ -1,0 +1,7 @@
+ALTER TABLE Users
+DROP COLUMN highscore;
+
+ALTER TABLE Users
+ADD COLUMN standard INT,
+ADD COLUMN odd_one_out INT,
+ADD COLUMN timed INT;
