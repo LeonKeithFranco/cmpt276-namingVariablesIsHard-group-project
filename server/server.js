@@ -71,6 +71,15 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('clientRequestFromCategory', (data) =>{
+    const category = data;
+    console.log(`Single drawing requested for: ${category}`);
+    quickdraw.getCategorySize(category, (size) => {
+      console.log(`size of ${category} category: ${size}`);
+      return sendRandomFromCategory(category, size);
+    });
+  });
+
   function sendCountFromCategory(category, count, size) {
     for(let i = 0; i < count; i++) {
       sendRandomFromCategory(category, size);
