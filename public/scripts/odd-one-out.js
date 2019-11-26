@@ -7,11 +7,12 @@ const scoreDisplay = $('#score');
 const playAgainBtn = $('#playAgainButton');
 
 let svgArr = [];
+let svgNormal = [];
 let svgOdd;
 let category = "";
 let oddCategory = "";
 let drawingCount = 0;
-let odd = 0;
+let oddIndex = 0;
 let playerScore = 0;
 let continueGame = true;
 let allDrawingsLoaded = false;
@@ -21,7 +22,7 @@ socket.on('serverSendRandomCategoryName', (cat) => {
         category = cat;
         socket.emit('clientRequestCountFromCategory', {
             category: category,
-            count: drawingDivs.length
+            count: drawingDivs.length - 1
         });
     } else {
         oddCategory = cat;
@@ -33,20 +34,24 @@ socket.on('serverSendRandomCategoryName', (cat) => {
 socket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
     if (word === category) {
-        svgArr.push(svg);
+        svgNormal.push(svg);
     } else {
-        odd = randomRange(num);
         svgOdd = svg;
     }
     drawingCount++;
-    allDrawingsLoaded = drawingCount === drawingDivs.length+1;
+    allDrawingsLoaded = drawingCount === drawingDivs.length;
     if (allDrawingsLoaded) {
-        for (let i = 0; i < svgArr.length; i++) {
-            if (i !== odd) {
-                $(drawingDivs[i]).html(svgArr[i]);
+        oddIndex = randomRange(num);
+        for(let i = 0; i < drawingDivs.length; i++) {
+            if(i === oddIndex) {
+                svgArr.push(svgOdd);
             } else {
-                $(drawingDivs[i]).html(svgOdd);
+                svgArr.push(svgNormal.pop());
             }
+        }
+
+        for (let i = 0; i < svgArr.length; i++) {
+            $(drawingDivs[i]).html(svgArr[i]);
             $(drawingDivs[i]).on('click', function () {
                 select(i);
             });
@@ -94,14 +99,14 @@ $(document).ready(() => {
 function select(index) {
     if (continueGame && allDrawingsLoaded) {
 
-        if (index === odd) {
+        if (index === oddIndex) {
             scoreDisplay.text(`Score: ${++playerScore}`);
 
             fillDrawingDivs();
         } else {
             continueGame = false;
 
-            alert(`Game over!\nIt was picture ${odd + 1}.\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
+            alert(`Game over!\nIt was picture ${oddIndex + 1}.\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
         }
     }
 };
