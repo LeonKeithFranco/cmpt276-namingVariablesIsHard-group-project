@@ -11,7 +11,7 @@ END
 $$
 LANGUAGE 'plpgsql';
 
-CREATE TRIGGER update_scores
+CREATE TRIGGER update_standard_score
 BEFORE UPDATE ON Users
 FOR EACH ROW
 EXECUTE PROCEDURE update_standard_score();
