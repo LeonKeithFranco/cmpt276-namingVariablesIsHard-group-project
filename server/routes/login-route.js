@@ -31,7 +31,6 @@ loginRoute.post('/', (req, res) => {
           const user = result.rows[0];
 
           sesh.user = user.username;
-          sesh.highscore = user.highscore || 0;
 
           console.log(`${sesh.user} logged in`);
           res.respond(req.httpStatus.OK, 'Login succesful');
