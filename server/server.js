@@ -224,7 +224,7 @@ io.on('connection', (socket) => {
           console.log(`category selected: ${category}`);
           socket.emit(`serverSendRandomCategoryName`, category);
         } else {
-          console.log(`no categories have enough drawing pre-loaded, selecting at random from all`);
+          console.log(`no categories have enough drawings pre-loaded, selecting at random from all`);
           const category = quickdraw.getRandomCategory();
           console.log(`category selected: ${category}`);
           socket.emit('serverSendRandomCategoryName', category);
