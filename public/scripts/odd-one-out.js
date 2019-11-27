@@ -106,6 +106,17 @@ function select(index) {
         } else {
             continueGame = false;
 
+            $.ajax({
+                type: 'PUT',
+                url: `${window.location.pathname}/${playerScore}`,
+                success: (response) => {
+                  console.log('Score successfully updated');
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                  console.log(`Error: ${textStatus} - ${errorThrown}`);
+                }
+              });
+
             alert(`Game over!\nIt was picture ${oddIndex + 1}.\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
         }
     }
