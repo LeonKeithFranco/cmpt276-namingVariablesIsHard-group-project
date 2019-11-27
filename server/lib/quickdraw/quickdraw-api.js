@@ -95,7 +95,7 @@ module.exports = {
         setTimeout(callback, 0, JSON.parse(body));
       } catch (error) {
         console.error(error);
-        self.getCategorySize(category, callback);
+        this.getCategorySize(category, callback);
       }
     });
   },
