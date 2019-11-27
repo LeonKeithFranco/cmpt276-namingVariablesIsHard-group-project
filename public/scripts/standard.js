@@ -63,7 +63,13 @@ submitGuessBtn.click(() => {
 
       $.ajax({
         type: 'PUT',
-        url: `${window.location.pathname}/${playerScore}`
+        url: `${window.location.pathname}/${playerScore}`,
+        success: (response) => {
+          console.log('Score successfully updated');
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+          console.log(`Error: ${textStatus} - ${errorThrown}`);
+        }
       });
     }
   }
