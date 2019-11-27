@@ -9,9 +9,18 @@ leaderboardRoute.get('/', async (req, res) => {
       FROM Users
       WHERE username='${req.session.user}'
     `);
+    const topTenStandardScoresQuery = await req.pool.query(`
+      SELECT username,standard
+      FROM Users
+      ORDER BY standard DESC
+      LIMIT 10
+    `);
+
+    console.log(topTenStandardScoresQuery);
 
     const scores = {
-      personalScore: personalScoreQuery.rows[0]
+      personalScore: personalScoreQuery.rows[0],
+      topTenStandardScores: topTenStandardScoresQuery.rows
     }
 
     res.render('pages/leaderboard', scores);
