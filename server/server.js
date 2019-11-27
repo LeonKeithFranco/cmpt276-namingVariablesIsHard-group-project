@@ -93,10 +93,10 @@ function preloadDrawings(category, count) {
 function loadRandomFromCategory(category, size) {
   let id = _.random(size - 1);
 
-  quickdraw.getDrawing(category, id, (drawing) => {
+  quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
     if(drawing.recognized) {
       let preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing)
-                      VALUES('${category}', ${id}, '${drawing.drawing}')`;
+                      VALUES('${category}', ${id}, '${rawDrawing}')`;
       serverPool.query(preloadQuery, (error, result) => {
         if(error) {
           console.error(error);
