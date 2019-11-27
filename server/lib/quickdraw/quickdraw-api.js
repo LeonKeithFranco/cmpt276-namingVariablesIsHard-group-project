@@ -53,7 +53,7 @@ module.exports = {
       const parsedBody = JSON.parse(body);
 
       if (parsedBody.code !== 8) {
-        setTimeout(callback, 0, parsedBody);
+        setTimeout(callback, 0, parsedBody, body);
       } else {
         counter = ++counter % API_KEYS.length;
         apiKey = API_KEYS[counter];
