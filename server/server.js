@@ -6,6 +6,11 @@ const _ = require('lodash');
 const quickdraw = require('./lib/quickdraw/quickdraw-api');
 const { pool, httpStatusCodes, hash, respond, checkForValidSession } = require('./lib/custom-middleware');
 
+const { Pool } = require('pg');
+const serverPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
 const indexRoute = require('./routes/index-route');
 const loginRoute = require('./routes/login-route');
 const registerRoute = require('./routes/register-route');
@@ -41,6 +46,71 @@ app.use('/leaderboard', pool, checkForValidSession, leaderboardRoute);
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
 
+let loadsInProgress = 0;
+
+setInterval(schedulePreloadDrawings, 1000);
+
+function schedulePreloadDrawings() {
+  if(loadsInProgress === 0) {
+    let categoryQuery = `Select * FROM Categories where recognized < 6;`;
+    serverPool.query(categoryQuery, (error, result) => {
+      if(error) {
+        console.error(error);
+      } else {
+        if(result.rows.length > 0) {
+          let choice = result.rows[_.random(result.rows.length-1)];
+          console.log(`preloading images from category: ${choice.category}`);
+          preloadDrawings(choice.category, 6 - choice.recognized);
+        } else {
+          let categoryQuery = `Select * FROM Categories where recognized < 12;`;
+          serverPool.query(categoryQuery, (error, result) => {
+            if (error) {
+              console.error(error);
+            } else {
+              if (result.rows.length > 0) {
+                let choice = result.rows[_.random(result.rows.length - 1)];
+                console.log(`preloading images from category: ${choice.category}`);
+                preloadDrawings(choice.category, 12 - choice.recognized);
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+}
+
+function preloadDrawings(category, count) {
+  console.log(`preloading ${count} more drawings from ${category}`);
+  loadsInProgress = count;
+  quickdraw.getCategorySize(category, (size) => {
+    for(let i = 0; i < count; i++) {
+      loadRandomFromCategory(category, size);
+    }
+  });
+}
+
+function loadRandomFromCategory(category, size) {
+  let id = _.random(size - 1);
+
+  quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
+    if(drawing.recognized) {
+      let preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing)
+                      VALUES('${category}', ${id}, '${rawDrawing}')`;
+      serverPool.query(preloadQuery, (error, result) => {
+        if(error) {
+          console.error(error);
+        }
+
+        --loadsInProgress;
+      });
+    } else {
+      console.log(`preloaded drawing with id ${id} not recognized, requesting another`);
+      loadRandomFromCategory(category, size);
+    }
+  });
+}
+
 io.on('connection', (socket) => {
   console.log("connection made with socket id:", socket.id);
 
@@ -65,25 +135,53 @@ io.on('connection', (socket) => {
   socket.on('clientRequestCountFromCategory', (data) =>{
     const { category, count } = data;
     console.log(`${count} drawings requested for: ${category}`);
-    quickdraw.getCategorySize(category, (size) => {
-      console.log(`size of ${category} category: ${size}`);
-      return sendCountFromCategory(category, count, size);
-    });
+    return sendCountFromCategory(category, count);
   });
 
   socket.on('clientRequestFromCategory', (data) =>{
     const category = data;
     console.log(`single drawing requested for: ${category}`);
-    quickdraw.getCategorySize(category, (size) => {
-      console.log(`size of ${category} category: ${size}`);
-      return sendRandomFromCategory(category, size);
-    });
+    sendCountFromCategory(category, 1);
   });
 
-  function sendCountFromCategory(category, count, size) {
-    for(let i = 0; i < count; i++) {
-      sendRandomFromCategory(category, size);
-    }
+  function sendCountFromCategory(category, count) {
+    let drawingQuery = `
+        DELETE FROM Preloaded_drawings
+        WHERE id = ANY (ARRAY(
+          SELECT id FROM Preloaded_drawings
+          WHERE category = '${category}'
+          AND recognized = TRUE
+          LIMIT ${count}))
+        RETURNING *;`;
+    serverPool.query(drawingQuery, (error, result) => {
+      if (error) {
+        console.error(error);
+      } else {
+
+        for(let i = 0; i < result.rows.length; i++) {
+          const parsedDrawing = JSON.parse(result.rows[i].drawing);
+          quickdraw.convertDrawing(parsedDrawing, (convertedDrawing) => {
+            socket.emit('serverSendDrawing', convertedDrawing);
+          });
+        }
+
+        if(result.rows.length < count) {
+          console.log(`insufficient preloaded images in category ${category}, falling back to direct API call`);
+
+          const remaining = count - result.rows.length;
+
+          quickdraw.getCategorySize(category, (size) => {
+            function getRemaining (category, remaining, size) {
+              for(let i = 0; i < remaining; i++) {
+                console.log(`making direct request for request for ${category}`);
+                sendRandomFromCategory(category, size);
+              }
+            }
+            return getRemaining(category, remaining, size);
+          });
+        }
+      }
+    });
   }
 
   function sendRandomFromCategory(category, size) {
@@ -106,13 +204,33 @@ io.on('connection', (socket) => {
     socket.emit('serverSendCategoryName', quickdraw.getCategory(data));
   });
 
-  socket.on('clientRequestRandomCategoryName', () => {
-    console.log('Random category requested');
+  socket.on('clientRequestRandomCategoryName', (needed, excluded) => {
+    needed = (typeof needed !== 'undefined') ? needed : 1;
+    excluded = (typeof excluded !== 'undefined') ? excluded : '';
 
-    let category = quickdraw.getRandomCategory();
-    console.log(category)
+    console.log(`random category requested with minimum ${needed} available needed`);
 
-    socket.emit('serverSendRandomCategoryName', category);
+    let categoryQuery = `SELECT category FROM categories
+        WHERE recognized >= ${needed}
+        AND category != '${excluded}'`;
+
+    serverPool.query(categoryQuery, (error, result) => {
+      if (error) {
+        console.error(error);
+      } else {
+        if(result.rows.length > 0) {
+          const rowIndex = _.random(result.rows.length - 1);
+          const category = result.rows[rowIndex].category;
+          console.log(`category selected: ${category}`);
+          socket.emit(`serverSendRandomCategoryName`, category);
+        } else {
+          console.log(`no categories have enough drawings pre-loaded, selecting at random from all`);
+          const category = quickdraw.getRandomCategory();
+          console.log(`category selected: ${category}`);
+          socket.emit('serverSendRandomCategoryName', category);
+        }
+      }
+    });
   });
 
   socket.on('clientRequestCategorySize', (category) => {
