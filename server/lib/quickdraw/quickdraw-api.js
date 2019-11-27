@@ -90,7 +90,13 @@ module.exports = {
       if (error) {
         console.error(error);
       }
-      setTimeout(callback, 0, JSON.parse(body));
+      try {
+        JSON.parse(body);
+        setTimeout(callback, 0, JSON.parse(body));
+      } catch (error) {
+        console.error(error);
+        self.getCategorySize(category, callback);
+      }
     });
   },
 
