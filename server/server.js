@@ -144,9 +144,32 @@ io.on('connection', (socket) => {
   socket.on('clientRequestFromCategory', (data) =>{
     const category = data;
     console.log(`single drawing requested for: ${category}`);
-    quickdraw.getCategorySize(category, (size) => {
-      console.log(`size of ${category} category: ${size}`);
-      return sendRandomFromCategory(category, size);
+
+    let drawingQuery = `
+        DELETE FROM Preloaded_drawings
+        WHERE id = ANY (ARRAY(
+          SELECT id FROM Preloaded_drawings
+          WHERE category = '${category}'
+          AND recognized = TRUE
+          LIMIT 1))
+        RETURNING *;`;
+    serverPool.query(drawingQuery, (error, result) => {
+      if (error) {
+        console.error(error);
+      } else {
+        if(result.rows.length > 0) {
+          let parsedDrawing = JSON.parse(result.rows[0].drawing);
+          quickdraw.convertDrawing(parsedDrawing, (convertedDrawing) => {
+            socket.emit('serverSendDrawing', convertedDrawing);
+          });
+        } else {
+          console.log(`no preloaded images in category ${category}, falling back to direct API call`);
+          quickdraw.getCategorySize(category, (size) => {
+            console.log(`size of ${category} category: ${size}`);
+            return sendRandomFromCategory(category, size);
+          });
+        }
+      }
     });
   });
 
