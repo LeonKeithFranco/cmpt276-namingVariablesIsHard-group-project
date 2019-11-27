@@ -9,23 +9,26 @@ leaderboardRoute.get('/', async (req, res) => {
       FROM Users
       WHERE username='${req.session.user}'
     `);
+
+    const maxNumOfScores = 10;
+
     const topTenStandardScoresQuery = await req.pool.query(`
       SELECT username,standard
       FROM Users
       ORDER BY standard DESC
-      LIMIT 10
+      LIMIT ${maxNumOfScores}
     `);
     const topTenOddOneOutScoresQuery = await req.pool.query(`
       SELECT username,odd_one_out
       FROM Users
       ORDER BY odd_one_out DESC
-      LIMIT 10
+      LIMIT ${maxNumOfScores}
     `);
     const topTenTimedScoresQuery = await req.pool.query(`
       SELECT username,timed
       FROM Users
       ORDER BY timed DESC
-      LIMIT 10
+      LIMIT ${maxNumOfScores}
     `);
 
     const scores = {
