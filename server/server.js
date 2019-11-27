@@ -6,6 +6,11 @@ const _ = require('lodash');
 const quickdraw = require('./lib/quickdraw/quickdraw-api');
 const { pool, httpStatusCodes, hash, respond, checkForValidSession } = require('./lib/custom-middleware');
 
+const { Pool } = require('pg');
+const serverPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
 const indexRoute = require('./routes/index-route');
 const loginRoute = require('./routes/login-route');
 const registerRoute = require('./routes/register-route');
@@ -40,6 +45,71 @@ app.use('/leaderboard', checkForValidSession, leaderboardRoute);
 
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
+
+let loadsInProgress = 0;
+
+setInterval(schedulePreloadDrawings, 1000);
+
+function schedulePreloadDrawings() {
+  if(loadsInProgress === 0) {
+    let categoryQuery = `Select * FROM Categories where recognized < 6;`;
+    serverPool.query(categoryQuery, (error, result) => {
+      if(error) {
+        console.error(error);
+      } else {
+        if(result.rows.length > 0) {
+          let choice = result.rows[_.random(result.rows.length-1)];
+          console.log(`preloading images from category: ${choice.category}`);
+          preloadDrawings(choice.category, 6 - choice.recognized);
+        } else {
+          let categoryQuery = `Select * FROM Categories where recognized < 12;`;
+          serverPool.query(categoryQuery, (error, result) => {
+            if (error) {
+              console.error(error);
+            } else {
+              if (result.rows.length > 0) {
+                let choice = result.rows[_.random(result.rows.length - 1)];
+                console.log(`preloading images from category: ${choice.category}`);
+                preloadDrawings(choice.category, 12 - choice.recognized);
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+}
+
+function preloadDrawings(category, count) {
+  console.log(`preloading ${count} more drawings from ${category}`);
+  loadsInProgress = count;
+  quickdraw.getCategorySize(category, (size) => {
+    for(let i = 0; i < count; i++) {
+      loadRandomFromCategory(category, size);
+    }
+  });
+}
+
+function loadRandomFromCategory(category, size) {
+  let id = _.random(size - 1);
+
+  quickdraw.getDrawing(category, id, (drawing) => {
+    if(drawing.recognized) {
+      let preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing)
+                      VALUES('${category}', ${id}, '${drawing.drawing}')`;
+      serverPool.query(preloadQuery, (error, result) => {
+        if(error) {
+          console.error(error);
+        }
+
+        --loadsInProgress;
+      });
+    } else {
+      console.log(`preloaded drawing with id ${id} not recognized, requesting another`);
+      loadRandomFromCategory(category, size);
+    }
+  });
+}
 
 io.on('connection', (socket) => {
   console.log("connection made with socket id:", socket.id);
