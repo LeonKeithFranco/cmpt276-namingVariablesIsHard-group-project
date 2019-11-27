@@ -379,7 +379,6 @@ CREATE TABLE Preloaded_Drawings
 CREATE OR REPLACE FUNCTION add_drawing()
     RETURNS trigger AS $add_drawing$
 DECLARE
-    count TEXT;
     type TEXT;
 BEGIN
     IF NEW.recognized THEN
@@ -388,16 +387,10 @@ BEGIN
         type = 'unrecognized';
     END IF;
     EXECUTE FORMAT(
-        'SELECT COUNT(*) FROM Preloaded_Drawings
-        WHERE category = ''%s''
-        AND recognized = ''%s'';',
-        NEW.category, NEW.recognized
-    ) INTO count;
-    EXECUTE FORMAT(
         'UPDATE Categories
-         SET %s = %s
+         SET %s = %s + 1
          WHERE category = ''%s'';',
-         type, count, NEW.category
+         type, type, NEW.category
     );
 
     RETURN NEW;
@@ -412,7 +405,6 @@ EXECUTE PROCEDURE add_drawing();
 CREATE OR REPLACE FUNCTION remove_drawing()
     RETURNS trigger AS $remove_drawing$
 DECLARE
-    count TEXT;
     type TEXT;
 BEGIN
     IF OLD.recognized THEN
@@ -421,16 +413,10 @@ BEGIN
         type = 'unrecognized';
     END IF;
     EXECUTE FORMAT(
-        'SELECT COUNT(*) FROM Preloaded_Drawings
-        WHERE category = ''%s''
-        AND recognized = ''%s'';',
-        OLD.category, OLD.recognized
-    ) INTO count;
-    EXECUTE FORMAT(
         'UPDATE Categories
-         SET %s = %s
+         SET %s = %s - 1
          WHERE category = ''%s'';',
-         type, count, OLD.category
+         type, type, OLD.category
     );
 
     RETURN OLD;
