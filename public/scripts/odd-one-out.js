@@ -24,13 +24,11 @@ socket.on('serverSendRandomCategoryName', (cat) => {
             category: category,
             count: drawingDivs.length - 1
         });
-    } else if (cat === category) {
-        socket.emit('clientRequestRandomCategoryName');
+        socket.emit('clientRequestRandomCategoryName', 1, cat);
     } else {
         oddCategory = cat;
         socket.emit('clientRequestFromCategory', oddCategory);
     }
-
 });
 
 socket.on('serverSendDrawing', (drawingData) => {
@@ -74,8 +72,7 @@ function fillDrawingDivs() {
     drawingCount = 0;
     allDrawingsLoaded = false;
 
-    socket.emit('clientRequestRandomCategoryName');
-    socket.emit('clientRequestRandomCategoryName');
+    socket.emit('clientRequestRandomCategoryName', drawingDivs.length - 1);
 }
 
 $(document).ready(() => {
