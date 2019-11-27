@@ -176,13 +176,33 @@ io.on('connection', (socket) => {
     socket.emit('serverSendCategoryName', quickdraw.getCategory(data));
   });
 
-  socket.on('clientRequestRandomCategoryName', () => {
-    console.log('Random category requested');
+  socket.on('clientRequestRandomCategoryName', (needed, excluded) => {
+    needed = (typeof needed !== 'undefined') ? needed : 1;
+    excluded = (typeof excluded !== 'undefined') ? excluded : '';
 
-    let category = quickdraw.getRandomCategory();
-    console.log(category)
+    console.log(`random category requested with minimum ${needed} available needed`);
 
-    socket.emit('serverSendRandomCategoryName', category);
+    let categoryQuery = `SELECT category FROM categories
+        WHERE recognized >= ${needed}
+        AND category != '${excluded}'`;
+
+    serverPool.query(categoryQuery, (error, result) => {
+      if (error) {
+        console.error(error);
+      } else {
+        if(result.rows.length > 0) {
+          const rowIndex = _.random(result.rows.length - 1);
+          const category = result.rows[rowIndex].category;
+          console.log(`category selected: ${category}`);
+          socket.emit(`serverSendRandomCategoryName`, category);
+        } else {
+          console.log(`no categories have enough drawing pre-loaded, selecting at random from all`);
+          const category = quickdraw.getRandomCategory();
+          console.log(`category selected: ${category}`);
+          socket.emit('serverSendRandomCategoryName', category);
+        }
+      }
+    });
   });
 
   socket.on('clientRequestCategorySize', (category) => {
