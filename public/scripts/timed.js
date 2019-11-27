@@ -57,7 +57,7 @@ $(document).ready(() => {
     }
     scoreDisplay.text(`Score: ${playerScore}`);
     fillDrawingDivs();
-   checkTimer = setInterval(function () {
+    checkTimer = setInterval(function () {
         updateTime();
     }, checkTime);
 });
@@ -90,6 +90,17 @@ submitGuessBtn.click(() => {
             fillDrawingDivs();
         } else {
             continueGame = false;
+
+            $.ajax({
+                type: 'PUT',
+                url: `${window.location.pathname}/${playerScore}`,
+                success: (response) => {
+                    console.log('Score successfully updated');
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    console.log(`Error: ${textStatus} - ${errorThrown}`);
+                }
+            });
 
             alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
         }
