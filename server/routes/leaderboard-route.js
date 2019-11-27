@@ -15,16 +15,20 @@ leaderboardRoute.get('/', async (req, res) => {
       ORDER BY standard DESC
       LIMIT 10
     `);
-
-    console.log(topTenStandardScoresQuery);
+    const topTenOddOneOutScoresQuery = await req.pool.query(`
+      SELECT username,odd_one_out
+      FROM Users
+      ORDER BY odd_one_out DESC
+      LIMIT 10
+    `);
 
     const scores = {
       personalScore: personalScoreQuery.rows[0],
-      topTenStandardScores: topTenStandardScoresQuery.rows
+      topTenStandardScores: topTenStandardScoresQuery.rows,
+      topTenOddOneOutScores: topTenOddOneOutScoresQuery.rows
     }
 
     res.render('pages/leaderboard', scores);
-    // res.send(scores);
   } catch (err) {
     console.error(err);
   }
