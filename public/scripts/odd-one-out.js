@@ -24,6 +24,8 @@ socket.on('serverSendRandomCategoryName', (cat) => {
             category: category,
             count: drawingDivs.length - 1
         });
+    } else if (cat === category) {
+        socket.emit('clientRequestRandomCategoryName');
     } else {
         oddCategory = cat;
         socket.emit('clientRequestFromCategory', oddCategory);
