@@ -10,10 +10,25 @@
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Leaderboard</h1>
-        <div id="board"></div>
+
+        <h2 class="text">Personal Top Scores For <%= personalScore.username %></h2>
+        <table id="personalScores" class="text">
+            <tr>
+                <td>Standard: </td>
+                <td><%= personalScore.standard %></td>
+            </tr>
+            <tr>
+                <td>Odd One Out: </td>
+                <td><%= personalScore.odd_one_out %></td>
+            </tr>
+            <tr>
+                <td>Timed: </td>
+                <td><%= personalScore.timed %></td>
+            </tr>
+        </table>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
     </center>
-    
+
 </body>
 
 </html>
