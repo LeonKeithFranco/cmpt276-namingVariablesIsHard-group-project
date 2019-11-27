@@ -21,11 +21,18 @@ leaderboardRoute.get('/', async (req, res) => {
       ORDER BY odd_one_out DESC
       LIMIT 10
     `);
+    const topTenTimedScoresQuery = await req.pool.query(`
+      SELECT username,timed
+      FROM Users
+      ORDER BY timed DESC
+      LIMIT 10
+    `);
 
     const scores = {
       personalScore: personalScoreQuery.rows[0],
       topTenStandardScores: topTenStandardScoresQuery.rows,
-      topTenOddOneOutScores: topTenOddOneOutScoresQuery.rows
+      topTenOddOneOutScores: topTenOddOneOutScoresQuery.rows,
+      topTenTimedScores: topTenTimedScoresQuery.rows
     }
 
     res.render('pages/leaderboard', scores);
