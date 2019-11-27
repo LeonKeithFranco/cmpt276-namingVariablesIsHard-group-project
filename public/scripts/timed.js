@@ -44,7 +44,7 @@ function fillDrawingDivs() {
     drawingCount = 0;
     allDrawingsLoaded = false;
 
-    socket.emit('clientRequestRandomCategoryName');
+    socket.emit('clientRequestRandomCategoryName', drawingDivs.length);
 }
 
 $(document).ready(() => {
