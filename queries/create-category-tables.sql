@@ -1,7 +1,8 @@
 CREATE TABLE Categories
     (id SERIAL PRIMARY KEY,
      category TEXT UNIQUE NOT NULL,
-     loaded INT DEFAULT 0);
+     recognized INT DEFAULT 0,
+     unrecognized INT DEFAULT 0);
 
 CREATE OR REPLACE FUNCTION create_categories()
     RETURNS void AS
@@ -371,22 +372,32 @@ SELECT "create_categories"();
 CREATE TABLE Preloaded_Drawings
     (id SERIAL PRIMARY KEY,
      category TEXT NOT NULL,
-     drawing TEXT NOT NULL);
+     drawing_id INT NOT NULL,
+     drawing TEXT NOT NULL,
+     recognized BOOLEAN NOT NULL DEFAULT TRUE);
 
 CREATE OR REPLACE FUNCTION add_drawing()
     RETURNS trigger AS $add_drawing$
 DECLARE
     count TEXT;
+    type TEXT;
 BEGIN
+    IF NEW.recognized THEN
+        type = 'recognized';
+    ELSE
+        type = 'unrecognized';
+    END IF;
     EXECUTE FORMAT(
-        'SELECT COUNT(*) FROM Preloaded_Drawings WHERE category = ''%s''',
-        NEW.category
+        'SELECT COUNT(*) FROM Preloaded_Drawings
+        WHERE category = ''%s''
+        AND recognized = ''%s'';',
+        NEW.category, NEW.recognized
     ) INTO count;
     EXECUTE FORMAT(
         'UPDATE Categories
-         SET loaded = %s
-         WHERE category = ''%s''',
-         count, NEW.category
+         SET %s = %s
+         WHERE category = ''%s'';',
+         type, count, NEW.category
     );
 
     RETURN NEW;
@@ -402,19 +413,27 @@ CREATE OR REPLACE FUNCTION remove_drawing()
     RETURNS trigger AS $remove_drawing$
 DECLARE
     count TEXT;
+    type TEXT;
 BEGIN
+    IF OLD.recognized THEN
+        type = 'recognized';
+    ELSE
+        type = 'unrecognized';
+    END IF;
     EXECUTE FORMAT(
-        'SELECT COUNT(*) FROM Preloaded_Drawings WHERE category = ''%s''',
-        OLD.category
+        'SELECT COUNT(*) FROM Preloaded_Drawings
+        WHERE category = ''%s''
+        AND recognized = ''%s'';',
+        OLD.category, OLD.recognized
     ) INTO count;
     EXECUTE FORMAT(
         'UPDATE Categories
-         SET loaded = %s
-         WHERE category = ''%s''',
-         count, OLD.category
+         SET %s = %s
+         WHERE category = ''%s'';',
+         type, count, OLD.category
     );
 
-    RETURN NEW;
+    RETURN OLD;
 END
 $remove_drawing$ LANGUAGE 'plpgsql';
 
