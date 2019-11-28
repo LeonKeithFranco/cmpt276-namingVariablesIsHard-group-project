@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pass-or-fail.css">
+</head>
+
+<body>
+    <center>
+        <img id="headerimage" src="/assets/scribbltaireio.png">
+        <h1 class="text">Pass Or Fail</h1>
+        <% include ../partials/1-drawing.ejs %>
+        <div id="inputSection">
+            <p id="word" class="text">word placeholder</p>
+            <button id="passButton" class="button">Pass</button>
+            <button id="failButton" class="button">Fail</button>
+            <br>
+            <button id="playAgainButton" class="button">Play Again</button>
+        </div>
+        <p id="passOrFailRules" class="text">
+            Rules:<br>
+            Each round, you will be presented with a picture along with the word that picture represents. <br>
+            Click "Pass" if you believe that Google's Quick, Draw! AI was able to identify the picture. Click fail otherwise. <br>
+            If you guess correctly, you'll be given a point!<br>
+            There are 10 rounds in total so try your best to get a perfect score!
+        </p>
+        <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
+    </center>
+</body>
+
+</html>

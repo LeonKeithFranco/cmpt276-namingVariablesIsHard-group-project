@@ -14,20 +14,30 @@ let difficulty;
 const standardBtn = $('#standardButton');
 const oddOneOutBtn = $('#oddOneOutButton');
 const timedBtn = $('#timedButton');
+const passOrFailBtn = $('#passOrFailButton');
 
 standardBtn.click(() => {
   gameMode = standardBtn.text();
-  gameModePicked()
+  gameModePicked();
 });
 
 oddOneOutBtn.click(() => {
   gameMode = oddOneOutBtn.text();
-  gameModePicked()
+  gameModePicked();
 });
 
 timedBtn.click(() => {
   gameMode = timedBtn.text();
-  gameModePicked()
+  gameModePicked();
+});
+
+passOrFailBtn.click(() => {
+  gameMode = passOrFailBtn.text();
+
+  $('#confirmationMessage').text(`Play ${gameMode}?`);
+
+  gameModeMenu.hide();
+  confirmationMenu.show();
 });
 
 
@@ -60,8 +70,14 @@ const noBtn = $('#noButton');
 noBtn.click(reset);
 yesBtn.click(() => {
   gameMode = gameMode.toLowerCase().replace(/ /g, "-");
-  difficulty = difficulty.toLowerCase();
-  window.location.href = `${window.location.origin}/game-mode/${gameMode}/${difficulty}`
+
+  if (gameMode !== 'pass-or-fail') {
+    difficulty = difficulty.toLowerCase();
+    window.location.href = `${window.location.origin}/game-mode/${gameMode}/${difficulty}`;
+  }
+  else {
+    window.location.href = `${window.location.origin}/game-mode/${gameMode}`;
+  }
 });
 
 

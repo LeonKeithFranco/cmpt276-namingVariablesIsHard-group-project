@@ -41,36 +41,44 @@ app.use('/register', pool, httpStatusCodes, hash, respond, registerRoute);
 app.use('/main-menu', checkForValidSession, mainMenuRoute);
 app.use('/logout', logoutRoute);
 app.use('/game-mode', checkForValidSession, pool, httpStatusCodes, respond, gameModeRoute);
-app.use('/leaderboard', checkForValidSession, leaderboardRoute);
+app.use('/leaderboard', pool, checkForValidSession, leaderboardRoute);
 
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
 
 let loadsInProgress = 0;
+let loadedMessageSent = false;
 
 setInterval(schedulePreloadDrawings, 1000);
 
 function schedulePreloadDrawings() {
   if(loadsInProgress === 0) {
-    let categoryQuery = `Select * FROM Categories where recognized < 6;`;
+    const categoryQuery = `Select * FROM Categories where recognized < 6;`;
     serverPool.query(categoryQuery, (error, result) => {
       if(error) {
         console.error(error);
       } else {
         if(result.rows.length > 0) {
-          let choice = result.rows[_.random(result.rows.length-1)];
+          loadedMessageSent = false;
+          const choice = result.rows[_.random(result.rows.length-1)];
           console.log(`preloading images from category: ${choice.category}`);
           preloadDrawings(choice.category, 6 - choice.recognized);
         } else {
-          let categoryQuery = `Select * FROM Categories where recognized < 12;`;
+          const categoryQuery = `Select * FROM Categories where recognized < 12;`;
           serverPool.query(categoryQuery, (error, result) => {
             if (error) {
               console.error(error);
             } else {
               if (result.rows.length > 0) {
-                let choice = result.rows[_.random(result.rows.length - 1)];
+                loadedMessageSent = false;
+                const choice = result.rows[_.random(result.rows.length - 1)];
                 console.log(`preloading images from category: ${choice.category}`);
                 preloadDrawings(choice.category, 12 - choice.recognized);
+              } else {
+                if(!loadedMessageSent) {
+                  console.log(`all categories have at least 12 drawings preloaded`);
+                  loadedMessageSent = true;
+                }
               }
             }
           });
@@ -91,11 +99,11 @@ function preloadDrawings(category, count) {
 }
 
 function loadRandomFromCategory(category, size) {
-  let id = _.random(size - 1);
+  const id = _.random(size - 1);
 
   quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
     if(drawing.recognized) {
-      let preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing)
+      const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing)
                       VALUES('${category}', ${id}, '${rawDrawing}')`;
       serverPool.query(preloadQuery, (error, result) => {
         if(error) {
@@ -145,7 +153,7 @@ io.on('connection', (socket) => {
   });
 
   function sendCountFromCategory(category, count) {
-    let drawingQuery = `
+    const drawingQuery = `
         DELETE FROM Preloaded_drawings
         WHERE id = ANY (ARRAY(
           SELECT id FROM Preloaded_drawings
@@ -185,7 +193,7 @@ io.on('connection', (socket) => {
   }
 
   function sendRandomFromCategory(category, size) {
-    let id = _.random(size - 1);
+    const id = _.random(size - 1);
 
     quickdraw.getDrawing(category, id, (drawing) => {
       if(drawing.recognized) {
@@ -210,7 +218,7 @@ io.on('connection', (socket) => {
 
     console.log(`random category requested with minimum ${needed} available needed`);
 
-    let categoryQuery = `SELECT category FROM categories
+    const categoryQuery = `SELECT category FROM categories
         WHERE recognized >= ${needed}
         AND category != '${excluded}'`;
 
@@ -224,7 +232,7 @@ io.on('connection', (socket) => {
           console.log(`category selected: ${category}`);
           socket.emit(`serverSendRandomCategoryName`, category);
         } else {
-          console.log(`no categories have enough drawings pre-loaded, selecting at random from all`);
+          console.log(`no categories have enough drawings preloaded, selecting at random from all`);
           const category = quickdraw.getRandomCategory();
           console.log(`category selected: ${category}`);
           socket.emit('serverSendRandomCategoryName', category);

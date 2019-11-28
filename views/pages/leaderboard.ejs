@@ -10,10 +10,53 @@
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Leaderboard</h1>
-        <div id="board"></div>
+        <p class="text">*Note: Scores are only saved for hard mode games</p>
+        <h3 class="text">Personal Top Scores For <%= personalScore.username %></h2>
+        <table id="personalScores" class="text">
+            <tr>
+                <td>Standard: </td>
+                <td><%= personalScore.standard %></td>
+            </tr>
+            <tr>
+                <td>Odd One Out: </td>
+                <td><%= personalScore.odd_one_out %></td>
+            </tr>
+            <tr>
+                <td>Timed: </td>
+                <td><%= personalScore.timed %></td>
+            </tr>
+        </table>
+        <h3 class="text">Top Ten Scores For Standard Mode</h2>
+        <table id="topTenStandardScores" class="text">
+            <% topTenStandardScores.forEach((score) => { %>
+            <tr>
+                <td><%= score.username %>: </td>
+                <td><%= score.standard %></td>
+            </tr>
+            <% }); %>
+        </table>
+        <h3 class="text">Top Ten Scores For Odd One Out Mode</h2>
+        <table id="topTenOddOneOutScores" class="text">
+            <% topTenOddOneOutScores.forEach((score) => { %>
+            <tr>
+                <td><%= score.username %>: </td>
+                <td><%= score.odd_one_out %></td>
+            </tr>
+            <% }); %>
+        </table>
+        <h3 class="text">Top Ten Scores For Timed Mode</h2>
+        <table id="topTenTimedScores" class="text">
+            <% topTenTimedScores.forEach((score) => { %>
+            <tr>
+                <td><%= score.username %>: </td>
+                <td><%= score.timed %></td>
+            </tr>
+            <% }); %>
+        </table>
+        <br>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
     </center>
-    
+
 </body>
 
 </html>
