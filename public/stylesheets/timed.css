@@ -1,4 +1,4 @@
-#hint, #score, #time {
+#hint, #hintTitle, #score, #time {
     font-size: 22px;
     margin: 3px;
 }
@@ -13,4 +13,9 @@
     border-color: lawngreen;
     border-width: 2px;
     border-style: solid;
+}
+
+#hintDisplay {
+    display: inline-grid;
+    grid-template-columns: auto auto;
 }
