@@ -21,6 +21,8 @@ module.exports = {
     const categoryIndex = _.random(categories.length - 1);
     const category = categories[categoryIndex];
     const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?&key=${apiKey}&isAnimated=false&format=json`;
+    counter = ++counter % API_KEYS.length;
+    apiKey = API_KEYS[counter];
 
     request(URL, (error, response, body) => {
       if (error) {
@@ -33,15 +35,11 @@ module.exports = {
         if (parsedBody.code !== 8) {
           setTimeout(callback, 0, parsedBody);
         } else {
-          counter = ++counter % API_KEYS.length;
-          apiKey = API_KEYS[counter];
           this.getRandomDrawing(callback);
         }
       }
       catch (err) {
         console.error(err);
-        counter = ++counter % API_KEYS.length;
-        apiKey = API_KEYS[counter];
         this.getRandomDrawing(callback);
       }
     });
@@ -54,6 +52,8 @@ module.exports = {
   */
   getDrawing: function (category, id, callback) {
     const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?id=${id}&key=${apiKey}&isAnimated=false&format=json`;
+    counter = ++counter % API_KEYS.length;
+    apiKey = API_KEYS[counter];
 
     request(URL, (error, response, body) => {
       if (error) {
@@ -66,15 +66,11 @@ module.exports = {
         if (parsedBody.code !== 8) {
           setTimeout(callback, 0, parsedBody, body);
         } else {
-          counter = ++counter % API_KEYS.length;
-          apiKey = API_KEYS[counter];
           this.getDrawing(category, id, callback);
         }
       }
       catch (err) {
         console.log(err)
-        counter = ++counter % API_KEYS.length;
-        apiKey = API_KEYS[counter];
         this.getDrawing(category, id, callback);
       }
     });
