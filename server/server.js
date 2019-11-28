@@ -190,7 +190,7 @@ io.on('connection', (socket) => {
             function getRemaining (category, remaining, size) {
               for(let i = 0; i < remaining; i++) {
                 console.log(`making direct request for request for ${category}`);
-                sendRandomFromCategory(category, size);
+                sendRandomFromCategory(category, size, recognized);
               }
             }
             return getRemaining(category, remaining, size);
@@ -200,17 +200,17 @@ io.on('connection', (socket) => {
     });
   }
 
-  function sendRandomFromCategory(category, size) {
+  function sendRandomFromCategory(category, size, recognized) {
     const id = _.random(size - 1);
 
     quickdraw.getDrawing(category, id, (drawing) => {
-      if(drawing.recognized) {
+      if(drawing.recognized === recognized) {
         quickdraw.convertDrawing(drawing, (convertedDrawing) => {
           socket.emit('serverSendDrawing', convertedDrawing);
         });
       } else {
-        console.log(`drawing with id ${id} not recognized, requesting another`);
-        sendRandomFromCategory(category, size);
+        console.log(`drawing from ${category} not ${recognized ? 'recognized' : 'unrecognized'}, requesting another`);
+        sendRandomFromCategory(category, size, recognized);
       }
     });
   }
