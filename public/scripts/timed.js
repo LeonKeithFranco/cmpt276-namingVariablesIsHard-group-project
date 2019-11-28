@@ -72,6 +72,17 @@ function updateTime() {
             timeDisplay.text(`Time: ${time}`);
             continueGame = false;
 
+            $.ajax({
+                type: 'PUT',
+                url: `${window.location.pathname}/${playerScore}`,
+                success: (response) => {
+                    console.log('Score successfully updated');
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    console.log(`Error: ${textStatus} - ${errorThrown}`);
+                }
+            });
+
             alert(`Time's up!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
         }
     }
@@ -90,17 +101,6 @@ submitGuessBtn.click(() => {
             fillDrawingDivs();
         } else {
             continueGame = false;
-
-            $.ajax({
-                type: 'PUT',
-                url: `${window.location.pathname}/${playerScore}`,
-                success: (response) => {
-                    console.log('Score successfully updated');
-                },
-                error: (jqXHR, textStatus, errorThrown) => {
-                    console.log(`Error: ${textStatus} - ${errorThrown}`);
-                }
-            });
 
             alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
         }
