@@ -3,6 +3,7 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <script type="text/javascript" src="/scripts/pass-or-fail.js" defer></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/pass-or-fail.css">
 </head>
 
@@ -12,7 +13,9 @@
         <h1 class="text">Pass Or Fail</h1>
         <% include ../partials/1-drawing.ejs %>
         <div id="inputSection">
-            <p id="word" class="text">word placeholder</p>
+            <p id="category" class="text"></p>
+            <p id="score" class="text"></p>
+            <p id="round" class="text"></p>
             <button id="passButton" class="button">Pass</button>
             <button id="failButton" class="button">Fail</button>
             <br>
