@@ -23,8 +23,10 @@ module.exports = {
         console.error(error);
       }
 
+      let parsedBody;
+
       try {
-        const parsedBody = JSON.parse(body);
+        parsedBody = JSON.parse(body);
       }
       catch (err) {
         console.error(err);
@@ -54,8 +56,10 @@ module.exports = {
         console.error(error);
       }
 
+      let parsedBody;
+
       try {
-        const parsedBody = JSON.parse(body);
+        parsedBody = JSON.parse(body);
       }
       catch (err) {
         console.error(err);
