@@ -94,13 +94,24 @@ submitGuessBtn.click(() => {
     if (continueGame && playerGuess) {
         const answer = category.toLowerCase();
 
+        const flashDuration = 500;
+        const flashesPerDuration = 3;
+
         if (playerGuess === answer) {
             scoreDisplay.text(`Score: ${++playerScore}`);
             input.val('');
 
             fillDrawingDivs();
         } else {
-            
+            input.val('');
+
+            const redFlashInterval = setInterval(() => {
+                input.toggleClass('redBorder');
+            }, (flashDuration / flashesPerDuration) / 2);
+            setTimeout(() => {
+                clearInterval(redFlashInterval);
+                input.removeClass('redBorder');
+            }, flashDuration);
         }
     }
 });
