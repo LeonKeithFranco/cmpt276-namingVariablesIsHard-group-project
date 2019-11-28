@@ -54,7 +54,9 @@ let loadedUnrecognizedSent = false;
 setInterval(schedulePreloadDrawings, 1000);
 
 function schedulePreloadDrawings() {
+
   if(loadsInProgress === 0) {
+    loadsInProgress = 1;  // Prevents this function from being entered multiple times at once asynchronously
     let categoryQuery = `SELECT * FROM Categories WHERE recognized < 6;`;
     serverPool.query(categoryQuery, (error, result) => {
       if(error) {
@@ -99,6 +101,8 @@ function schedulePreloadDrawings() {
                         console.log(`all categories have at least 3 unrecognized drawings preloaded`);
                         loadedRecognizedSent = true;
                       }
+
+                      loadsRemaining = 0;
                     }
                   }
                 });
