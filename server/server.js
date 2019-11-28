@@ -46,7 +46,7 @@ app.use('/leaderboard', pool, checkForValidSession, leaderboardRoute);
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
 
-let loadsInProgress = 0;
+let loadersInProgress = 0;
 let loadsRemaining = 0;
 let loadedRecognizedSent = false;
 let loadedUnrecognizedSent = false;
@@ -55,8 +55,8 @@ setInterval(schedulePreloadDrawings, 1000);
 
 function schedulePreloadDrawings() {
 
-  if(loadsInProgress === 0) {
-    loadsInProgress = 1;  // Prevents this function from being entered multiple times at once asynchronously
+  if(loadersInProgress === 0) {
+    loadersInProgress = 1;  // Prevents this function from being entered multiple times at once asynchronously
     let categoryQuery = `SELECT * FROM Categories WHERE recognized < 6;`;
     serverPool.query(categoryQuery, (error, result) => {
       if(error) {
@@ -116,8 +116,8 @@ function schedulePreloadDrawings() {
 }
 
 function preloadDrawings(category, count) {
-  console.log(`preloading ${count} more drawings from ${category}`);
-  loadsInProgress = count;
+  console.log(`preloading ${count} more recognized drawings from ${category}`);
+  loadersInProgress = count;
   loadsRemaining = count;
   quickdraw.getCategorySize(category, (size) => {
     for(let i = 0; i < count; i++) {
@@ -138,8 +138,8 @@ function loadRandomFromCategory(category, size) {
           console.error(error);
         }
 
-        if(loadsInProgress > 0) {
-          --loadsInProgress;
+        if(loadersInProgress > 0) {
+          --loadersInProgress;
         }
         if(loadsRemaining > 0) {
           --loadsRemaining;
@@ -176,7 +176,7 @@ function loadRandomFromCategory(category, size) {
 
 function preloadUnrecognizedDrawings(category, count) {
   console.log(`preloading ${count} more unrecognized drawings from ${category}`);
-  loadsInProgress = 3 * count;
+  loadersInProgress = 3 * count;
   loadsRemaining = count;
   quickdraw.getCategorySize(category, (size) => {
     for(let i = 0; i < 3 * count; i++) {    // Many requests are made because unrecognized drawings are uncommon
@@ -200,35 +200,33 @@ function loadUnrecognizedFromCategory(category, size) {
 
           console.log(`unrecognized drawing from ${category} found, inserting into table`);
 
-          if (loadsInProgress > 0) {
-            --loadsInProgress;
-          }
           if (loadsRemaining > 0) {
             --loadsRemaining;
           }
-          console.log(`loads remaining: ${loadsInProgress}`);
+
+          loadUnrecognizedFromCategory(category, size);
         });
       } else {
 
         console.log(`preloaded drawing from ${category} with id ${id} is recognized, but only unrecognized is wanted`);
         if (loadsRemaining > 0) {
-          console.log(`discarding drawing and trying again to retrieve unrecognized from ${category}`);
+          console.log(`discarding drawing and trying again from ${category}`);
           loadUnrecognizedFromCategory(category, size);
         } else {
-          console.log(`sufficient drawings have been loaded, done requesting unrecognized from ${category}`);
-          if(loadsInProgress > 0) {
-            --loadsInProgress;
+          console.log(`sufficient drawings have been loaded from ${category}`);
+          if(loadersInProgress > 0) {
+            --loadersInProgress;
           }
-          console.log(`loads remaining: ${loadsInProgress}`);
+          console.log(`loaders remaining: ${loadersInProgress}`);
         }
       }
     });
   } else {
-    console.log(`sufficient drawings have been loaded, done requesting unrecognized from ${category}`);
-    if(loadsInProgress > 0) {
-      --loadsInProgress;
+    console.log(`sufficient drawings have been loaded from ${category}`);
+    if(loadersInProgress > 0) {
+      --loadersInProgress;
     }
-    console.log(`loads remaining: ${loadsInProgress}`);
+    console.log(`loaders remaining: ${loadersInProgress}`);
   }
 }
 
