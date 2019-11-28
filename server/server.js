@@ -102,7 +102,7 @@ function schedulePreloadDrawings() {
                         loadedRecognizedSent = true;
                       }
 
-                      loadsRemaining = 0;
+                      loadersInProgress = 0;
                     }
                   }
                 });
