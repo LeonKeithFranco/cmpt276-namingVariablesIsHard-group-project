@@ -102,7 +102,7 @@ function schedulePreloadDrawings() {
 
                       if(!loadedUnrecognizedSent) {
                         console.log(`all categories have at least 3 unrecognized drawings preloaded`);
-                        loadedRecognizedSent = true;
+                        loadedUnrecognizedSent = true;
                       }
 
                       loadersInProgress = 0;
