@@ -27,21 +27,19 @@ module.exports = {
         console.error(error);
       }
 
-      let parsedBody;
-
       try {
-        parsedBody = JSON.parse(body);
+        const parsedBody = JSON.parse(body);
+  
+        if (parsedBody.code !== 8) {
+          setTimeout(callback, 0, parsedBody);
+        } else {
+          counter = ++counter % API_KEYS.length;
+          apiKey = API_KEYS[counter];
+          this.getRandomDrawing(callback);
+        }
       }
       catch (err) {
         console.error(err);
-        this.getRandomDrawing(callback);
-      }
-
-      if (parsedBody.code !== 8) {
-        setTimeout(callback, 0, parsedBody);
-      } else {
-        counter = ++counter % API_KEYS.length;
-        apiKey = API_KEYS[counter];
         this.getRandomDrawing(callback);
       }
     });
@@ -59,22 +57,20 @@ module.exports = {
       if (error) {
         console.error(error);
       }
-
-      let parsedBody;
-
+      
       try {
-        parsedBody = JSON.parse(body);
+        const parsedBody = JSON.parse(body);
+
+        if (parsedBody.code !== 8) {
+          setTimeout(callback, 0, parsedBody, body);
+        } else {
+          counter = ++counter % API_KEYS.length;
+          apiKey = API_KEYS[counter];
+          this.getDrawing(category, id, callback);
+        }
       }
       catch (err) {
-        console.error(err);
-        this.getDrawing(category, id, callback);
-      }
-
-      if (parsedBody.code !== 8) {
-        setTimeout(callback, 0, parsedBody, body);
-      } else {
-        counter = ++counter % API_KEYS.length;
-        apiKey = API_KEYS[counter];
+        console.log(err)
         this.getDrawing(category, id, callback);
       }
     });
