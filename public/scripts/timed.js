@@ -23,7 +23,7 @@ let maxTime;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
     category = cat;
-    hintDisplay.text(`Hint: ${category.replace(/\S/g, "-")}`);
+    hintDisplay.text(`${category.replace(/\S/g, "-")}`);
     socket.emit('clientRequestCountFromCategory', {
         category: category,
         count: drawingDivs.length
@@ -101,9 +101,19 @@ submitGuessBtn.click(() => {
             scoreDisplay.text(`Score: ${++playerScore}`);
             input.val('');
 
+            const greenFlashInterval = setInterval(() => {
+                input.toggleClass('greenBorder');
+            }, (flashDuration / flashesPerDuration) / 2);
+            setTimeout(() => {
+                clearInterval(greenFlashInterval);
+                input.removeClass('greenBorder');
+            }, flashDuration);
+
             fillDrawingDivs();
         } else {
             input.val('');
+
+            revealHint();
 
             const redFlashInterval = setInterval(() => {
                 input.toggleClass('redBorder');
@@ -138,3 +148,31 @@ playAgainBtn.click(() => {
         fillDrawingDivs();
     }
 });
+
+function revealHint() {
+    let hint = hintDisplay.text();
+
+    if (hint === category) return;
+    
+    let hintGiven = false;
+    do {
+        const i = _.random(category.length - 1);
+
+        if (hint[i] == '-') {
+            // hint[i] = category[i]
+            // hintDisplay.text(hint);
+            
+            hintDisplay.text(hint.replaceAt(i, category[i]))
+            hintGiven = true;
+        }
+    } while (!hintGiven)
+}
+
+String.prototype.replaceAt = function (i, char) {
+    if (i < 0 || i > this.length - 1) {
+        // I know this looks goofy, but this way, it returns a string literal instead of a string object
+        return this.toString(); 
+    }
+
+    return `${this.slice(0, i)}${char}${this.slice(i + 1, this.length)}`;
+}
