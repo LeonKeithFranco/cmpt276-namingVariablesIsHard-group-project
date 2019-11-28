@@ -47,6 +47,7 @@ const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
 
 let loadsInProgress = 0;
+let loadedMessageSent = false;
 
 setInterval(schedulePreloadDrawings, 1000);
 
@@ -58,6 +59,7 @@ function schedulePreloadDrawings() {
         console.error(error);
       } else {
         if(result.rows.length > 0) {
+          loadedMessageSent = false;
           const choice = result.rows[_.random(result.rows.length-1)];
           console.log(`preloading images from category: ${choice.category}`);
           preloadDrawings(choice.category, 6 - choice.recognized);
@@ -68,9 +70,15 @@ function schedulePreloadDrawings() {
               console.error(error);
             } else {
               if (result.rows.length > 0) {
+                loadedMessageSent = false;
                 const choice = result.rows[_.random(result.rows.length - 1)];
                 console.log(`preloading images from category: ${choice.category}`);
                 preloadDrawings(choice.category, 12 - choice.recognized);
+              } else {
+                if(!loadedMessageSent) {
+                  console.log(`all categories have at least 12 drawings preloaded`);
+                  loadedMessageSent = true;
+                }
               }
             }
           });
@@ -224,7 +232,7 @@ io.on('connection', (socket) => {
           console.log(`category selected: ${category}`);
           socket.emit(`serverSendRandomCategoryName`, category);
         } else {
-          console.log(`no categories have enough drawings pre-loaded, selecting at random from all`);
+          console.log(`no categories have enough drawings preloaded, selecting at random from all`);
           const category = quickdraw.getRandomCategory();
           console.log(`category selected: ${category}`);
           socket.emit('serverSendRandomCategoryName', category);
