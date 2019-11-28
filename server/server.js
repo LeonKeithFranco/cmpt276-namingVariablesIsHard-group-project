@@ -47,7 +47,9 @@ const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = socket(server);
 
 let loadsInProgress = 0;
-let loadedMessageSent = false;
+let loadsRemaining = 0;
+let loadedRecognizedSent = false;
+let loadedUnrecognizedSent = false;
 
 setInterval(schedulePreloadDrawings, 1000);
 
@@ -59,9 +61,9 @@ function schedulePreloadDrawings() {
         console.error(error);
       } else {
         if(result.rows.length > 0) {
-          loadedMessageSent = false;
+          loadedRecognizedSent = false;
           const choice = result.rows[_.random(result.rows.length-1)];
-          console.log(`preloading images from category: ${choice.category}`);
+          console.log(`preloading recognized images from category: ${choice.category}`);
           preloadDrawings(choice.category, 6 - choice.recognized);
         } else {
           categoryQuery = `SELECT * FROM Categories WHERE recognized < 12;`;
@@ -70,15 +72,36 @@ function schedulePreloadDrawings() {
               console.error(error);
             } else {
               if (result.rows.length > 0) {
-                loadedMessageSent = false;
+                loadedRecognizedSent = false;
                 const choice = result.rows[_.random(result.rows.length - 1)];
-                console.log(`preloading images from category: ${choice.category}`);
+                console.log(`preloading recognized images from category: ${choice.category}`);
                 preloadDrawings(choice.category, 12 - choice.recognized);
               } else {
-                if(!loadedMessageSent) {
-                  console.log(`all categories have at least 12 drawings preloaded`);
-                  loadedMessageSent = true;
+
+                if(!loadedRecognizedSent) {
+                  console.log(`all categories have at least 12 recognized drawings preloaded`);
+                  loadedRecognizedSent = true;
                 }
+
+                categoryQuery = `SELECT * FROM Categories WHERE unrecognized < 3;`;
+                serverPool.query(categoryQuery, (error, result) => {
+                  if (error) {
+                    console.error(error);
+                  } else {
+                    if(result.rows.length > 0) {
+                      loadedUnrecognizedSent = false;
+                      const choice = result.rows[_.random(result.rows.length-1)];
+                      console.log(`preloading unrecognized images from category: ${choice.category}`);
+                      preloadUnrecognizedDrawings(choice.category, 3 - choice.unrecognized);
+                    } else {
+
+                      if(!loadedUnrecognizedSent) {
+                        console.log(`all categories have at least 3 unrecognized drawings preloaded`);
+                        loadedRecognizedSent = true;
+                      }
+                    }
+                  }
+                });
               }
             }
           });
@@ -91,6 +114,7 @@ function schedulePreloadDrawings() {
 function preloadDrawings(category, count) {
   console.log(`preloading ${count} more drawings from ${category}`);
   loadsInProgress = count;
+  loadsRemaining = count;
   quickdraw.getCategorySize(category, (size) => {
     for(let i = 0; i < count; i++) {
       loadRandomFromCategory(category, size);
@@ -110,7 +134,12 @@ function loadRandomFromCategory(category, size) {
           console.error(error);
         }
 
-        --loadsInProgress;
+        if(loadsInProgress > 0) {
+          --loadsInProgress;
+        }
+        if(loadsRemaining > 0) {
+          --loadsRemaining;
+        }
       });
     } else {
 
@@ -143,9 +172,10 @@ function loadRandomFromCategory(category, size) {
 
 function preloadUnrecognizedDrawings(category, count) {
   console.log(`preloading ${count} more unrecognized drawings from ${category}`);
-  loadsInProgress = count;
+  loadsInProgress = 3 * count;
+  loadsRemaining = count;
   quickdraw.getCategorySize(category, (size) => {
-    for(let i = 0; i < count * 3; i++) {    // Many requests are made because unrecognized drawings are uncommon
+    for(let i = 0; i < 3 * count; i++) {    // Many requests are made because unrecognized drawings are uncommon
       loadUnrecognizedFromCategory(category, size);
     }
   });
@@ -154,28 +184,48 @@ function preloadUnrecognizedDrawings(category, count) {
 function loadUnrecognizedFromCategory(category, size) {
   const id = _.random(size - 1);
 
-  quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
-    if(!drawing.recognized) {
-      const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing, recognized))
+  if(loadsRemaining > 0) {
+    quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
+      if (!drawing.recognized) {
+        const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing, recognized)
                       VALUES('${category}', ${id}, '${rawDrawing}', FALSE)`;
-      serverPool.query(preloadQuery, (error, result) => {
-        if (error) {
-          console.error(error);
-        }
+        serverPool.query(preloadQuery, (error, result) => {
+          if (error) {
+            console.error(error);
+          }
 
-        --loadsInProgress;
-      });
-    } else {
+          console.log(`unrecognized drawing from ${category} found, inserting into table`);
 
-      console.log(`preloaded drawing from ${category} is recognized, but only unrecognized is wanted`);
-      if(loadsInProgress > 0) {
-        console.log(`discarding drawing and trying again to retrieve unrecognized from ${category}`);
-        loadUnrecognizedFromCategory(category, size);
+          if (loadsInProgress > 0) {
+            --loadsInProgress;
+          }
+          if (loadsRemaining > 0) {
+            --loadsRemaining;
+          }
+          console.log(`loads remaining: ${loadsInProgress}`);
+        });
       } else {
-        console.log(`sufficient drawings have been loaded, done requesting unrecognized from ${category}`);
+
+        console.log(`preloaded drawing from ${category} with id ${id} is recognized, but only unrecognized is wanted`);
+        if (loadsRemaining > 0) {
+          console.log(`discarding drawing and trying again to retrieve unrecognized from ${category}`);
+          loadUnrecognizedFromCategory(category, size);
+        } else {
+          console.log(`sufficient drawings have been loaded, done requesting unrecognized from ${category}`);
+          if(loadsInProgress > 0) {
+            --loadsInProgress;
+          }
+          console.log(`loads remaining: ${loadsInProgress}`);
+        }
       }
+    });
+  } else {
+    console.log(`sufficient drawings have been loaded, done requesting unrecognized from ${category}`);
+    if(loadsInProgress > 0) {
+      --loadsInProgress;
     }
-  });
+    console.log(`loads remaining: ${loadsInProgress}`);
+  }
 }
 
 io.on('connection', (socket) => {
