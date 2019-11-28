@@ -3,6 +3,7 @@
 
 <head>
     <% include ../partials/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pass-or-fail.css">
 </head>
 
 <body>
@@ -11,6 +12,10 @@
         <h1 class="text">Pass Or Fail</h1>
         <% include ../partials/1-drawing.ejs %>
         <div id="inputSection">
+            <p id="word" class="text">word placeholder</p>
+            <button id="passButton" class="button">Pass</button>
+            <button id="failButton" class="button">Fail</button>
+            <br>
             <button id="playAgainButton" class="button">Play Again</button>
         </div>
         <p id="passOrFailRules" class="text">
@@ -18,7 +23,6 @@
         </p>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
     </center>
-
 </body>
 
 </html>
