@@ -23,9 +23,13 @@ module.exports = {
         console.error(error);
       }
 
-      // setTimeout(callback, 0, JSON.parse(body));
-
-      const parsedBody = JSON.parse(body);
+      try {
+        const parsedBody = JSON.parse(body);
+      }
+      catch (err) {
+        console.error(err);
+        this.getRandomDrawing(callback);
+      }
 
       if (parsedBody.code !== 8) {
         setTimeout(callback, 0, parsedBody);
@@ -50,7 +54,13 @@ module.exports = {
         console.error(error);
       }
 
-      const parsedBody = JSON.parse(body);
+      try {
+        const parsedBody = JSON.parse(body);
+      }
+      catch (err) {
+        console.error(err);
+        this.getDrawing(category, id, callback);
+      }
 
       if (parsedBody.code !== 8) {
         setTimeout(callback, 0, parsedBody, body);
