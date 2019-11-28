@@ -220,15 +220,24 @@ io.on('connection', (socket) => {
     socket.emit('serverSendCategoryName', quickdraw.getCategory(data));
   });
 
-  socket.on('clientRequestRandomCategoryName', (needed, excluded) => {
+  socket.on('clientRequestRandomCategoryName', (needed, excluded, recognized) => {
     needed = (typeof needed !== 'undefined') ? needed : 1;
     excluded = (typeof excluded !== 'undefined') ? excluded : '';
+    recognized = (typeof recognized !== 'undefined') ? recognized : true;
 
-    console.log(`random category requested with minimum ${needed} available needed`);
+    console.log(`random category requested with minimum ${needed} available needed, where recognized is ${recognized}`);
 
-    const categoryQuery = `SELECT category FROM categories
+    let categoryQuery = ``;
+
+    if(recognized) {
+      categoryQuery = `SELECT category FROM categories
         WHERE recognized >= ${needed}
         AND category != '${excluded}'`;
+    } else {
+      categoryQuery = `SELECT category FROM categories
+        WHERE unrecognized >= ${needed}
+        AND category != '${excluded}'`;
+    }
 
     serverPool.query(categoryQuery, (error, result) => {
       if (error) {
