@@ -227,17 +227,9 @@ io.on('connection', (socket) => {
 
     console.log(`random category requested with minimum ${needed} available needed, where recognized is ${recognized}`);
 
-    let categoryQuery = ``;
-
-    if(recognized) {
-      categoryQuery = `SELECT category FROM categories
-        WHERE recognized >= ${needed}
+    const categoryQuery = `SELECT category FROM categories
+        WHERE ${recognized ? 'recognized' : 'unrecognized'} >= ${needed}
         AND category != '${excluded}'`;
-    } else {
-      categoryQuery = `SELECT category FROM categories
-        WHERE unrecognized >= ${needed}
-        AND category != '${excluded}'`;
-    }
 
     serverPool.query(categoryQuery, (error, result) => {
       if (error) {
