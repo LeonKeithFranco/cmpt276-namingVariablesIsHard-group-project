@@ -61,6 +61,7 @@ function schedulePreloadDrawings() {
     serverPool.query(categoryQuery, (error, result) => {
       if(error) {
         console.error(error);
+        loadersInProgress = 0;
       } else {
         if(result.rows.length > 0) {
           loadedRecognizedSent = false;
@@ -72,6 +73,7 @@ function schedulePreloadDrawings() {
           serverPool.query(categoryQuery, (error, result) => {
             if (error) {
               console.error(error);
+              loadersInProgress = 0;
             } else {
               if (result.rows.length > 0) {
                 loadedRecognizedSent = false;
@@ -89,6 +91,7 @@ function schedulePreloadDrawings() {
                 serverPool.query(categoryQuery, (error, result) => {
                   if (error) {
                     console.error(error);
+                    loadersInProgress = 0;
                   } else {
                     if(result.rows.length > 0) {
                       loadedUnrecognizedSent = false;
