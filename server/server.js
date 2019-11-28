@@ -141,6 +141,43 @@ function loadRandomFromCategory(category, size) {
   });
 }
 
+function preloadUnrecognizedDrawings(category, count) {
+  console.log(`preloading ${count} more unrecognized drawings from ${category}`);
+  loadsInProgress = count;
+  quickdraw.getCategorySize(category, (size) => {
+    for(let i = 0; i < count * 3; i++) {    // Many requests are made because unrecognized drawings are uncommon
+      loadUnrecognizedFromCategory(category, size);
+    }
+  });
+}
+
+function loadUnrecognizedFromCategory(category, size) {
+  const id = _.random(size - 1);
+
+  quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
+    if(!drawing.recognized) {
+      const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing, recognized))
+                      VALUES('${category}', ${id}, '${rawDrawing}', FALSE)`;
+      serverPool.query(preloadQuery, (error, result) => {
+        if (error) {
+          console.error(error);
+        }
+
+        --loadsInProgress;
+      });
+    } else {
+
+      console.log(`preloaded drawing from ${category} is recognized, but only unrecognized is wanted`);
+      if(loadsInProgress > 0) {
+        console.log(`discarding drawing and trying again to retrieve unrecognized from ${category}`);
+        loadUnrecognizedFromCategory(category, size);
+      } else {
+        console.log(`sufficient drawings have been loaded, done requesting unrecognized from ${category}`);
+      }
+    }
+  });
+}
+
 io.on('connection', (socket) => {
   console.log("connection made with socket id:", socket.id);
 
