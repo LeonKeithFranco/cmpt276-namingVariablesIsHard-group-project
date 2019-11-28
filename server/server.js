@@ -53,7 +53,7 @@ setInterval(schedulePreloadDrawings, 1000);
 
 function schedulePreloadDrawings() {
   if(loadsInProgress === 0) {
-    const categoryQuery = `Select * FROM Categories where recognized < 6;`;
+    let categoryQuery = `SELECT * FROM Categories WHERE recognized < 6;`;
     serverPool.query(categoryQuery, (error, result) => {
       if(error) {
         console.error(error);
@@ -64,7 +64,7 @@ function schedulePreloadDrawings() {
           console.log(`preloading images from category: ${choice.category}`);
           preloadDrawings(choice.category, 6 - choice.recognized);
         } else {
-          const categoryQuery = `Select * FROM Categories where recognized < 12;`;
+          categoryQuery = `SELECT * FROM Categories WHERE recognized < 12;`;
           serverPool.query(categoryQuery, (error, result) => {
             if (error) {
               console.error(error);
