@@ -99,6 +99,10 @@ gameModeRoute.put('/timed/:difficulty/:score', (req, res) => {
   }
 });
 
+gameModeRoute.get('/pass-or-fail', (req, res) => {
+  console.log(`${req.session.user} started a Pass Or Fail game`);
 
+  res.render('pages/pass-or-fail');
+});
 
 module.exports = gameModeRoute;
