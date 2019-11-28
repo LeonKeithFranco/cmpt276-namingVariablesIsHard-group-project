@@ -100,9 +100,7 @@ submitGuessBtn.click(() => {
 
             fillDrawingDivs();
         } else {
-            continueGame = false;
-
-            alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
+            
         }
     }
 });
