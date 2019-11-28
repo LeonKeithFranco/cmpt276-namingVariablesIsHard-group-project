@@ -49,7 +49,7 @@ const io = socket(server);
 let loadsInProgress = 0;
 let loadedMessageSent = false;
 
-setInterval(schedulePreloadDrawings, 1000);
+const preloadDrawingsInterval = setInterval(schedulePreloadDrawings, 1000);
 
 function schedulePreloadDrawings() {
   if(loadsInProgress === 0) {
@@ -78,6 +78,7 @@ function schedulePreloadDrawings() {
                 if(!loadedMessageSent) {
                   console.log(`all categories have at least 12 drawings preloaded`);
                   loadedMessageSent = true;
+                  clearInterval(preloadDrawingsInterval);
                 }
               }
             }
