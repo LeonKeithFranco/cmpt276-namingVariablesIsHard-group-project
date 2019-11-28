@@ -140,25 +140,33 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('clientRequestCountFromCategory', (data) =>{
-    const { category, count } = data;
-    console.log(`${count} drawings requested for: ${category}`);
-    return sendCountFromCategory(category, count);
+  socket.on('clientRequestCountFromCategory', (data) => {
+    let { category, count, recognized } = data;
+    recognized = (typeof recognized !== 'undefined') ? recognized : true;
+    console.log(`${count} drawings requested for: ${category} where recognized: ${recognized}`);
+    return sendCountFromCategory(category, count, recognized);
   });
 
-  socket.on('clientRequestFromCategory', (data) =>{
+  socket.on('clientRequestFromCategory', (data) => {
     const category = data;
     console.log(`single drawing requested for: ${category}`);
-    sendCountFromCategory(category, 1);
+    sendCountFromCategory(category, 1, true);
   });
 
-  function sendCountFromCategory(category, count) {
+  socket.on('clientRequestUnrecognizedFromCategory', (data) => {
+    const category = data;
+    console.log(`single drawing requested for: ${category}`);
+    sendCountFromCategory(category, 1, false);
+  });
+
+  function sendCountFromCategory(category, count, recognized) {
+    count = (typeof count !== 'undefined') ? count : 1;
     const drawingQuery = `
         DELETE FROM Preloaded_drawings
         WHERE id = ANY (ARRAY(
           SELECT id FROM Preloaded_drawings
           WHERE category = '${category}'
-          AND recognized = TRUE
+          AND recognized = '${recognized}'
           LIMIT ${count}))
         RETURNING *;`;
     serverPool.query(drawingQuery, (error, result) => {
