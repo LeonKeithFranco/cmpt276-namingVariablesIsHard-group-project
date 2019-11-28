@@ -113,8 +113,30 @@ function loadRandomFromCategory(category, size) {
         --loadsInProgress;
       });
     } else {
-      console.log(`preloaded drawing with id ${id} not recognized, requesting another`);
-      loadRandomFromCategory(category, size);
+
+      const categoryQuery = `SELECT unrecognized FROM Categories WHERE category = '${category}'`;
+      serverPool.query(categoryQuery, (error, result) => {
+        if (error) {
+          console.error(error);
+        } else {
+
+          if(result.rows[0].unrecognized < 6) {
+            console.log(`preloaded drawing from ${category} not recognized, storing and requesting another`);
+            const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing, recognized)
+                      VALUES('${category}', ${id}, '${rawDrawing}', FALSE)`;
+            serverPool.query(preloadQuery, (error, result) => {
+              if (error) {
+                console.error(error);
+              }
+            });
+            loadRandomFromCategory(category, size);
+          } else {
+
+            console.log(`preloaded drawing from ${category} not recognized, discarding and requesting another`);
+            loadRandomFromCategory(category, size);
+          }
+        }
+      });
     }
   });
 }
