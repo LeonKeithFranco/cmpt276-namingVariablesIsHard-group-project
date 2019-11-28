@@ -5,6 +5,7 @@ gameModeRoute.get('/', (req, res) => {
 
   res.redirect('/main-menu');
 });
+
 gameModeRoute.get('/standard/:difficulty', (req, res) => {
   const difficulty = req.params.difficulty;
 
@@ -35,6 +36,7 @@ gameModeRoute.put('/standard/:difficulty/:score', (req, res) => {
     res.respond(req.httpStatus.FORBIDDEN, 'Can only update score when playing hard mode');
   }
 });
+
 gameModeRoute.get('/odd-one-out/:difficulty', (req, res) => {
   const difficulty = req.params.difficulty;
 
@@ -42,7 +44,6 @@ gameModeRoute.get('/odd-one-out/:difficulty', (req, res) => {
 
   res.render('pages/odd-one-out', { difficulty: difficulty });
 });
-
 gameModeRoute.put('/odd-one-out/:difficulty/:score', (req, res) => {
   console.log(`Update ${req.session.user}'s Odd One Out mode high score`)
 
@@ -74,7 +75,6 @@ gameModeRoute.get('/timed/:difficulty', (req, res) => {
 
   res.render('pages/timed', { difficulty: difficulty });
 });
-
 gameModeRoute.put('/timed/:difficulty/:score', (req, res) => {
   console.log(`Update ${req.session.user}'s Timed mode high score`);
 
@@ -98,5 +98,7 @@ gameModeRoute.put('/timed/:difficulty/:score', (req, res) => {
     res.respond(req.httpStatus.FORBIDDEN, 'Can only update score when playing hard mode');
   }
 });
+
+
 
 module.exports = gameModeRoute;
