@@ -29,7 +29,7 @@ module.exports = {
 
       try {
         const parsedBody = JSON.parse(body);
-  
+
         if (parsedBody.code !== 8) {
           setTimeout(callback, 0, parsedBody);
         } else {
@@ -40,6 +40,8 @@ module.exports = {
       }
       catch (err) {
         console.error(err);
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
         this.getRandomDrawing(callback);
       }
     });
@@ -57,7 +59,7 @@ module.exports = {
       if (error) {
         console.error(error);
       }
-      
+
       try {
         const parsedBody = JSON.parse(body);
 
@@ -71,6 +73,8 @@ module.exports = {
       }
       catch (err) {
         console.log(err)
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
         this.getDrawing(category, id, callback);
       }
     });
