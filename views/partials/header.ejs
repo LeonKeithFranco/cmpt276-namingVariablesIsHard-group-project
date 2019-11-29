@@ -4,15 +4,16 @@
 <!-- Add scripts and stylesheets that are common across all pages here -->
 
 <!-- Scripts -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.js"></script> <!-- Don't add the defer or async attributes as it breaks it -->
+<script>
+    const assert = chai.assert;
+</script>
 <script type="text/javascript" src="/scripts/extensions.js" defer></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous" defer></script>
 <script type="text/javascript" src="/scripts/nav.js" defer></script>
 <script type="text/javascript" src="/scripts/input-check.js" defer></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script> <!-- Don't add the defer or async attributes as it breaks it -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js" defer></script>
-<script type="text/javascript" src="https://www.chaijs.com/chai.js" defer>
-    const assert = chai.assert;
-</script>
 
 <!-- Stylesheets -->
 <link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
