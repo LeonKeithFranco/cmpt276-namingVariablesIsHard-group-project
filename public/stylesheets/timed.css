@@ -3,18 +3,6 @@
     margin: 3px;
 }
 
-.redBorder {
-    border-color: darkred;
-    border-width: 2px;
-    border-style: solid;
-}
-
-.greenBorder {
-    border-color: lawngreen;
-    border-width: 2px;
-    border-style: solid;
-}
-
 #hintDisplay {
     display: inline-grid;
     grid-template-columns: auto auto;
