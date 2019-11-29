@@ -196,7 +196,7 @@ const gameEngine = (function () {
       do {
         const i = _.random(category.length - 1);
 
-        if (hint[i] == '-') {
+        if (hint[i] === '-') {
           hintDisplay.text(hint.replaceAt(i, category[i]));
           hintGiven = true;
         }
