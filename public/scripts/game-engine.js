@@ -17,7 +17,7 @@ const gameEngine = (function () {
 
   socket.on('serverSendRandomCategoryName', (cat) => {
     category = cat;
-    hintDisplay.text(`Hint: ${category.replace(/\S/g, "-")}`);
+    hintDisplay.text(`${category.replace(/\S/g, "-")}`);
     socket.emit('clientRequestCountFromCategory', {
       category: category,
       count: drawingDivs.length
@@ -34,7 +34,7 @@ const gameEngine = (function () {
 
   input.keypress(function (e) {
     let key = e.which;
-  
+
     if (key == 13) { // hitting enter key
       submitGuessBtn.click();
     }
@@ -99,6 +99,24 @@ const gameEngine = (function () {
     },
     displayGameOverScreen: function () {
       alert(`Game over!\nThe word was "${category}".\n\nScore: ${playerScore}\n\nClick "Play Again" to start a new game!`);
+    },
+    revealHint: function () {
+      let hint = hintDisplay.text();
+
+      if (hint === category) return;
+
+      let hintGiven = false;
+      do {
+        const i = _.random(category.length - 1);
+
+        if (hint[i] == '-') {
+          // hint[i] = category[i]
+          // hintDisplay.text(hint);
+
+          hintDisplay.text(hint.replaceAt(i, category[i]))
+          hintGiven = true;
+        }
+      } while (!hintGiven)
     }
   }
 })();

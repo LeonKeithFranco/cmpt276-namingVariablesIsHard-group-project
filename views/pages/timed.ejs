@@ -6,6 +6,7 @@
     <script>
         let difficulty = "<%= difficulty %>";
     </script>
+    <script type="text/javascript" src="/scripts/game-engine.js" defer></script>
     <script type="text/javascript" src="/scripts/timed.js" defer></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/timed.css">
 </head>
@@ -15,13 +16,13 @@
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Timed Mode</h1>
         <% if (difficulty === 'easy') { %>
-            <% include ../partials/4-drawing.ejs %>
+        <% include ../partials/4-drawing.ejs %>
         <% } else if (difficulty === 'normal') { %>
-            <% include ../partials/2-drawing.ejs %>
+        <% include ../partials/2-drawing.ejs %>
         <% } else if (difficulty === 'hard') { %>
-            <% include ../partials/1-drawing.ejs %>
+        <% include ../partials/1-drawing.ejs %>
         <% } else { %>
-            <h1><strong>Something has gone horribly wrong</strong></h1>
+        <h1><strong>Something has gone horribly wrong</strong></h1>
         <% } %>
         <div id="inputSection">
             <p id="score" class="text"></p>
@@ -44,7 +45,7 @@
         </p>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
     </center>
-    
+
 </body>
 
 </html>
