@@ -22,11 +22,11 @@ const flash = (function () {
 
   // private helper
   function flashElem(color, HtmlElement, flashDuration, flashesPerDuration) {
-    const greenFlashInterval = setInterval(() => {
+    const flashInterval = setInterval(() => {
       HtmlElement.toggleClass(`${color}Border`);
     }, (flashDuration / flashesPerDuration) / 2);
     setTimeout(() => {
-      clearInterval(greenFlashInterval);
+      clearInterval(flashInterval);
       HtmlElement.removeClass(`${color}Border`);
     }, flashDuration);
   }
