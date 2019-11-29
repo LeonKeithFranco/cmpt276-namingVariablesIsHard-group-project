@@ -45,34 +45,19 @@ gameEngine.setSubmitButtonClickEvent(() => {
     if (gameEngine.willContinueGame() && playerGuess) {
         const answer = gameEngine.getCategory();
 
-        const flashDuration = 500;
-        const flashesPerDuration = 3;
-
         if (playerGuess === answer) {
             gameEngine.incrementScore();
             gameEngine.displayScore();
             gameEngine.resetUserInput();
 
-            const greenFlashInterval = setInterval(() => {
-                input.toggleClass('greenBorder');
-            }, (flashDuration / flashesPerDuration) / 2);
-            setTimeout(() => {
-                clearInterval(greenFlashInterval);
-                input.removeClass('greenBorder');
-            }, flashDuration);
+            flash.green(gameEngine.getInputHtmlElement());
 
             gameEngine.fillDrawingDivs();
         } else {
             gameEngine.resetUserInput();
             gameEngine.revealHint();
 
-            const redFlashInterval = setInterval(() => {
-                input.toggleClass('redBorder');
-            }, (flashDuration / flashesPerDuration) / 2);
-            setTimeout(() => {
-                clearInterval(redFlashInterval);
-                input.removeClass('redBorder');
-            }, flashDuration);
+            flash.red(gameEngine.getInputHtmlElement());
         }
     }
 });
