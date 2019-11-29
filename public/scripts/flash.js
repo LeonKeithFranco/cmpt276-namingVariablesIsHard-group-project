@@ -1,22 +1,33 @@
 const flash = (function () {
-    return {
-        flashDuration: 500,
-        flashesPerDuration: 3,
-        green: function (HtmlElement) {
-            flashElem('green', HtmlElement, this.flashDuration, this.flashesPerDuration);
-        },
-        red: function (HtmlElement) {
-            flashElem('red', HtmlElement, this.flashDuration, this.flashesPerDuration);
-        }
-    }
+  return {
+    flashDuration: 500, // milliseconds
+    flashesPerDuration: 3, // one 'flash' is a single on/off cycle
 
-    function flashElem(color, HtmlElement, flashDuration, flashesPerDuration) {
-        const greenFlashInterval = setInterval(() => {
-            HtmlElement.toggleClass(`${color}Border`);
-        }, (flashDuration / flashesPerDuration) / 2);
-        setTimeout(() => {
-            clearInterval(greenFlashInterval);
-            HtmlElement.removeClass(`${color}Border`);
-        }, flashDuration);
+    /*
+      Precondition: Must be passed a valid HTML Element
+      Postcondition: Flashs a green border on the HTML Element
+    */
+    green: function (HtmlElement) {
+      flashElem('green', HtmlElement, this.flashDuration, this.flashesPerDuration);
+    },
+
+    /*
+      Precondition: Must be passed a valid HTML Element
+      Postcondition: Flashs a red border on the HTML Element
+    */
+    red: function (HtmlElement) {
+      flashElem('red', HtmlElement, this.flashDuration, this.flashesPerDuration);
     }
+  }
+
+  // private helper
+  function flashElem(color, HtmlElement, flashDuration, flashesPerDuration) {
+    const greenFlashInterval = setInterval(() => {
+      HtmlElement.toggleClass(`${color}Border`);
+    }, (flashDuration / flashesPerDuration) / 2);
+    setTimeout(() => {
+      clearInterval(greenFlashInterval);
+      HtmlElement.removeClass(`${color}Border`);
+    }, flashDuration);
+  }
 })();
