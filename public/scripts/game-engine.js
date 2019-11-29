@@ -1,6 +1,6 @@
-const gameEngine = (function () {
-  const socket = io.connect(window.location.origin);
+const socket = io.connect(window.location.origin);
 
+const gameEngine = (function () {
   const drawingDivs = $(".drawing");
   const input = $('#wordInput');
   const scoreDisplay = $('#score');
@@ -113,10 +113,7 @@ const gameEngine = (function () {
         const i = _.random(category.length - 1);
 
         if (hint[i] == '-') {
-          // hint[i] = category[i]
-          // hintDisplay.text(hint);
-
-          hintDisplay.text(hint.replaceAt(i, category[i]))
+          hintDisplay.text(hint.replaceAt(i, category[i]));
           hintGiven = true;
         }
       } while (!hintGiven)
