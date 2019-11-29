@@ -41,6 +41,9 @@ const gameEngine = (function () {
   });
 
   return {
+    getInputHtmlElement: function () {
+      return input;
+    },
     fillDrawingDivs: function () {
       svgArr = [];
       category = "";
