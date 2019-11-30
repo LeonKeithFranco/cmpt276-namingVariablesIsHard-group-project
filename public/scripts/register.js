@@ -10,7 +10,7 @@ $(selector).submit((event) => {
       data: $(selector).serialize(),
       success: (response) => {
         alert('Registration successful\nWelcome to Scribbltaire.io!');
-        window.location.href = window.location.href = `${window.location.origin}/login`;
+        window.location.href = `${window.location.origin}/login`;
       },
       error: (jqXHR, textStatus, errorThrown) => {
         console.log(`Error: ${textStatus} - ${errorThrown}`);
