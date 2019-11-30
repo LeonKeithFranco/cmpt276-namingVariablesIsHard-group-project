@@ -61,12 +61,12 @@ module.exports = {
       if (parsedResult.code !== 8) {
         return parsedResult;
       } else {
-        return this.getRandomDrawingPromise();
+        return await this.getRandomDrawingPromise();
       }
     }
     catch (err) {
       console.error(err);
-      return this.getRandomDrawingPromise();
+      return await this.getRandomDrawingPromise();
     }
   },
 
@@ -114,12 +114,12 @@ module.exports = {
       if (parsedResult.code !== 8) {
         return { parsedDrawing: parsedResult, rawDrawing: result };
       } else {
-        return this.getDrawingPromise(category, id);
+        return await this.getDrawingPromise(category, id);
       }
     }
     catch (err) {
       console.error(err);
-      return this.getDrawingPromise(category, id);
+      return await this.getDrawingPromise(category, id);
     }
   },
 
@@ -171,7 +171,7 @@ module.exports = {
       return parsedResult;
     } catch (err) {
       console.error(err);
-      return this.getCategorySizePromise(category);
+      return await this.getCategorySizePromise(category);
     }
   },
 
