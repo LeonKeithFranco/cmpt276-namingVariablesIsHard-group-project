@@ -171,7 +171,7 @@ module.exports = {
       return parsedResult;
     } catch (err) {
       console.error(err);
-      return this.getCategorySize(category);
+      return this.getCategorySizePromise(category);
     }
   },
 
