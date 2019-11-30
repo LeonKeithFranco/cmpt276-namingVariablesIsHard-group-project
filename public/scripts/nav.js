@@ -1,4 +1,6 @@
 function goTo(page) {
+  assert.isString(page);
+
   return () => window.location.href = `${window.location.origin}/${page}`
 }
 
