@@ -59,6 +59,41 @@ describe('quickdraw-api', () => {
     });
   });
 
+  describe('getDrawingPromise()', () => {
+    const category = 'angel'
+    const drawingId = 1;
+
+    it('Should return a quickdraw JSON object', async () => {
+      const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, drawingId);
+
+      assert.isObject(parsedDrawing);
+      assert.property(parsedDrawing, 'key_id');
+      assert.property(parsedDrawing, 'word');
+      assert.property(parsedDrawing, 'recognized');
+      assert.property(parsedDrawing, 'timestamp');
+      assert.property(parsedDrawing, 'countrycode');
+      assert.property(parsedDrawing, 'drawing');
+    });
+
+    it(`Should return a quickdraw drawing of category "${category}"`, async () => {
+      const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, drawingId);
+
+      assert.propertyVal(parsedDrawing, 'word', category);
+    });
+
+    it(`Should return an unparsed string of a quickdraw drawing of category "${category}"`, async () => {
+      const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, drawingId);
+
+      assert.isString(rawDrawing);
+      assert.match(rawDrawing, /key_id/);
+      assert.match(rawDrawing, /word/);
+      assert.match(rawDrawing, /recognized/);
+      assert.match(rawDrawing, /timestamp/);
+      assert.match(rawDrawing, /countrycode/);
+      assert.match(rawDrawing, /drawing/);
+    });
+  });
+
   describe('getCategory()', () => {
     let index = 0;
     let expected = 'aircraft carrier';

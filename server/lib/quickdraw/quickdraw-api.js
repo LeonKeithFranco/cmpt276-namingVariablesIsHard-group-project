@@ -101,6 +101,27 @@ module.exports = {
     });
   },
 
+  getDrawingPromise: async function (category, id) {
+    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?id=${id}&key=${apiKey}&isAnimated=false&format=json`;
+    counter = ++counter % API_KEYS.length;
+    apiKey = API_KEYS[counter];
+
+    try {
+      const result = await requestP(URL);
+      const parsedResult = JSON.parse(result);
+
+      if (parsedResult.code !== 8) {
+        return { parsedDrawing: parsedResult, rawDrawing: result };
+      } else {
+        return this.getDrawingPromise(category, id);
+      }
+    }
+    catch (err) {
+      console.error(err);
+      return this.getDrawingPromise(category, id);
+    }
+  },
+
   /*
     Pre-condition: Requires an integer between 0 and 344 (inclusive) as input
     Post-condition: Will return a category name from the corresponding given index
