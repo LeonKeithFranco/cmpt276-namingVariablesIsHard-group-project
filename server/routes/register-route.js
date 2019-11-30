@@ -1,4 +1,5 @@
 const registerRoute = require('express').Router();
+const assert = require('chai').assert;
 
 const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
 
@@ -11,6 +12,11 @@ registerRoute.post('/', (req, res) => {
   console.log('User register requested');
 
   const { username, password, passwordReconfirm } = req.body;
+
+  assert.exists(username);
+  assert.exists(password);
+  assert.exists(passwordReconfirm);
+
   let registerQuery = `SELECT * FROM Users WHERE username=\'${username}\'`
 
   req.pool.query(registerQuery, (error, result) => {
