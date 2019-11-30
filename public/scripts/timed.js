@@ -45,8 +45,8 @@ gameEngine.setSubmitButtonClickEvent(() => {
     if (gameEngine.willContinueGame() && playerGuess) {
         const answer = gameEngine.getCategory();
 
-        assert.isNotEmpty(answer);
-        assert.isString(answer);
+        // assert.isNotEmpty(answer);
+        // assert.isString(answer);
 
         if (playerGuess === answer) {
             gameEngine.incrementScore();

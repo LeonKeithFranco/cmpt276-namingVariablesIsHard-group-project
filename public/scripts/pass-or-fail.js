@@ -44,8 +44,8 @@ function getRound() {
 }
 
 socket.on('serverSendRandomCategoryName', (cat) => {
-    assert.isNotEmpty(cat);
-    assert.isString(cat);
+    // assert.isNotEmpty(cat);
+    // assert.isString(cat);
 
     category = cat;
     categoryDisplay.html(category);
@@ -60,12 +60,12 @@ socket.on('serverSendRandomCategoryName', (cat) => {
 socket.on(('serverSendDrawing'), (drawingData) => {
     const { word, svg } = drawingData;
 
-    assert.isNotEmpty(word);
-    assert.isString(word);
+    // assert.isNotEmpty(word);
+    // assert.isString(word);
 
-    assert.isNotEmpty(svg);
-    assert.isString(svg);
-    assert.match(svg, /svg/);
+    // assert.isNotEmpty(svg);
+    // assert.isString(svg);
+    // assert.match(svg, /svg/);
 
     drawingDiv.html(svg);
     drawingLoaded = true;
@@ -80,7 +80,7 @@ failBtn.click(() => {
 });
 
 function submitGuess(selectedPassed) {
-    assert.isBoolean(selectedPassed);
+    // assert.isBoolean(selectedPassed);
 
     if(drawingLoaded && continueGame) {
         if(selectedPassed === drawingPassed) {
