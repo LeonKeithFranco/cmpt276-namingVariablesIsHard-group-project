@@ -109,23 +109,30 @@ module.exports = {
   // same as above but uses async/await
   getDrawingPromise: async function (category, id) {
     const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?id=${id}&key=${apiKey}&isAnimated=false&format=json`;
-    counter = ++counter % API_KEYS.length;
-    apiKey = API_KEYS[counter];
 
-    try {
-      const result = await requestP(URL);
-      const parsedResult = JSON.parse(result);
+    let parsedResult;
+    let code;
+    let finished;
 
-      if (parsedResult.code !== 8) {
-        return { parsedDrawing: parsedResult, rawDrawing: result };
-      } else {
-        return await this.getDrawingPromise(category, id);
+    do {
+      try {
+        const result = await requestP(URL);
+        parsedResult = JSON.parse(result);
+        code = parsedResult.code;
+        finished = { parsedDrawing: parsedResult, rawDrawing: result };
       }
-    }
-    catch (err) {
-      console.error(err);
-      return await this.getDrawingPromise(category, id);
-    }
+      catch (err) {
+        console.error(err);
+
+        code = 8;
+      }
+      finally {
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
+      }
+    } while (code === 8);
+
+    return finished;
   },
 
   /*
