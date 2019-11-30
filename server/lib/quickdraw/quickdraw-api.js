@@ -1,4 +1,5 @@
 const request = require('request');
+const requestP = require('request-promise-native');
 const _ = require('lodash');
 const categories = require('./categories');
 const qdsr = require('quickdraw-svg-render');
@@ -43,6 +44,30 @@ module.exports = {
         this.getRandomDrawing(callback);
       }
     });
+  },
+
+  // same as above but uses async/await
+  getRandomDrawingPromise: async function () {
+    const categoryIndex = _.random(categories.length - 1);
+    const category = categories[categoryIndex];
+    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?&key=${apiKey}&isAnimated=false&format=json`;
+    counter = ++counter % API_KEYS.length;
+    apiKey = API_KEYS[counter];
+
+    try {
+      const result = await requestP(URL);
+      const parsedResult = JSON.parse(result);
+
+      if (parsedResult.code !== 8) {
+        return parsedResult;
+      } else {
+        return this.getRandomDrawingPromise();
+      }
+    }
+    catch (err) {
+      console.error(err);
+      return this.getRandomDrawingPromise();
+    }
   },
 
   /*
