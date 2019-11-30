@@ -18,8 +18,8 @@ let continueGame = true;
 let allDrawingsLoaded = false;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
-    assert.isNotEmpty(cat);
-    assert.isString(cat);
+    // assert.isNotEmpty(cat);
+    // assert.isString(cat);
 
     if (category === "") {
         category = cat;
@@ -37,12 +37,12 @@ socket.on('serverSendRandomCategoryName', (cat) => {
 socket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
 
-    assert.isNotEmpty(word);
-    assert.isString(word);
+    // assert.isNotEmpty(word);
+    // assert.isString(word);
 
-    assert.isNotEmpty(svg);
-    assert.isString(svg);
-    assert.match(svg, /svg/);
+    // assert.isNotEmpty(svg);
+    // assert.isString(svg);
+    // assert.match(svg, /svg/);
 
     if (word === category) {
         svgNormal.push(svg);
@@ -55,7 +55,8 @@ socket.on('serverSendDrawing', (drawingData) => {
 
     if (allDrawingsLoaded) {
         oddIndex = randomRange(num);
-        assert.isNumber(oddIndex);
+
+        // assert.isNumber(oddIndex);
 
         for (let i = 0; i < drawingDivs.length; i++) {
             if (i === oddIndex) {
@@ -75,7 +76,7 @@ socket.on('serverSendDrawing', (drawingData) => {
 });
 
 function randomRange(upperbound) {
-    assert.isNumber(upperbound);
+    // assert.isNumber(upperbound);
 
     return Math.floor(Math.random() * upperbound);
 }

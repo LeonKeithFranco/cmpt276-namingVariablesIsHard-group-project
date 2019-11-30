@@ -9,8 +9,8 @@ loginRoute.get('/', (req, res) => {
 loginRoute.post('/', (req, res) => {
   console.log('Login requested');
 
-  assert.exists(req.body.username);
-  assert.exists(req.body.password);
+  // assert.exists(req.body.username);
+  // assert.exists(req.body.password);
 
   let loginQuery = `SELECT * FROM Users WHERE username=\'${req.body.username}\'`;
   req.pool.query(loginQuery, (error, result) => {

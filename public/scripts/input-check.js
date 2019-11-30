@@ -3,7 +3,7 @@ function hasIncorrectInputs() {
   const containsWhiteSpaceRegex = /\s/;
 
   $('input').each((i, elem) => {
-    assert.exists(elem);
+    // assert.exists(elem);
 
     const inputStr = $(elem).val();
     const containsWhiteSpace = inputStr.match(containsWhiteSpaceRegex);

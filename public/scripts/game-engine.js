@@ -16,8 +16,8 @@ const gameEngine = (function () {
   let allDrawingsLoaded = false;
 
   socket.on('serverSendRandomCategoryName', (cat) => {
-    assert.isNotEmpty(cat);
-    assert.isString(cat);
+    // assert.isNotEmpty(cat);
+    // assert.isString(cat);
 
     category = cat;
     hintDisplay.text(`${category.replace(/\S/g, "-")}`);
@@ -30,12 +30,12 @@ const gameEngine = (function () {
   socket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
 
-    assert.isNotEmpty(word);
-    assert.isString(word);
+    // assert.isNotEmpty(word);
+    // assert.isString(word);
 
-    assert.isNotEmpty(svg);
-    assert.isString(svg);
-    assert.match(svg, /svg/);
+    // assert.isNotEmpty(svg);
+    // assert.isString(svg);
+    // assert.match(svg, /svg/);
 
     svgArr.push(svg);
     $(drawingDivs[drawingCount]).html(svgArr[drawingCount]);
@@ -78,7 +78,7 @@ const gameEngine = (function () {
       Postcondition: Adds click event to button
     */
     setSubmitButtonClickEvent: function (clickEvent) {
-      assert.isFunction(clickEvent);
+      // assert.isFunction(clickEvent);
 
       submitGuessBtn.click(clickEvent);
     },
@@ -88,7 +88,7 @@ const gameEngine = (function () {
       Postcondition: Adds click event to button
     */
     setPlayAgainButtonClickEvent: function (clickEvent) {
-      assert.isFunction(clickEvent);
+      // assert.isFunction(clickEvent);
 
       playAgainBtn.click(clickEvent);
     },

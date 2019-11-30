@@ -10,7 +10,7 @@ gameModeRoute.get('/', (req, res) => {
 gameModeRoute.get('/standard/:difficulty', (req, res) => {
   const difficulty = req.params.difficulty;
 
-  assert.exists(difficulty);
+  // assert.exists(difficulty);
 
   console.log(`${req.session.user} started a Standard game with ${difficulty} difficulty`);
 
@@ -19,8 +19,8 @@ gameModeRoute.get('/standard/:difficulty', (req, res) => {
 gameModeRoute.put('/standard/:difficulty/:score', (req, res) => {
   console.log(`Update ${req.session.user}'s standard mode high score`)
 
-  assert.exists(req.params.difficulty);
-  assert.exists(req.params.score);
+  // assert.exists(req.params.difficulty);
+  // assert.exists(req.params.score);
 
   if (req.params.difficulty == 'hard') {
     const query = `UPDATE Users SET standard=${req.params.score} WHERE username=\'${req.session.user}\'`;
@@ -46,7 +46,7 @@ gameModeRoute.put('/standard/:difficulty/:score', (req, res) => {
 gameModeRoute.get('/odd-one-out/:difficulty', (req, res) => {
   const difficulty = req.params.difficulty;
 
-  assert.exists(difficulty);
+  // assert.exists(difficulty);
 
   console.log(`${req.session.user} started an Odd One Out game with ${difficulty} difficulty`);
 
@@ -55,8 +55,8 @@ gameModeRoute.get('/odd-one-out/:difficulty', (req, res) => {
 gameModeRoute.put('/odd-one-out/:difficulty/:score', (req, res) => {
   console.log(`Update ${req.session.user}'s Odd One Out mode high score`)
 
-  assert.exists(req.params.difficulty);
-  assert.exists(req.params.score);
+  // assert.exists(req.params.difficulty);
+  // assert.exists(req.params.score);
 
   if (req.params.difficulty == 'hard') {
     const query = `UPDATE Users SET odd_one_out=${req.params.score} WHERE username=\'${req.session.user}\'`;
@@ -82,7 +82,7 @@ gameModeRoute.put('/odd-one-out/:difficulty/:score', (req, res) => {
 gameModeRoute.get('/timed/:difficulty', (req, res) => {
   const difficulty = req.params.difficulty;
 
-  assert.exists(difficulty);
+  // assert.exists(difficulty);
 
   console.log(`${req.session.user} started a Timed game with ${difficulty} difficulty`);
 
@@ -91,8 +91,8 @@ gameModeRoute.get('/timed/:difficulty', (req, res) => {
 gameModeRoute.put('/timed/:difficulty/:score', (req, res) => {
   console.log(`Update ${req.session.user}'s Timed mode high score`);
 
-  assert.exists(req.params.difficulty);
-  assert.exists(req.params.score);
+  // assert.exists(req.params.difficulty);
+  // assert.exists(req.params.score);
 
   if (req.params.difficulty == 'hard') {
     const query = `UPDATE Users SET timed=${req.params.score} WHERE username=\'${req.session.user}\'`;

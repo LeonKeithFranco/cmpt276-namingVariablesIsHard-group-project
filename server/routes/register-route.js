@@ -13,9 +13,9 @@ registerRoute.post('/', (req, res) => {
 
   const { username, password, passwordReconfirm } = req.body;
 
-  assert.exists(username);
-  assert.exists(password);
-  assert.exists(passwordReconfirm);
+  // assert.exists(username);
+  // assert.exists(password);
+  // assert.exists(passwordReconfirm);
 
   let registerQuery = `SELECT * FROM Users WHERE username=\'${username}\'`
 

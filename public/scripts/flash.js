@@ -22,7 +22,7 @@ const flash = (function () {
 
   // private helper
   function flashElem(color, HtmlElement, flashDuration, flashesPerDuration) {
-    assert.isObject(HtmlElement);
+    // assert.isObject(HtmlElement);
 
     const flashInterval = setInterval(() => {
       HtmlElement.toggleClass(`${color}Border`);

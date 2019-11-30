@@ -248,8 +248,8 @@ io.on('connection', (socket) => {
   socket.on('clientRequestDrawing', (data) => {
     const { category, id } = data;
 
-    assert.isString(category);
-    assert.isNumber(id);
+    // assert.isString(category);
+    // assert.isNumber(id);
 
     console.log(`drawing requested for: ${category}`);
     quickdraw.getDrawing(category, id, (drawing) => {
@@ -262,8 +262,8 @@ io.on('connection', (socket) => {
   socket.on('clientRequestCountFromCategory', (data) => {
     let { category, count, recognized } = data;
 
-    assert.isString(category);
-    assert.isNumber(count);
+    // assert.isString(category);
+    // assert.isNumber(count);
 
     recognized = (typeof recognized !== 'undefined') ? recognized : true;
     console.log(`${count} drawings requested for: ${category} where recognized: ${recognized}`);
@@ -273,7 +273,7 @@ io.on('connection', (socket) => {
   socket.on('clientRequestFromCategory', (data) => {
     const category = data;
 
-    assert.isString(category);
+    // assert.isString(category);
 
     console.log(`single drawing requested for: ${category}`);
     sendCountFromCategory(category, 1, true);
@@ -282,15 +282,15 @@ io.on('connection', (socket) => {
   socket.on('clientRequestUnrecognizedFromCategory', (data) => {
     const category = data;
 
-    assert.isString(category);
+    // assert.isString(category);
 
     console.log(`single drawing requested for: ${category}`);
     sendCountFromCategory(category, 1, false);
   });
 
   function sendCountFromCategory(category, count, recognized) {
-    assert.isString(category);
-    assert.isBoolean(recognized);
+    // assert.isString(category);
+    // assert.isBoolean(recognized);
 
     count = (typeof count !== 'undefined') ? count : 1;
     const drawingQuery = `
@@ -333,9 +333,9 @@ io.on('connection', (socket) => {
   }
 
   function sendRandomFromCategory(category, size, recognized) {
-    assert.isString(category);
-    assert.isNumber(size);
-    assert.isBoolean(recognized);
+    // assert.isString(category);
+    // assert.isNumber(size);
+    // assert.isBoolean(recognized);
 
     const id = _.random(size - 1);
 
@@ -352,7 +352,8 @@ io.on('connection', (socket) => {
   }
 
   socket.on('clientRequestCategoryName', (data) => {
-    assert.isString(data);
+    // assert.isString(data);
+
     console.log(`${data}`);
     socket.emit('serverSendCategoryName', quickdraw.getCategory(data));
   });
@@ -388,7 +389,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('clientRequestCategorySize', (category) => {
-    assert.isString(category);
+    // assert.isString(category);
 
     console.log('Category size requested');
     console.log(`Category: ${category}`);
