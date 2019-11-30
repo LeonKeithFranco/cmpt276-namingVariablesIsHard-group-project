@@ -18,6 +18,9 @@ let continueGame = true;
 let allDrawingsLoaded = false;
 
 socket.on('serverSendRandomCategoryName', (cat) => {
+    assert.isNotEmpty(cat);
+    assert.isString(cat);
+
     if (category === "") {
         category = cat;
         socket.emit('clientRequestCountFromCategory', {
@@ -33,17 +36,29 @@ socket.on('serverSendRandomCategoryName', (cat) => {
 
 socket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
+
+    assert.isNotEmpty(word);
+    assert.isString(word);
+
+    assert.isNotEmpty(svg);
+    assert.isString(svg);
+    assert.match(svg, /svg/);
+
     if (word === category) {
         svgNormal.push(svg);
     } else {
         svgOdd = svg;
     }
+
     drawingCount++;
     allDrawingsLoaded = drawingCount === drawingDivs.length;
+
     if (allDrawingsLoaded) {
         oddIndex = randomRange(num);
-        for(let i = 0; i < drawingDivs.length; i++) {
-            if(i === oddIndex) {
+        assert.isNumber(oddIndex);
+
+        for (let i = 0; i < drawingDivs.length; i++) {
+            if (i === oddIndex) {
                 svgArr.push(svgOdd);
             } else {
                 svgArr.push(svgNormal.pop());
@@ -60,6 +75,8 @@ socket.on('serverSendDrawing', (drawingData) => {
 });
 
 function randomRange(upperbound) {
+    assert.isNumber(upperbound);
+
     return Math.floor(Math.random() * upperbound);
 }
 
@@ -76,7 +93,6 @@ function fillDrawingDivs() {
 }
 
 $(document).ready(() => {
-    console.log(difficulty);
     if (difficulty === 'easy') {
         num = 6;
     } else if (difficulty === 'normal') {
@@ -109,12 +125,12 @@ function select(index) {
                 type: 'PUT',
                 url: `${window.location.pathname}/${playerScore}`,
                 success: (response) => {
-                  console.log('Score successfully updated');
+                    console.log('Score successfully updated');
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
-                  console.log(`Error: ${textStatus} - ${errorThrown}`);
+                    console.log(`Error: ${textStatus} - ${errorThrown}`);
                 }
-              });
+            });
 
             let alertString = "";
             alertString += `Game over!\n`;
@@ -131,7 +147,6 @@ function select(index) {
 
 playAgainBtn.click(() => {
     if (allDrawingsLoaded) {
-        console.log('play again clicked')
         continueGame = true;
 
         playerScore = 0;
