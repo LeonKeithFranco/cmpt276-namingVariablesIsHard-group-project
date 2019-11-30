@@ -20,7 +20,7 @@ const logoutRoute = require('./routes/logout-route');
 const gameModeRoute = require('./routes/game-mode-route');
 const leaderboardRoute = require('./routes/leaderboard-route');
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../public')));
@@ -56,17 +56,17 @@ setInterval(schedulePreloadDrawings, 1000);
 
 function schedulePreloadDrawings() {
 
-  if(loadersInProgress === 0) {
+  if (loadersInProgress === 0) {
     loadersInProgress = 1;  // Prevents this function from being entered multiple times at once asynchronously
     let categoryQuery = `SELECT * FROM Categories WHERE recognized < 6;`;
     serverPool.query(categoryQuery, (error, result) => {
-      if(error) {
+      if (error) {
         console.error(error);
         loadersInProgress = 0;
       } else {
-        if(result.rows.length > 0) {
+        if (result.rows.length > 0) {
           loadedRecognizedSent = false;
-          const choice = result.rows[_.random(result.rows.length-1)];
+          const choice = result.rows[_.random(result.rows.length - 1)];
           console.log(`preloading recognized images from category: ${choice.category}`);
           preloadDrawings(choice.category, 6 - choice.recognized);
         } else {
@@ -83,7 +83,7 @@ function schedulePreloadDrawings() {
                 preloadDrawings(choice.category, 12 - choice.recognized);
               } else {
 
-                if(!loadedRecognizedSent) {
+                if (!loadedRecognizedSent) {
                   console.log(`all categories have at least 12 recognized drawings preloaded`);
                   loadedRecognizedSent = true;
                 }
@@ -94,14 +94,14 @@ function schedulePreloadDrawings() {
                     console.error(error);
                     loadersInProgress = 0;
                   } else {
-                    if(result.rows.length > 0) {
+                    if (result.rows.length > 0) {
                       loadedUnrecognizedSent = false;
-                      const choice = result.rows[_.random(result.rows.length-1)];
+                      const choice = result.rows[_.random(result.rows.length - 1)];
                       console.log(`preloading unrecognized images from category: ${choice.category}`);
                       preloadUnrecognizedDrawings(choice.category, 3 - choice.unrecognized);
                     } else {
 
-                      if(!loadedUnrecognizedSent) {
+                      if (!loadedUnrecognizedSent) {
                         console.log(`all categories have at least 3 unrecognized drawings preloaded`);
                         loadedUnrecognizedSent = true;
                       }
@@ -124,7 +124,7 @@ function preloadDrawings(category, count) {
   loadersInProgress = count;
   loadsRemaining = count;
   quickdraw.getCategorySize(category, (size) => {
-    for(let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       loadRandomFromCategory(category, size);
     }
   });
@@ -134,18 +134,18 @@ function loadRandomFromCategory(category, size) {
   const id = _.random(size - 1);
 
   quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
-    if(drawing.recognized) {
+    if (drawing.recognized) {
       const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing)
                       VALUES('${category}', ${id}, '${rawDrawing}')`;
       serverPool.query(preloadQuery, (error, result) => {
-        if(error) {
+        if (error) {
           console.error(error);
         }
 
-        if(loadersInProgress > 0) {
+        if (loadersInProgress > 0) {
           --loadersInProgress;
         }
-        if(loadsRemaining > 0) {
+        if (loadsRemaining > 0) {
           --loadsRemaining;
         }
       });
@@ -157,7 +157,7 @@ function loadRandomFromCategory(category, size) {
           console.error(error);
         } else {
 
-          if(result.rows[0].unrecognized < 6) {
+          if (result.rows[0].unrecognized < 6) {
             console.log(`preloaded drawing from ${category} not recognized, storing and requesting another`);
             const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing, recognized)
                       VALUES('${category}', ${id}, '${rawDrawing}', FALSE)`;
@@ -183,7 +183,7 @@ function preloadUnrecognizedDrawings(category, count) {
   loadersInProgress = 3 * count;
   loadsRemaining = count;
   quickdraw.getCategorySize(category, (size) => {
-    for(let i = 0; i < 3 * count; i++) {    // Many requests are made because unrecognized drawings are uncommon
+    for (let i = 0; i < 3 * count; i++) {    // Many requests are made because unrecognized drawings are uncommon
       loadUnrecognizedFromCategory(category, size);
     }
   });
@@ -192,7 +192,7 @@ function preloadUnrecognizedDrawings(category, count) {
 function loadUnrecognizedFromCategory(category, size) {
   const id = _.random(size - 1);
 
-  if(loadsRemaining > 0) {
+  if (loadsRemaining > 0) {
     quickdraw.getDrawing(category, id, (drawing, rawDrawing) => {
       if (!drawing.recognized) {
         const preloadQuery = `INSERT INTO Preloaded_Drawings(category, drawing_id, drawing, recognized)
@@ -218,7 +218,7 @@ function loadUnrecognizedFromCategory(category, size) {
           loadUnrecognizedFromCategory(category, size);
         } else {
           console.log(`sufficient drawings have been loaded from ${category}`);
-          if(loadersInProgress > 0) {
+          if (loadersInProgress > 0) {
             --loadersInProgress;
           }
           console.log(`loaders remaining: ${loadersInProgress}`);
@@ -227,7 +227,7 @@ function loadUnrecognizedFromCategory(category, size) {
     });
   } else {
     console.log(`sufficient drawings have been loaded from ${category}`);
-    if(loadersInProgress > 0) {
+    if (loadersInProgress > 0) {
       --loadersInProgress;
     }
     console.log(`loaders remaining: ${loadersInProgress}`);
@@ -237,118 +237,111 @@ function loadUnrecognizedFromCategory(category, size) {
 io.on('connection', (socket) => {
   console.log("connection made with socket id:", socket.id);
 
-  socket.on('clientRequestRandomDrawing', () => {
-    quickdraw.getRandomDrawing((drawing) => {
-      quickdraw.convertDrawing(drawing, (convertedDrawing) => {
-        socket.emit('serverSendRandomDrawing', convertedDrawing);
-      });
-    });
+  socket.on('clientRequestRandomDrawing', async () => {
+    const drawing = await quickdraw.getRandomDrawingPromise();
+    const convertedDrawing = await quickdraw.convertDrawingPromise(drawing);
+    socket.emit('serverSendRandomDrawing', convertedDrawing);
   });
 
-  socket.on('clientRequestDrawing', (data) => {
+  socket.on('clientRequestDrawing', async (data) => {
     const { category, id } = data;
 
     // assert.isString(category);
     // assert.isNumber(id);
 
     console.log(`drawing requested for: ${category}`);
-    quickdraw.getDrawing(category, id, (drawing) => {
-      quickdraw.convertDrawing(drawing, (convertedDrawing) => {
-        socket.emit('serverSendDrawing', convertedDrawing);
-      });
-    });
+    const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, id);
+    const convertedDrawing = await quickdraw.convertDrawingPromise(drawing);
+    socket.emit('serverSendDrawing', convertedDrawing);
   });
 
-  socket.on('clientRequestCountFromCategory', (data) => {
+  socket.on('clientRequestCountFromCategory', async (data) => {
     let { category, count, recognized } = data;
 
     // assert.isString(category);
     // assert.isNumber(count);
 
-    recognized = (typeof recognized !== 'undefined') ? recognized : true;
+    recognized = (!_.isUndefined(recognized)) ? recognized : true;
     console.log(`${count} drawings requested for: ${category} where recognized: ${recognized}`);
-    return sendCountFromCategory(category, count, recognized);
+    return await sendCountFromCategory(category, count, recognized);
   });
 
-  socket.on('clientRequestFromCategory', (data) => {
+  socket.on('clientRequestFromCategory', async (data) => {
     const category = data;
 
     // assert.isString(category);
 
     console.log(`single drawing requested for: ${category}`);
-    sendCountFromCategory(category, 1, true);
+    await sendCountFromCategory(category, 1, true);
   });
 
-  socket.on('clientRequestUnrecognizedFromCategory', (data) => {
+  socket.on('clientRequestUnrecognizedFromCategory', async (data) => {
     const category = data;
 
     // assert.isString(category);
 
     console.log(`single drawing requested for: ${category}`);
-    sendCountFromCategory(category, 1, false);
+    await sendCountFromCategory(category, 1, false);
   });
 
-  function sendCountFromCategory(category, count, recognized) {
+  async function sendCountFromCategory(category, count, recognized) {
     // assert.isString(category);
     // assert.isBoolean(recognized);
 
-    count = (typeof count !== 'undefined') ? count : 1;
-    const drawingQuery = `
+    count = (!_.isUndefined(count)) ? count : 1;
+
+    try {
+      const result = await serverPool.query(`
         DELETE FROM Preloaded_drawings
         WHERE id = ANY (ARRAY(
-          SELECT id FROM Preloaded_drawings
-          WHERE category = '${category}'
-          AND recognized = '${recognized}'
-          LIMIT ${count}))
-        RETURNING *;`;
-    serverPool.query(drawingQuery, (error, result) => {
-      if (error) {
-        console.error(error);
-      } else {
+        SELECT id FROM Preloaded_drawings
+        WHERE category = '${category}'
+        AND recognized = '${recognized}'
+        LIMIT ${count}))
+        RETURNING *;
+      `);
 
-        for(let i = 0; i < result.rows.length; i++) {
-          const parsedDrawing = JSON.parse(result.rows[i].drawing);
-          quickdraw.convertDrawing(parsedDrawing, (convertedDrawing) => {
-            socket.emit('serverSendDrawing', convertedDrawing);
-          });
-        }
-
-        if(result.rows.length < count) {
-          console.log(`insufficient preloaded images in category ${category}, falling back to direct API call`);
-
-          const remaining = count - result.rows.length;
-
-          quickdraw.getCategorySize(category, (size) => {
-            function getRemaining (category, remaining, size) {
-              for(let i = 0; i < remaining; i++) {
-                console.log(`making direct request for request for ${category}`);
-                sendRandomFromCategory(category, size, recognized);
-              }
-            }
-            return getRemaining(category, remaining, size);
-          });
-        }
+      for (let i = 0; i < result.rows.length; i++) {
+        const parsedDrawing = JSON.parse(result.rows[i].drawing);
+        const convertedDrawing = await quickdraw.convertDrawingPromise(parsedDrawing);
+        socket.emit('serverSendDrawing', convertedDrawing);
       }
-    });
+
+      if (result.rows.length < count) {
+        console.log(`insufficient preloaded images in category ${category}, falling back to direct API call`);
+
+        const remaining = count - result.rows.length;
+
+        const size = await quickdraw.getCategorySizePromise(category);
+        async function getRemaining(category, remaining, size) {
+          for (let i = 0; i < remaining; i++) {
+            console.log(`making direct request for request for ${category}`);
+            await sendRandomFromCategory(category, size, recognized);
+          }
+        }
+
+        return await getRemaining(category, remaining, size);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  function sendRandomFromCategory(category, size, recognized) {
+  async function sendRandomFromCategory(category, size, recognized) {
     // assert.isString(category);
     // assert.isNumber(size);
     // assert.isBoolean(recognized);
 
     const id = _.random(size - 1);
 
-    quickdraw.getDrawing(category, id, (drawing) => {
-      if(drawing.recognized === recognized) {
-        quickdraw.convertDrawing(drawing, (convertedDrawing) => {
-          socket.emit('serverSendDrawing', convertedDrawing);
-        });
-      } else {
-        console.log(`drawing from ${category} not ${recognized ? 'recognized' : 'unrecognized'}, requesting another`);
-        sendRandomFromCategory(category, size, recognized);
-      }
-    });
+    const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, id);
+    if (parsedDrawing.recognized === recognized) {
+      const convertedDrawing = await quickdraw.convertDrawingPromise(parsedDrawing);
+      socket.emit('serverSendDrawing', convertedDrawing);
+    } else {
+      console.log(`drawing from ${category} not ${recognized ? 'recognized' : 'unrecognized'}, requesting another`);
+      await sendRandomFromCategory(category, size, recognized);
+    }
   }
 
   socket.on('clientRequestCategoryName', (data) => {
@@ -358,45 +351,45 @@ io.on('connection', (socket) => {
     socket.emit('serverSendCategoryName', quickdraw.getCategory(data));
   });
 
-  socket.on('clientRequestRandomCategoryName', (needed, excluded, recognized) => {
-    needed = (typeof needed !== 'undefined') ? needed : 1;
-    excluded = (typeof excluded !== 'undefined') ? excluded : '';
-    recognized = (typeof recognized !== 'undefined') ? recognized : true;
+  socket.on('clientRequestRandomCategoryName', async (needed, excluded, recognized) => {
+    needed = (!_.isUndefined(needed)) ? needed : 1;
+    excluded = (!_.isUndefined(excluded)) ? excluded : '';
+    recognized = (!_.isUndefined(recognized)) ? recognized : true;
 
     console.log(`random category requested with minimum ${needed} available needed, where recognized is ${recognized}`);
 
-    const categoryQuery = `SELECT category FROM categories
+    try {
+      const result = await serverPool.query(`
+        SELECT category FROM categories
         WHERE ${recognized ? 'recognized' : 'unrecognized'} >= ${needed}
-        AND category != '${excluded}'`;
+        AND category != '${excluded}'
+      `);
 
-    serverPool.query(categoryQuery, (error, result) => {
-      if (error) {
-        console.error(error);
+      if (result.rows.length > 0) {
+        const rowIndex = _.random(result.rows.length - 1);
+        const category = result.rows[rowIndex].category;
+        console.log(`category selected: ${category}`);
+        socket.emit(`serverSendRandomCategoryName`, category);
       } else {
-        if(result.rows.length > 0) {
-          const rowIndex = _.random(result.rows.length - 1);
-          const category = result.rows[rowIndex].category;
-          console.log(`category selected: ${category}`);
-          socket.emit(`serverSendRandomCategoryName`, category);
-        } else {
-          console.log(`no categories have enough drawings preloaded, selecting at random from all`);
-          const category = quickdraw.getRandomCategory();
-          console.log(`category selected: ${category}`);
-          socket.emit('serverSendRandomCategoryName', category);
-        }
+        console.log(`no categories have enough drawings preloaded, selecting at random from all`);
+        const category = quickdraw.getRandomCategory();
+        console.log(`category selected: ${category}`);
+        socket.emit('serverSendRandomCategoryName', category);
       }
-    });
+    }
+    catch (err) {
+      console.error(err);
+    }
   });
 
-  socket.on('clientRequestCategorySize', (category) => {
+  socket.on('clientRequestCategorySize', async (category) => {
     // assert.isString(category);
 
     console.log('Category size requested');
     console.log(`Category: ${category}`);
 
-    quickdraw.getCategorySize(category, (size) => {
-      console.log(`size of ${category} category: ${size}`);
-      socket.emit('serverSendCategorySize', size);
-    });
+    const size = await quickdraw.getCategorySizePromise(category);
+    console.log(`size of ${category} category: ${size}`);
+    socket.emit('serverSendCategorySize', size);
   });
 });
