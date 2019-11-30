@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
 
     console.log(`drawing requested for: ${category}`);
     const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, id);
-    const convertedDrawing = await quickdraw.convertDrawingPromise(drawing);
+    const convertedDrawing = await quickdraw.convertDrawingPromise(parsedDrawing);
     socket.emit('serverSendDrawing', convertedDrawing);
   });
 
@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
     // assert.isString(category);
 
     console.log(`single drawing requested for: ${category}`);
-    await sendCountFromCategory(category, 1, true);
+    sendCountFromCategory(category, 1, true);
   });
 
   socket.on('clientRequestUnrecognizedFromCategory', async (data) => {
@@ -97,7 +97,7 @@ io.on('connection', (socket) => {
     // assert.isString(category);
 
     console.log(`single drawing requested for: ${category}`);
-    await sendCountFromCategory(category, 1, false);
+    sendCountFromCategory(category, 1, false);
   });
 
   async function sendCountFromCategory(category, count, recognized) {
@@ -132,7 +132,7 @@ io.on('connection', (socket) => {
         async function getRemaining(category, remaining, size) {
           for (let i = 0; i < remaining; i++) {
             console.log(`making direct request for request for ${category}`);
-            await sendRandomFromCategory(category, size, recognized);
+            sendRandomFromCategory(category, size, recognized);
           }
         }
 
@@ -156,7 +156,7 @@ io.on('connection', (socket) => {
       socket.emit('serverSendDrawing', convertedDrawing);
     } else {
       console.log(`drawing from ${category} not ${recognized ? 'recognized' : 'unrecognized'}, requesting another`);
-      await sendRandomFromCategory(category, size, recognized);
+      sendRandomFromCategory(category, size, recognized);
     }
   }
 
