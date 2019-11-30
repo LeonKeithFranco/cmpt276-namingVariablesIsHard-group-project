@@ -138,7 +138,7 @@ describe('quickdraw-api', () => {
     it('Should return a positive number for some category', async () => {
       const categorySize = await quickdraw.getCategorySizePromise('rainbow');
 
-        assert.operator(categorySize, '>', 0);
+      assert.operator(categorySize, '>', 0);
     })
   });
 
@@ -170,6 +170,27 @@ describe('quickdraw-api', () => {
           asyncTestDone();
         });
       });
+    });
+  });
+
+  describe('convertDrawingPromise()', () => {
+    const category = 'bee';
+    const drawingId = 10;
+
+    it(`Should return a word that matches category "${category}"`, async () => {
+      const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, drawingId)
+      const { word, svg } = await quickdraw.convertDrawingPromise(parsedDrawing);
+
+      assert.isString(word);
+      assert.strictEqual(word, category);
+    });
+
+    it('Should return a svg HTML element as a string', async () => {
+      const parsedDrawing = await quickdraw.getRandomDrawingPromise();
+      const { word, svg } = await quickdraw.convertDrawingPromise(parsedDrawing);
+
+      assert.isString(svg);
+      assert.match(svg, /svg/);
     });
   });
 

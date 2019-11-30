@@ -180,7 +180,7 @@ module.exports = {
     Post-Condition: Applies the callback to an object which contains the related word and an HTML svg element as a string
   */
   convertDrawing: function (drawing, callback) {
-    let svgArray = 0;
+    let svgArray = [];
     try {
       svgArray = qdsr(drawing.drawing, true);
       const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
@@ -191,6 +191,22 @@ module.exports = {
 
     } catch (error) {
       console.error(error);
+    }
+  },
+
+  // same as above but uses async/await
+  convertDrawingPromise: async function (drawing) {
+    let svgArray = [];
+
+    try {
+      svgArray = qdsr(drawing.drawing, true);
+      const svgHTMLElem = svgArray.reduce((currentVal, nextVal) => {
+        return currentVal + nextVal;
+      });
+
+      return { word: drawing.word, svg: svgHTMLElem };
+    } catch (err) {
+      console.error(err);
     }
   }
 };
