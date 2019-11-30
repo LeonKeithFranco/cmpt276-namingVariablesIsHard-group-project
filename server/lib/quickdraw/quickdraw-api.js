@@ -101,6 +101,7 @@ module.exports = {
     });
   },
 
+  // same as above but uses async/await
   getDrawingPromise: async function (category, id) {
     const URL = `https://quickdrawfiles.appspot.com/drawing/${category}?id=${id}&key=${apiKey}&isAnimated=false&format=json`;
     counter = ++counter % API_KEYS.length;
@@ -151,13 +152,27 @@ module.exports = {
         console.error(error);
       }
       try {
-        JSON.parse(body);
         setTimeout(callback, 0, JSON.parse(body));
       } catch (error) {
         console.error(error);
         this.getCategorySize(category, callback);
       }
     });
+  },
+
+  // same as above but uses async/await
+  getCategorySizePromise: async function (category) {
+    const URL = `https://quickdrawfiles.appspot.com/drawing/${category}/count?key=${apiKey}`;
+
+    try {
+      const result = await requestP(URL);
+      const parsedResult = JSON.parse(result);
+
+      return parsedResult;
+    } catch (err) {
+      console.error(err);
+      return this.getCategorySize(category);
+    }
   },
 
   /*

@@ -134,6 +134,14 @@ describe('quickdraw-api', () => {
     })
   });
 
+  describe('getCategorySizePromise()', () => {
+    it('Should return a positive number for some category', async () => {
+      const categorySize = await quickdraw.getCategorySizePromise('rainbow');
+
+        assert.operator(categorySize, '>', 0);
+    })
+  });
+
   describe('convertDrawing()', () => {
     const category = 'sock';
     const drawingId = 0;
