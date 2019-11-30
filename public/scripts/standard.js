@@ -7,8 +7,10 @@ gameEngine.setSubmitButtonClickEvent(() => {
   const playerGuess = gameEngine.getUserInput();
 
   if (gameEngine.willContinueGame() && playerGuess) {
-    console.log('here');
     const answer = gameEngine.getCategory();
+
+    assert.isString(answer);
+    assert.isNotEmpty(answer);
 
     if (playerGuess === answer) {
       gameEngine.incrementScore()

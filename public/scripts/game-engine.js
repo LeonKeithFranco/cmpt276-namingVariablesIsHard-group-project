@@ -16,6 +16,9 @@ const gameEngine = (function () {
   let allDrawingsLoaded = false;
 
   socket.on('serverSendRandomCategoryName', (cat) => {
+    assert.isNotEmpty(cat);
+    assert.isString(cat);
+
     category = cat;
     hintDisplay.text(`${category.replace(/\S/g, "-")}`);
     socket.emit('clientRequestCountFromCategory', {
@@ -26,6 +29,14 @@ const gameEngine = (function () {
 
   socket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
+
+    assert.isNotEmpty(word);
+    assert.isString(word);
+
+    assert.isNotEmpty(svg);
+    assert.isString(svg);
+    assert.match(svg, /svg/);
+
     svgArr.push(svg);
     $(drawingDivs[drawingCount]).html(svgArr[drawingCount]);
     drawingCount++;
@@ -67,6 +78,8 @@ const gameEngine = (function () {
       Postcondition: Adds click event to button
     */
     setSubmitButtonClickEvent: function (clickEvent) {
+      assert.isFunction(clickEvent);
+
       submitGuessBtn.click(clickEvent);
     },
 
@@ -75,6 +88,8 @@ const gameEngine = (function () {
       Postcondition: Adds click event to button
     */
     setPlayAgainButtonClickEvent: function (clickEvent) {
+      assert.isFunction(clickEvent);
+
       playAgainBtn.click(clickEvent);
     },
     
@@ -170,7 +185,7 @@ const gameEngine = (function () {
           console.log('Score successfully updated');
         },
         error: (jqXHR, textStatus, errorThrown) => {
-          console.log(`Error: ${textStatus} - ${errorThrown}`);
+          console.error(`Error: ${textStatus} - ${errorThrown}`);
         }
       });
     },
