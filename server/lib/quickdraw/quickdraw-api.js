@@ -176,15 +176,21 @@ module.exports = {
   getCategorySizePromise: async function (category) {
     const URL = `https://quickdrawfiles.appspot.com/drawing/${category}/count?key=${apiKey}`;
 
-    try {
-      const result = await requestP(URL);
-      const parsedResult = JSON.parse(result);
+    let parsedResult;
 
-      return parsedResult;
-    } catch (err) {
-      console.error(err);
-      return await this.getCategorySizePromise(category);
-    }
+    do {
+      try {
+        const result = await requestP(URL);
+        parsedResult = JSON.parse(result);
+      }
+      catch (err) {
+        console.error(err);
+
+        parsedResult = undefined;
+      }
+    } while (!parsedResult);
+
+    return parsedResult;
   },
 
   /*
