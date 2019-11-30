@@ -1,5 +1,5 @@
 const loginRoute = require('express').Router();
-const assert = require('chai').assert;
+// const assert = require('chai').assert;
 
 loginRoute.get('/', (req, res) => {
   console.log('Landed on login page');

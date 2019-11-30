@@ -1,5 +1,5 @@
 const gameModeRoute = require('express').Router();
-const assert = require('chai').assert;
+// const assert = require('chai').assert;
 
 gameModeRoute.get('/', (req, res) => {
   console.log(`${req.session.user} redirected to main menu`);

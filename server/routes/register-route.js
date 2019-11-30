@@ -1,5 +1,5 @@
 const registerRoute = require('express').Router();
-const assert = require('chai').assert;
+// const assert = require('chai').assert;
 
 const saltRounds = 8; // for hashing; the higher the number, the more secure the hash
 
