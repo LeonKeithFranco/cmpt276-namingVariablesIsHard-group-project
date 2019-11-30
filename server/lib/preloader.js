@@ -33,7 +33,7 @@ async function schedulePreloadDrawings() {
 
         console.log(`preloading recognized images from category: ${choice.category}`);
 
-        await preloadDrawings(choice.category, 6 - choice.recognized);
+        preloadDrawings(choice.category, 6 - choice.recognized);
       } else {
         result = await serverPool.query(`
           SELECT * 
@@ -47,7 +47,7 @@ async function schedulePreloadDrawings() {
 
           console.log(`preloading recognized images from category: ${choice.category}`);
 
-          await preloadDrawings(choice.category, 12 - choice.recognized);
+          preloadDrawings(choice.category, 12 - choice.recognized);
         } else {
 
           if (!loadedRecognizedSent) {
@@ -68,7 +68,7 @@ async function schedulePreloadDrawings() {
 
             console.log(`preloading unrecognized images from category: ${choice.category}`);
 
-            await preloadUnrecognizedDrawings(choice.category, 3 - choice.unrecognized);
+            preloadUnrecognizedDrawings(choice.category, 3 - choice.unrecognized);
           } else {
             if (!loadedUnrecognizedSent) {
               console.log(`all categories have at least 3 unrecognized drawings preloaded`);
@@ -99,7 +99,7 @@ async function preloadDrawings(category, count) {
   const size = await quickdraw.getCategorySizePromise(category);
 
   for (let i = 0; i < count; i++) {
-    await loadRandomFromCategory(category, size);
+    loadRandomFromCategory(category, size);
   }
 }
 
@@ -109,7 +109,7 @@ async function loadRandomFromCategory(category, size) {
   try {
     const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, id);
     if (parsedDrawing.recognized) {
-      await serverPool.query(`
+      serverPool.query(`
         INSERT INTO Preloaded_Drawings(category, drawing_id, drawing)
         VALUES ('${category}', ${id}, '${rawDrawing}')
       `);
@@ -135,11 +135,11 @@ async function loadRandomFromCategory(category, size) {
           VALUES ('${category}', ${id}, '${rawDrawing}', FALSE)
         `);
 
-        await loadRandomFromCategory(category, size);
+        loadRandomFromCategory(category, size);
       } else {
         console.log(`preloaded drawing from ${category} not recognized, discarding and requesting another`);
 
-        await loadRandomFromCategory(category, size);
+        loadRandomFromCategory(category, size);
       }
     }
   }
@@ -157,7 +157,7 @@ async function preloadUnrecognizedDrawings(category, count) {
   const size = await quickdraw.getCategorySizePromise(category);
 
   for (let i = 0; i < 3 * count; i++) {    // Many requests are made because unrecognized drawings are uncommon
-    await loadUnrecognizedFromCategory(category, size);
+    loadUnrecognizedFromCategory(category, size);
   }
 }
 
@@ -169,7 +169,7 @@ async function loadUnrecognizedFromCategory(category, size) {
       const { parsedDrawing, rawDrawing } = await quickdraw.getDrawingPromise(category, id);
 
       if (!parsedDrawing.recognized) {
-        await serverPool.query(`
+        serverPool.query(`
           INSERT INTO Preloaded_Drawings(category, drawing_id, drawing, recognized)
           VALUES ('${category}', ${id}, '${rawDrawing}', FALSE)
         `);
@@ -180,14 +180,14 @@ async function loadUnrecognizedFromCategory(category, size) {
           --loadsRemaining;
         }
 
-        await loadUnrecognizedFromCategory(category, size);
+        loadUnrecognizedFromCategory(category, size);
       } else {
         console.log(`preloaded drawing from ${category} with id ${id} is recognized, but only unrecognized is wanted`);
 
         if (loadsRemaining > 0) {
           console.log(`discarding drawing and trying again from ${category}`);
 
-          await loadUnrecognizedFromCategory(category, size);
+          loadUnrecognizedFromCategory(category, size);
         } else {
           console.log(`sufficient drawings have been loaded from ${category}`);
           if (loadersInProgress > 0) {
