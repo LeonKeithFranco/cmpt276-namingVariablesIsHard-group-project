@@ -31,7 +31,7 @@ function updateTime() {
         if (time < 0) {
             time = 0;
             timeDisplay.text(`Time: ${time}`);
-            
+
             gameEngine.stopGame();
             gameEngine.updateHighScore();
             gameEngine.displayGameOverScreen();
@@ -44,6 +44,9 @@ gameEngine.setSubmitButtonClickEvent(() => {
 
     if (gameEngine.willContinueGame() && playerGuess) {
         const answer = gameEngine.getCategory();
+
+        assert.isNotEmpty(answer);
+        assert.isString(answer);
 
         if (playerGuess === answer) {
             gameEngine.incrementScore();
