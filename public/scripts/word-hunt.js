@@ -1,7 +1,9 @@
 const socket = io.connect(window.location.origin);
 
 const drawingDivs = $(".drawing");
+const scoreDisplay = $('#score');
 const categoryDiv = $("#category");
+const playAgainBtn = $('#playAgainButton');
 
 let svgArr = [];
 let categoryArr = [];
@@ -12,10 +14,17 @@ let allDrawingsLoaded = false;
 
 $(document).ready(() => {
   gameEngine.displayScore();
-  fillDrawingDivs();
+  startGame();
 });
 
-function fillDrawingDivs() {
+function startGame() {
+  playerScore = 0;
+  continueGame = true;
+  getRound();
+}
+
+function getRound() {
+  scoreDisplay.text(`Score: ${playerScore}`);
   svgArr = [];
   categoryArr = [];
   category = "";
