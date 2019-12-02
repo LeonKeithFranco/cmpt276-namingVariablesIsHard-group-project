@@ -31,7 +31,7 @@ module.exports = {
 
     request(URL, (error, response, body) => {
       if (error) {
-        console.error(error);
+        // console.error(`API key ${apiKey} saturated`);
       }
 
       try {
@@ -66,7 +66,7 @@ module.exports = {
         code = parsedResult.code;
       }
       catch (err) {
-        console.error(err);
+        // console.error(`API key ${apiKey} saturated`);
 
         code = 8;
       }
@@ -104,7 +104,7 @@ module.exports = {
         }
       }
       catch (err) {
-        console.log(err)
+        // console.error(`API key ${apiKey} saturated`);
         this.getDrawing(category, id, callback);
       }
     });
@@ -126,7 +126,7 @@ module.exports = {
         finished = { parsedDrawing: parsedResult, rawDrawing: result };
       }
       catch (err) {
-        console.error(err);
+        // console.error(`API key ${apiKey} saturated`);
 
         code = 8;
       }
@@ -170,8 +170,11 @@ module.exports = {
       try {
         setTimeout(callback, 0, JSON.parse(body));
       } catch (error) {
-        console.error(error);
+        // console.error(`API key ${apiKey} saturated`);
         this.getCategorySize(category, callback);
+      } finally {
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
       }
     });
   },
@@ -188,9 +191,12 @@ module.exports = {
         parsedResult = JSON.parse(result);
       }
       catch (err) {
-        console.error(err);
+        // console.error(`API key ${apiKey} saturated`);
 
         parsedResult = undefined;
+      } finally {
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
       }
     } while (!parsedResult);
 

@@ -24,12 +24,14 @@ async function schedulePreloadDrawings() {
       let result = await serverPool.query(`
         SELECT * 
         FROM Categories 
-        WHERE recognized < 6;
+        WHERE recognized < 6
+        ORDER BY RANDOM()
+        LIMIT 1
       `);
 
       if (result.rows.length > 0) {
         loadedRecognizedSent = false;
-        const choice = result.rows[_.random(result.rows.length - 1)];
+        const choice = result.rows[0];
 
         console.log(`preloading recognized images from category: ${choice.category}`);
 
@@ -38,12 +40,14 @@ async function schedulePreloadDrawings() {
         result = await serverPool.query(`
           SELECT * 
           FROM Categories 
-          WHERE recognized < 12;
+          WHERE recognized < 12
+          ORDER BY RANDOM()
+          LIMIT 1
         `);
 
         if (result.rows.length > 0) {
           loadedRecognizedSent = false;
-          const choice = result.rows[_.random(result.rows.length - 1)];
+          const choice = result.rows[0];
 
           console.log(`preloading recognized images from category: ${choice.category}`);
 
@@ -59,12 +63,14 @@ async function schedulePreloadDrawings() {
           result = await serverPool.query(`
             SELECT * 
             FROM Categories 
-            WHERE unrecognized < 3;
+            WHERE unrecognized < 3
+            ORDER BY RANDOM()
+            LIMIT 1
           `);
 
           if (result.rows.length > 0) {
             loadedUnrecognizedSent = false;
-            const choice = result.rows[_.random(result.rows.length - 1)];
+            const choice = result.rows[0];
 
             console.log(`preloading unrecognized images from category: ${choice.category}`);
 
