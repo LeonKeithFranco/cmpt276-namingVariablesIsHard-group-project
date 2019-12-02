@@ -14,6 +14,7 @@ let difficulty;
 const standardBtn = $('#standardButton');
 const oddOneOutBtn = $('#oddOneOutButton');
 const timedBtn = $('#timedButton');
+const wordHuntBtn = $('#wordHuntButton');
 const passOrFailBtn = $('#passOrFailButton');
 
 standardBtn.click(() => {
@@ -28,6 +29,11 @@ oddOneOutBtn.click(() => {
 
 timedBtn.click(() => {
   gameMode = timedBtn.text();
+  gameModePicked();
+});
+
+wordHuntBtn.click(() => {
+  gameMode = wordHuntBtn.text();
   gameModePicked();
 });
 

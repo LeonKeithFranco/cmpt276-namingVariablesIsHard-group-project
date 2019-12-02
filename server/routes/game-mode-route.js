@@ -115,6 +115,16 @@ gameModeRoute.put('/timed/:difficulty/:score', (req, res) => {
   }
 });
 
+gameModeRoute.get('/word-hunt/:difficulty', (req, res) => {
+  const difficulty = req.params.difficulty;
+
+  // assert.exists(difficulty);
+
+  console.log(`${req.session.user} started a Timed game with ${difficulty} difficulty`);
+
+  res.render('pages/word-hunt', { difficulty: difficulty });
+});
+
 gameModeRoute.get('/pass-or-fail', (req, res) => {
   console.log(`${req.session.user} started a Pass Or Fail game`);
 
