@@ -106,3 +106,9 @@ function randomRange(upperbound) {
 
   return Math.floor(Math.random() * upperbound);
 }
+
+playAgainBtn.click(() => {
+  if (allDrawingsLoaded) {
+    startGame();
+  }
+});
