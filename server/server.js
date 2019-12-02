@@ -207,8 +207,8 @@ io.on('connection', (socket) => {
     try {
       const result = await serverPool.query(`
         SELECT category FROM categories
-        ORDER BY RANDOM()
         WHERE category != '${excluded}'
+        ORDER BY RANDOM()
         LIMIT ${count}
       `);
 
