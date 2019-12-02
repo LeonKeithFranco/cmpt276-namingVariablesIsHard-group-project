@@ -28,27 +28,46 @@
             <p id="score" class="text"></p>
             <button id="playAgainButton" class="button">Play Again</button>
         </div>
-        <p id="oddOneOutRules" class="text">
-            Rules:<br>
-            All of these drawings come from the same category... except one!<br>
-            Click on the odd one out and you'll recieve a new set of drawings.<br>
-            Your score increases each for each set you successfully complete.<br>
-            If you guess incorrectly, then the game ends, so guess well!<br>
-            The drawings are numbered according to this layout:<br><br>
+        <% if (difficulty === 'easy') { %>
+            <p id="oddOneOutRules" class="text">
+                Rules:<br>
+                All of these drawings come from the same category... except one!<br>
+                Click on the odd one out and you'll recieve a new set of drawings.<br>
+                Your score increases each for each set you successfully complete.<br>
+                If you guess incorrectly, then the game ends, so guess well!<br>
+                The drawings are numbered according to this layout:<br><br>
 
-            <% if (difficulty === 'easy') { %>
                 1       2       3<br>
                 4       5       6<br><br>
-            <% } else if (difficulty === 'normal') { %>
+            </p>
+                
+        <% } else if (difficulty === 'normal') { %>
+            <p id="oddOneOutRules" class="text">
+                Rules:<br>
+                All of these drawings come from the same category... except one!<br>
+                Click on the odd one out and you'll recieve a new set of drawings.<br>
+                Your score increases each for each set you successfully complete.<br>
+                If you guess incorrectly, then the game ends, so guess well!<br>
+                The drawings are numbered according to this layout:<br><br>
+
                 1       2<br>
                 3       4<br><br>
-            <% } else if (difficulty === 'hard') { %>
+            </p>
+        <% } else if (difficulty === 'hard') { %>
+            <p id="oddOneOutRules" class="text">
+                Rules:<br>
+                All of these drawings come from the same category... except one!<br>
+                Click on the odd one out and you'll recieve a new set of drawings.<br>
+                Your score increases each for each set you successfully complete.<br>
+                If you guess incorrectly, then the game ends, so guess well!<br>
+                The drawings are numbered according to this layout:<br><br>
+
                 1       2       3<br><br>
-            <% } else { %>
-                <h1><strong>Something has gone horribly wrong</strong></h1>
-            <% } %>
-            
-        </p>
+            </p>
+        <% } else { %>
+            <h1><strong>Something has gone horribly wrong</strong></h1>
+        <% } %>
+        
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
     </center>
     
