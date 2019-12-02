@@ -1,10 +1,12 @@
 const socket = io.connect(window.location.origin);
 
 const drawingDivs = $(".drawing");
+const categoryDiv = $("#category");
 
 let svgArr = [];
 let categoryArr = [];
 let category = "";
+let correctIndex;
 let drawingCount = 0;
 let allDrawingsLoaded = false;
 
@@ -18,6 +20,7 @@ function fillDrawingDivs() {
   categoryArr = [];
   category = "";
   drawingCount = 0;
+  continueGame = true;
   allDrawingsLoaded = false;
 
   socket.emit('clientRequestRandomCategoryNames', drawingDivs.length);
@@ -49,5 +52,32 @@ socket.on('serverSendDrawing', (drawingData) => {
 });
 
 function setCorrectCategory() {
+  correctIndex = randomRange(drawingDivs.length);
+  category = categoryArr[correctIndex];
 
+  categoryDiv.text(`Category: ${category}`);
+
+  for (let i = 0; i < svgArr.length; i++) {
+    $(drawingDivs[i]).html(svgArr[i]);
+    $(drawingDivs[i]).on('click', function () {
+      select(i);
+    });
+  }
+}
+
+function select(index) {
+  if (continueGame && allDrawingsLoaded) {
+
+    if (index === correctIndex) {
+      alert("correct");
+    } else {
+      alert("incorrect");
+    }
+  }
+}
+
+function randomRange(upperbound) {
+  // assert.isNumber(upperbound);
+
+  return Math.floor(Math.random() * upperbound);
 }
