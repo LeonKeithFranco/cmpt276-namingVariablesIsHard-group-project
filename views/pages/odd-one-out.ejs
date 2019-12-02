@@ -34,21 +34,46 @@
             Click on the odd one out and you'll recieve a new set of drawings.<br>
             Your score increases each for each set you successfully complete.<br>
             If you guess incorrectly, then the game ends, so guess well!<br>
-            The drawings are numbered according to this layout:<br><br>
+            The drawings are numbered according to this layout:<br>
 
-            <% if (difficulty === 'easy') { %>
-                1       2       3<br>
-                4       5       6<br><br>
-            <% } else if (difficulty === 'normal') { %>
-                1       2<br>
-                3       4<br><br>
-            <% } else if (difficulty === 'hard') { %>
-                1       2       3<br><br>
-            <% } else { %>
-                <h1><strong>Something has gone horribly wrong</strong></h1>
-            <% } %>
-            
         </p>
+
+        <% if (difficulty === 'easy') { %>
+            <table>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                </tr>
+            </table>
+        <% } else if (difficulty === 'normal') { %>
+            <table>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>4</td>
+                </tr>
+            </table>
+        <% } else if (difficulty === 'hard') { %>
+            <table>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>
+            </table>
+        <% } else { %>
+            <h1><strong>Something has gone horribly wrong here too</strong></h1>
+        <% } %>
+        <br>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
     </center>
     
