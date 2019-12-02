@@ -199,13 +199,16 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('clientRequestRandomCategoryNames', async (count) => {
+  socket.on('clientRequestRandomCategoryNames', async (count, excluded) => {
+    excluded = (!_.isUndefined(excluded)) ? excluded : '';
+
     console.log(`${count} random categories requested`);
 
     try {
       const result = await serverPool.query(`
         SELECT category FROM categories
         ORDER BY RANDOM()
+        WHERE category != '${excluded}'
         LIMIT ${count}
       `);
 
