@@ -36,7 +36,7 @@ leaderboardRoute.get('/', async (req, res) => {
       FROM Users
       ORDER BY word_hunt DESC
       LIMIT ${maxNumOfScores}
-      `)
+      `);
 
     const scores = {
       personalScore: (await personalScoreQuery).rows[0],
