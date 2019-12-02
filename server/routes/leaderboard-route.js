@@ -10,7 +10,7 @@ leaderboardRoute.get('/', async (req, res) => {
       WHERE username='${req.session.user}'
     `);
 
-    const maxNumOfScores = 10;
+    const maxNumOfScores = 11;
 
     const topTenStandardScoresQuery = req.pool.query(`
       SELECT username,standard
