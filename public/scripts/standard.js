@@ -15,9 +15,11 @@ gameEngine.setSubmitButtonClickEvent(() => {
     if (playerGuess === answer) {
       gameEngine.incrementScore()
       gameEngine.displayScore();
+      gameEngine.playRight();
       gameEngine.resetUserInput();
       gameEngine.fillDrawingDivs();
     } else {
+      gameEngine.playWrong();
       gameEngine.stopGame();
       gameEngine.updateHighScore();
       gameEngine.displayGameOverScreen();

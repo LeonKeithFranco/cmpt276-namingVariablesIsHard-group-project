@@ -7,6 +7,10 @@ const gameEngine = (function () {
   const submitGuessBtn = $('#submitGuessButton');
   const playAgainBtn = $('#playAgainButton');
   const hintDisplay = $('#hint');
+  const rightSound = new Audio('../../assets/audio/right.mp3');
+  const wrongSound = new Audio('../../assets/audio/wrong.mp3');
+
+
 
   let svgArr = [];
   let category = "";
@@ -216,6 +220,14 @@ const gameEngine = (function () {
           hintGiven = true;
         }
       } while (!hintGiven)
+    },
+
+    playRight: function () {
+      rightSound.play();
+    },
+
+    playWrong: function () {
+      wrongSound.play();
     }
   }
 })();
