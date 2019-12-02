@@ -57,7 +57,7 @@ socket.on('serverSendDrawing', (drawingData) => {
   drawingCount++;
   allDrawingsLoaded = drawingCount === drawingDivs.length;
 
-  if(allDrawingsLoaded) {
+  if (allDrawingsLoaded) {
     setCorrectCategory();
   }
 });
@@ -89,6 +89,17 @@ function select(index) {
       wrongSound.play();
 
       continueGame = false;
+
+      $.ajax({
+        type: 'PUT',
+        url: `${window.location.pathname}/${playerScore}`,
+        success: (response) => {
+          console.log('Score successfully updated');
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+          console.log(`Error: ${textStatus} - ${errorThrown}`);
+        }
+      });
 
       let alertString = "";
       alertString += `Game over!\n`;

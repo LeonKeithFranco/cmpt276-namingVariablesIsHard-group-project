@@ -124,6 +124,32 @@ gameModeRoute.get('/word-hunt/:difficulty', (req, res) => {
 
   res.render('pages/word-hunt', { difficulty: difficulty });
 });
+gameModeRoute.put('/word-hunt/:difficulty/:score', (req, res) => {
+  console.log(`Update ${req.session.user}'s Word Hunt mode high score`);
+
+  // assert.exists(req.params.difficulty);
+  // assert.exists(req.params.score);
+
+  if (req.params.difficulty == 'hard') {
+    const query = `UPDATE Users SET word_hunt=${req.params.score} WHERE username=\'${req.session.user}\'`;
+    req.pool.query(query, (error, result) => {
+      if (error) {
+        console.error(error);
+  
+        res.send(error);
+      }
+
+      if (result.rowCount != 0) {
+        res.respond(req.httpStatus.OK, 'Timed score was successfully updated');
+      }
+      else {
+        res.respond(req.httpStatus.CONFLICT, 'Unable to update score');
+      }
+    });
+  } else {
+    res.respond(req.httpStatus.FORBIDDEN, 'Can only update score when playing hard mode');
+  }
+});
 
 gameModeRoute.get('/pass-or-fail', (req, res) => {
   console.log(`${req.session.user} started a Pass Or Fail game`);
