@@ -23,6 +23,15 @@
 .fourDrawings {
     grid-template-columns: auto auto;
 }
+
 .sixDrawings {
+    grid-template-columns: auto auto auto;
+}
+
+.eightDrawings {
+    grid-template-columns: auto auto auto auto;
+}
+
+.nineDrawings {
     grid-template-columns: auto auto auto;
 }

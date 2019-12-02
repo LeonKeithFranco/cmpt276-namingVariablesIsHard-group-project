@@ -13,11 +13,11 @@
     <img id="headerimage" src="/assets/scribbltaireio.png">
     <h1 class="text">Word Hunt Mode</h1>
     <% if (difficulty === 'easy') { %>
-        <% include ../partials/3-drawing.ejs %>
-    <% } else if (difficulty === 'normal') { %>
         <% include ../partials/4-drawing.ejs %>
-    <% } else if (difficulty === 'hard') { %>
+    <% } else if (difficulty === 'normal') { %>
         <% include ../partials/6-drawing.ejs %>
+    <% } else if (difficulty === 'hard') { %>
+        <% include ../partials/8-drawing.ejs %>
     <% } else { %>
         <h1><strong>Something has gone horribly wrong</strong></h1>
     <% } %>
@@ -42,11 +42,13 @@
                 <td>1</td>
                 <td>2</td>
                 <td>3</td>
+                <td>4</td>
             </tr>
             <tr>
-                <td>4</td>
                 <td>5</td>
                 <td>6</td>
+                <td>7</td>
+                <td>8</td>
             </tr>
         </table>
     <% } else if (difficulty === 'normal') { %>
@@ -54,10 +56,12 @@
             <tr>
                 <td>1</td>
                 <td>2</td>
+                <td>3</td>
             </tr>
             <tr>
-                <td>3</td>
                 <td>4</td>
+                <td>5</td>
+                <td>6</td>
             </tr>
         </table>
     <% } else if (difficulty === 'easy') { %>
@@ -65,7 +69,10 @@
             <tr>
                 <td>1</td>
                 <td>2</td>
+            </tr>
+            <tr>
                 <td>3</td>
+                <td>4</td>
             </tr>
         </table>
     <% } else { %>
