@@ -120,7 +120,7 @@ gameModeRoute.get('/word-hunt/:difficulty', (req, res) => {
 
   // assert.exists(difficulty);
 
-  console.log(`${req.session.user} started a Timed game with ${difficulty} difficulty`);
+  console.log(`${req.session.user} started a Word Hunt game with ${difficulty} difficulty`);
 
   res.render('pages/word-hunt', { difficulty: difficulty });
 });
