@@ -172,6 +172,9 @@ module.exports = {
       } catch (error) {
         console.error(error);
         this.getCategorySize(category, callback);
+      } finally {
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
       }
     });
   },
@@ -191,6 +194,9 @@ module.exports = {
         console.error(err);
 
         parsedResult = undefined;
+      } finally {
+        counter = ++counter % API_KEYS.length;
+        apiKey = API_KEYS[counter];
       }
     } while (!parsedResult);
 
