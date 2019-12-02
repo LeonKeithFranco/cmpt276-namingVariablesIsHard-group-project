@@ -7,7 +7,10 @@ const qdsr = require('quickdraw-svg-render');
 const API_KEYS = [
   'AIzaSyC0U3yLy_m6u7aOMi9YJL2w1vWG4oI5mj0',
   'AIzaSyC5osDYfGz4jZvEw_6WdGFuQ1ZYDE-P7VM',
-  'AIzaSyBasoPrgP5G0T08HZ41H4hc4_FiCVf61qA'
+  'AIzaSyBasoPrgP5G0T08HZ41H4hc4_FiCVf61qA',
+  'AIzaSyCwDo9OEKiIHAWQEmezXK--aL_vh7EQKp0',
+  'AIzaSyDQUbF6AH32qjU7Ntuf2GMMxtigJx6tZgM',
+  'AIzaSyC7U2zZFl1don5JA6VtEfdbumokwZj8FLo'
 ];
 let apiKey = API_KEYS[0];
 let counter = 0;
