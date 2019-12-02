@@ -5,6 +5,8 @@ const socket = io.connect(window.location.origin);
 const drawingDivs = $(".drawing");
 const scoreDisplay = $('#score');
 const playAgainBtn = $('#playAgainButton');
+const rightSound = new Audio('../../assets/audio/right.mp3');
+const wrongSound = new Audio('../../assets/audio/wrong.mp3');
 
 let svgArr = [];
 let svgNormal = [];
@@ -118,8 +120,12 @@ function select(index) {
         if (index === oddIndex) {
             scoreDisplay.text(`Score: ${++playerScore}`);
 
+            rightSound.play();
+
             fillDrawingDivs();
         } else {
+            wrongSound.play();
+
             continueGame = false;
 
             $.ajax({

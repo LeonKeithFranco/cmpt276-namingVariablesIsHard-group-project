@@ -49,6 +49,7 @@ gameEngine.setSubmitButtonClickEvent(() => {
         // assert.isString(answer);
 
         if (playerGuess === answer) {
+            gameEngine.playRight();
             gameEngine.incrementScore();
             gameEngine.displayScore();
             gameEngine.resetUserInput();
@@ -57,6 +58,7 @@ gameEngine.setSubmitButtonClickEvent(() => {
 
             gameEngine.fillDrawingDivs();
         } else {
+            gameEngine.playWrong();
             gameEngine.resetUserInput();
             gameEngine.revealHint();
 

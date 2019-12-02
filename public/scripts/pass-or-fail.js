@@ -7,6 +7,8 @@ const categoryDisplay = $('#category');
 const playAgainBtn = $('#playAgainButton');
 const passBtn = $('#passButton');
 const failBtn = $('#failButton');
+const rightSound = new Audio('../../assets/audio/right.mp3');
+const wrongSound = new Audio('../../assets/audio/wrong.mp3');
 
 let category = "";
 let playerScore = 0;
@@ -85,6 +87,9 @@ function submitGuess(selectedPassed) {
     if(drawingLoaded && continueGame) {
         if(selectedPassed === drawingPassed) {
             playerScore++;
+            rightSound.play();
+        } else {
+            wrongSound.play();
         }
 
         nextRound();
