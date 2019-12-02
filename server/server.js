@@ -179,11 +179,12 @@ io.on('connection', (socket) => {
         SELECT category FROM categories
         WHERE ${recognized ? 'recognized' : 'unrecognized'} >= ${needed}
         AND category != '${excluded}'
+        ORDER BY RANDOM()
+        LIMIT 1
       `);
 
       if (result.rows.length > 0) {
-        const rowIndex = _.random(result.rows.length - 1);
-        const category = result.rows[rowIndex].category;
+        const category = result.rows[0].category;
         console.log(`category selected: ${category}`);
         socket.emit(`serverSendRandomCategoryName`, category);
       } else {
