@@ -4,6 +4,8 @@ const drawingDivs = $(".drawing");
 const scoreDisplay = $('#score');
 const categoryDiv = $("#category");
 const playAgainBtn = $('#playAgainButton');
+const rightSound = new Audio('../../assets/audio/right.mp3');
+const wrongSound = new Audio('../../assets/audio/wrong.mp3');
 
 let svgArr = [];
 let categoryArr = [];
@@ -78,7 +80,11 @@ function select(index) {
   if (continueGame && allDrawingsLoaded) {
 
     if (index === correctIndex) {
-      alert("correct");
+      playerScore++;
+
+      rightSound.play();
+
+      getRound();
     } else {
       alert("incorrect");
     }
