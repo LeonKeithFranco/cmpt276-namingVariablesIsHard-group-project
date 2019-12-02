@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/header.ejs %>
+    <script type="text/javascript" src="/scripts/game-engine.js" defer></script>
+    <script type="text/javascript" src="/scripts/standard.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/standard.css">
+</head>
+
+<body>
+<center>
+    <img id="headerimage" src="/assets/scribbltaireio.png">
+    <h1 class="text">Standard Mode</h1>
+    <% if (difficulty === 'easy') { %>
+        <% include ../partials/4-drawing.ejs %>
+    <% } else if (difficulty === 'normal') { %>
+        <% include ../partials/2-drawing.ejs %>
+    <% } else if (difficulty === 'hard') { %>
+        <% include ../partials/1-drawing.ejs %>
+    <% } else { %>
+        <h1><strong>Something has gone horribly wrong</strong></h1>
+    <% } %>
+    <div id="inputSection">
+        <p id="score" class="text"></p>
+        <div id="hintDisplay">
+            <p id="hintTitle" class="text">Hint: </p>
+            <p id="hint" class="text"></p>
+        </div>
+        <br>
+        <input id="wordInput" type="text" placeholder="Word" autofocus>
+        <button id="submitGuessButton" class="button">Guess</button><br>
+        <button id="playAgainButton" class="button">Play Again</button>
+    </div>
+    <p id="standardModeRules" class="text">
+        Rules:<br>
+        Guess the category of these drawings.<br>
+        You have infinite time, but only one guess.<br>
+        If you guess correctly, then you'll get a new set of drawings.<br>
+        Your score increases with each set of drawings you guess correctly.<br>
+        If you guess incorrectly, then the game ends, so guess well!
+    </p>
+    <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
+</center>
+
+</body>
+
+</html>
