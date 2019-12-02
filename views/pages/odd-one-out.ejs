@@ -40,16 +40,16 @@
             Click on the odd one out and you'll recieve a new set of drawings.<br>
             Your score increases each for each set you successfully complete.<br>
             If you guess incorrectly, then the game ends, so guess well!<br>
-            The drawings are numbered according to this layout:<br><br>
+            The drawings are numbered according to this layout:<br>
 
         </p>
 
         <% if (difficulty === 'easy') { %>
             <table>
                 <tr>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
                 </tr>
                 <tr>
                     <td>4</td>
@@ -60,8 +60,8 @@
         <% } else if (difficulty === 'normal') { %>
             <table>
                 <tr>
-                    <th>1</th>
-                    <th>2</th>
+                    <td>1</td>
+                    <td>2</td>
                 </tr>
                 <tr>
                     <td>3</td>
@@ -71,14 +71,15 @@
         <% } else if (difficulty === 'hard') { %>
             <table>
                 <tr>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3</th>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
                 </tr>
             </table>
         <% } else { %>
             <h1><strong>Something has gone horribly wrong</strong></h1>
         <% } %>
+        <br><br>
         <button id="backToMainMenuButton" class="button">Go Back to Main Menu</button>
     </center>
     
