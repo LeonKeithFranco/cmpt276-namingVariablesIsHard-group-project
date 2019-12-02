@@ -24,6 +24,7 @@ $(document).ready(() => {
 function startGame() {
     playerScore = 0;
     round = 0;
+    continueGame = true;
     nextRound();
 }
 
@@ -103,7 +104,6 @@ function gameFinished() {
 
 playAgainBtn.click(() => {
     if(drawingLoaded) {
-        continueGame = true;
         startGame();
     }
 });
