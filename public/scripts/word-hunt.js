@@ -51,37 +51,3 @@ socket.on('serverSendDrawing', (drawingData) => {
 function setCorrectCategory() {
 
 }
-
-gameEngine.setSubmitButtonClickEvent(() => {
-  const playerGuess = gameEngine.getUserInput();
-
-  if (gameEngine.willContinueGame() && playerGuess) {
-    const answer = gameEngine.getCategory();
-
-    // assert.isString(answer);
-    // assert.isNotEmpty(answer);
-
-    if (playerGuess === answer) {
-      gameEngine.incrementScore()
-      gameEngine.displayScore();
-      gameEngine.playRight();
-      gameEngine.resetUserInput();
-      gameEngine.fillDrawingDivs();
-    } else {
-      gameEngine.playWrong();
-      gameEngine.stopGame();
-      gameEngine.updateHighScore();
-      gameEngine.displayGameOverScreen();
-    }
-  }
-});
-
-gameEngine.setPlayAgainButtonClickEvent(() => {
-  if (allDrawingsLoaded) {
-    gameEngine.restartGame();
-    gameEngine.resetScore();
-    gameEngine.displayScore();
-    gameEngine.resetUserInput();
-    fillDrawingDivs();
-  }
-});
