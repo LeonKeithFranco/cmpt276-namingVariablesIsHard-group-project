@@ -86,7 +86,17 @@ function select(index) {
 
       getRound();
     } else {
-      alert("incorrect");
+      wrongSound.play();
+
+      continueGame = false;
+
+      let alertString = "";
+      alertString += `Game over!\n`;
+      alertString += `It was picture ${correctIndex + 1}.\n\n`;
+      alertString += `Score: ${playerScore}\n\n`;
+      alertString += `Click "Play Again" to start a new game!`;
+
+      alert(alertString);
     }
   }
 }
