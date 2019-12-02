@@ -10,7 +10,8 @@ const API_KEYS = [
   'AIzaSyBasoPrgP5G0T08HZ41H4hc4_FiCVf61qA',
   'AIzaSyCwDo9OEKiIHAWQEmezXK--aL_vh7EQKp0',
   'AIzaSyDQUbF6AH32qjU7Ntuf2GMMxtigJx6tZgM',
-  'AIzaSyC7U2zZFl1don5JA6VtEfdbumokwZj8FLo'
+  'AIzaSyC7U2zZFl1don5JA6VtEfdbumokwZj8FLo',
+  'AIzaSyDxca15NbXtgHVk2GLTNybPt_C010F3CC0'
 ];
 let apiKey = API_KEYS[0];
 let counter = 0;
