@@ -31,19 +31,11 @@ leaderboardRoute.get('/', async (req, res) => {
       LIMIT ${maxNumOfScores}
     `);
 
-    const topTenWordHuntScoresQuery = req.pool.query(`
-      SELECT username, word_hunt
-      FROM Users
-      ORDER BY word_hunt DESC
-      LIMIT ${maxNumOfScores}
-      `)
-
     const scores = {
       personalScore: (await personalScoreQuery).rows[0],
       topTenStandardScores: (await topTenStandardScoresQuery).rows,
       topTenOddOneOutScores: (await topTenOddOneOutScoresQuery).rows,
-      topTenTimedScores: (await topTenTimedScoresQuery).rows,
-      topTenWordHuntScores: (await topTenWordHuntScoresQuery).rows
+      topTenTimedScores: (await topTenTimedScoresQuery).rows
     }
 
     res.render('pages/leaderboard', scores);
