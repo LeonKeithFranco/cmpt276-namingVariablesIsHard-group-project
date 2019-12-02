@@ -4,14 +4,14 @@
 <head>
     <% include ../partials/header.ejs %>
     <script type="text/javascript" src="/scripts/game-engine.js" defer></script>
-    <script type="text/javascript" src="/scripts/standard.js" defer></script>
+    <script type="text/javascript" src="/scripts/word-hunt.js" defer></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/standard.css">
 </head>
 
 <body>
 <center>
     <img id="headerimage" src="/assets/scribbltaireio.png">
-    <h1 class="text">Standard Mode</h1>
+    <h1 class="text">Word Hunt Mode</h1>
     <% if (difficulty === 'easy') { %>
         <% include ../partials/3-drawing.ejs %>
     <% } else if (difficulty === 'normal') { %>
@@ -23,10 +23,6 @@
     <% } %>
     <div id="inputSection">
         <p id="score" class="text"></p>
-        <div id="hintDisplay">
-            <p id="hintTitle" class="text">Hint: </p>
-            <p id="hint" class="text"></p>
-        </div>
         <br>
         <input id="wordInput" type="text" placeholder="Word" autofocus>
         <button id="submitGuessButton" class="button">Guess</button><br>
