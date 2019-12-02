@@ -5,10 +5,25 @@
     <% include ../partials/header.ejs %>
     <script type="text/javascript" src="/scripts/game-engine.js" defer></script>
     <script type="text/javascript" src="/scripts/standard.js" defer></script>
+    <script>
+        function playAudio() {
+            let x = document.getElementById("wrongSound");
+            x.play();
+        }
+    </script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/standard.css">
 </head>
 
 <body>
+    <audio id="rightSound">
+        <source src="/assets/audio/c3.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="wrongSound">
+        <source src="/assets/audio/wrong.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <button onclick="playAudio()" type="button">Play Audio</button>
     <center>
         <img id="headerimage" src="/assets/scribbltaireio.png">
         <h1 class="text">Standard Mode</h1>
