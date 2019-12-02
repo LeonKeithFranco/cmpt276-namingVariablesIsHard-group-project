@@ -199,6 +199,34 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('clientRequestRandomCategoryNames', async (count, excluded) => {
+    excluded = (!_.isUndefined(excluded)) ? excluded : '';
+
+    console.log(`${count} random categories requested`);
+
+    try {
+      const result = await serverPool.query(`
+        SELECT category FROM categories
+        WHERE category != '${excluded}'
+        ORDER BY RANDOM()
+        LIMIT ${count}
+      `);
+
+      if (count === result.rows.length) {
+        for (let i = 0; i < count; i++) {
+          const category = result.rows[i].category;
+          console.log(`category selected: ${category}`);
+          socket.emit(`serverSendRandomCategoryName`, category);
+        }
+      } else {
+        console.log(`category query failed to return the requested number of categories for unknown reason`);
+      }
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+
   socket.on('clientRequestCategorySize', async (category) => {
     // assert.isString(category);
 

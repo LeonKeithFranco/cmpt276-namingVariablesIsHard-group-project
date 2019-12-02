@@ -1,4 +1,4 @@
-const socket = io.connect(window.location.origin);
+const engineSocket = io.connect(window.location.origin);
 
 const gameEngine = (function () {
   const drawingDivs = $(".drawing");
@@ -19,19 +19,19 @@ const gameEngine = (function () {
   let continueGame = true;
   let allDrawingsLoaded = false;
 
-  socket.on('serverSendRandomCategoryName', (cat) => {
+  engineSocket.on('serverSendRandomCategoryName', (cat) => {
     // assert.isNotEmpty(cat);
     // assert.isString(cat);
 
     category = cat;
     hintDisplay.text(`${category.replace(/\S/g, "-")}`);
-    socket.emit('clientRequestCountFromCategory', {
+    engineSocket.emit('clientRequestCountFromCategory', {
       category: category,
       count: drawingDivs.length
     });
   });
 
-  socket.on('serverSendDrawing', (drawingData) => {
+  engineSocket.on('serverSendDrawing', (drawingData) => {
     const { word, svg } = drawingData;
 
     // assert.isNotEmpty(word);
@@ -74,7 +74,7 @@ const gameEngine = (function () {
       drawingCount = 0;
       allDrawingsLoaded = false;
 
-      socket.emit('clientRequestRandomCategoryName', drawingDivs.length);
+      engineSocket.emit('clientRequestRandomCategoryName', drawingDivs.length);
     },
 
     /*
