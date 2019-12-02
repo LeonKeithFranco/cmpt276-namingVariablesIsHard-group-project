@@ -1,2 +1,0 @@
-ALTER TABLE Users
-ADD COLUMN word_hunt INT;
