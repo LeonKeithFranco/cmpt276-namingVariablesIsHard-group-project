@@ -5,7 +5,7 @@ leaderboardRoute.get('/', async (req, res) => {
 
   try {
     const personalScoreQuery = req.pool.query(`
-      SELECT username,standard,odd_one_out,timed
+      SELECT username,standard,odd_one_out,timed,word_hunt
       FROM Users
       WHERE username='${req.session.user}'
     `);
