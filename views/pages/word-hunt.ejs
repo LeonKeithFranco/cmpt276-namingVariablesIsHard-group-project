@@ -12,6 +12,7 @@
 <center>
     <img id="headerimage" src="/assets/scribbltaireio.png">
     <h1 class="text">Word Hunt Mode</h1>
+    <h3 id="category" class="text"></h3>
     <% if (difficulty === 'easy') { %>
         <% include ../partials/4-drawing.ejs %>
     <% } else if (difficulty === 'normal') { %>
@@ -23,7 +24,6 @@
     <% } %>
     <div id="inputSection">
         <p id="score" class="text"></p>
-        <p id="category" class="text"></p>
         <button id="playAgainButton" class="button">Play Again</button>
     </div>
     <p id="standardModeRules" class="text">
