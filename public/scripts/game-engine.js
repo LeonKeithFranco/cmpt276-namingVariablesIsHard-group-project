@@ -225,12 +225,14 @@ const gameEngine = (function () {
     playRight: function () {
       // Assertion will fail if rightSound does not match a file name
       // assert(!isNaN(rightSound.duration));
+
       rightSound.play();
     },
 
     playWrong: function () {
       // Assertion will fail if wrongSound does not match a file name
-      //assert(!isNaN(wrongSound.duration));
+      // assert(!isNaN(wrongSound.duration));
+
       wrongSound.play();
     }
   }
