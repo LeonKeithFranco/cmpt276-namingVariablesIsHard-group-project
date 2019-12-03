@@ -8,7 +8,7 @@ const gameEngine = (function () {
   const playAgainBtn = $('#playAgainButton');
   const hintDisplay = $('#hint');
   const rightSound = new Audio('../../assets/audio/right.mp3');
-  const wrongSound = new Audio('../../assets/audio/wrong.mp3');
+  const wrongSound = new Audio('../../assets/audio/wron.mp3');
 
 
 
@@ -223,10 +223,14 @@ const gameEngine = (function () {
     },
 
     playRight: function () {
+      // Assertion will fail if rightSound does not match a file name
+      // assert(!isNaN(rightSound.duration));
       rightSound.play();
     },
 
     playWrong: function () {
+      // Assertion will fail if wrongSound does not match a file name
+      //assert(!isNaN(wrongSound.duration));
       wrongSound.play();
     }
   }

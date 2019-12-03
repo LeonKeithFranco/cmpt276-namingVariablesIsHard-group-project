@@ -3,6 +3,7 @@ const path = require('path');
 const session = require('client-sessions');
 const socket = require('socket.io');
 const _ = require('lodash');
+const fs = require('fs');
 // const assert = require('chai').assert;
 const quickdraw = require('./lib/quickdraw/quickdraw-api');
 const preloader = require('./lib/preloader');
